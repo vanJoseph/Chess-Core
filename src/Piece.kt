@@ -1,6 +1,6 @@
 
 
-abstract class Piece(var piece: PieceType) {
-    abstract fun verifyMove():
+abstract class Piece( piece: PieceType) {
+    abstract fun verifyMove()
 
 }

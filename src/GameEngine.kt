@@ -1,6 +1,11 @@
 class GameEngine {
-    fun main(args: ArrayList<String>) {
-        println("Hello, World!")
+    var board= arrayOf(Array<Square>())
+    fun startGame(){
+        newBoard()
+
+    }
+
+    fun newBoard() {
 
     }
 }

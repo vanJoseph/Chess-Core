@@ -1,3 +1,3 @@
 
 
-class Coord(val file: Int, val rank: Int)
+data class Coord(val file: Int, val rank: Int)
