@@ -1,4 +1,4 @@
-class King:Piece(PieceType.KING) {
+class King(color:Player):Piece(PieceType.KING,color) {
     override fun verifyMove() {
         TODO("Not yet implemented")
     }

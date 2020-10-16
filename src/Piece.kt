@@ -1,6 +1,6 @@
 
 
-abstract class Piece( piece: PieceType) {
+abstract class Piece(piece: PieceType,color:Player) {
     abstract fun verifyMove()
 
 }
