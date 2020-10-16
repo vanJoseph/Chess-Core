@@ -1,5 +1,5 @@
 class GameEngine {
-    var board= arrayOf(Array<Square>())
+    val board=Board()
     fun startGame(){
         newBoard()
 
