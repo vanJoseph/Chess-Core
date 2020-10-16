@@ -1,3 +1,5 @@
+package wildercoding.chess
+
 enum class GameState {
     STALEMATE,
     THREEOLD_REPETITION,

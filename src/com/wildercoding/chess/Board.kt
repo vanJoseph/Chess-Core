@@ -1,3 +1,5 @@
+package wildercoding.chess
+
 class Board {
 
     var squareInit=  { _:Int ->Square(Coord(0, 0), null)}

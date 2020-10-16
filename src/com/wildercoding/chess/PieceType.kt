@@ -1,4 +1,4 @@
-
+package wildercoding.chess
 enum class PieceType {
     PAWN,
     KNIGHT,
