@@ -1,5 +1,5 @@
 package wildercoding.chess
 
 class TurnManager {
-    var turn:Int
+    var turn:Int=0
 }
