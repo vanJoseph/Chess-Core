@@ -16,9 +16,9 @@ class Board {
     }
 
     private fun addPawns() {
-        for (x in 0..7){
-            board[x][1].piece=Pawn(Player.WHITE)
-            board[x][6].piece=Pawn(Player.BLACK)
+        for (y in 0..7){
+            board[1][y].piece=Pawn(Player.WHITE)
+            board[6][y].piece=Pawn(Player.BLACK)
         }
     }
     private fun addRooks() {
@@ -48,9 +48,25 @@ class Board {
         board[7][3].piece = Queen(Player.BLACK)
     }
     private fun addKings() {
-        board[0][3].piece = King(Player.WHITE)
+        board[0][4].piece = King(Player.WHITE)
 
-        board[7][3].piece = King(Player.BLACK)
+        board[7][4].piece = King(Player.BLACK)
+    }
+    override fun toString(): String {
+         var boardString:String= String()
+        for (x in 7 downTo 0) {
+            for (y in 0..7) {
+                var pieceType=String()
+                if(board[x][y].piece!=null) {
+                    pieceType= board[x][y].piece?.piece.toString()
+                }else{
+                    pieceType="None"
+                }
+                boardString+="$pieceType:($x,$y)\t"
+            }
+            boardString+="\n"
+        }
+        return boardString
     }
 
 }
