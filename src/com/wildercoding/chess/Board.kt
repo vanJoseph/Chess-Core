@@ -2,9 +2,9 @@ package wildercoding.chess
 
 class Board {
 
-    var squareInit=  { _:Int ->Square(Coord(0, 0), null)}
+    private var squareInit=  { _:Int ->Square(Coord(0, 0), null)}
 
-    var board=Array(8){Array<Square>(8,squareInit) }
+    private var board=Array(8){Array<Square>(8,squareInit) }
 
     fun initNewGame(){
         addPawns()
@@ -13,6 +13,9 @@ class Board {
         addBishops()
         addKings()
         addQueens()
+    }
+    fun add(piece: Piece, coord: Coord) {
+        board[coord.rank][coord.file].piece=piece
     }
 
     private fun addPawns() {
@@ -55,14 +58,14 @@ class Board {
     override fun toString(): String {
          var boardString:String= String()
         for (x in 7 downTo 0) {
-            for (y in 0..7) {
+            for (file in 0..7) {
                 var pieceType=String()
-                if(board[x][y].piece!=null) {
-                    pieceType= board[x][y].piece?.piece.toString()
+                if(board[x][file].piece!=null) {
+                    pieceType= board[x][file].piece?.piece.toString()+"(${board[x][file].piece!!.color.toName()[0]})"
                 }else{
                     pieceType="None"
                 }
-                boardString+="$pieceType:($x,$y)\t"
+                boardString+="$pieceType:($x,$file)\t"
             }
             boardString+="\n"
         }
