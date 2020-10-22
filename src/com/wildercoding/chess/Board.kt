@@ -57,15 +57,15 @@ class Board {
     }
     override fun toString(): String {
          var boardString:String= String()
-        for (x in 7 downTo 0) {
+        for (rank in 7 downTo 0) {
             for (file in 0..7) {
                 var pieceType=String()
-                if(board[x][file].piece!=null) {
-                    pieceType= board[x][file].piece?.piece.toString()+"(${board[x][file].piece!!.color.toName()[0]})"
+                if(board[rank][file].piece!=null) {
+                    pieceType= board[rank][file].piece?.piece.toString()+"(${board[rank][file].piece!!.color.toName()[0]})"
                 }else{
                     pieceType="None"
                 }
-                boardString+="$pieceType:($x,$file)\t"
+                boardString+="$pieceType:($file,$rank)\t"
             }
             boardString+="\n"
         }
