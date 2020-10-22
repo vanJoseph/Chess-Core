@@ -1,32 +1,32 @@
 package wildercoding.chess
 enum class PieceType: Nameable  {
     PAWN {
-        override fun getPieceName(): String {
+        override fun toName(): String {
             return "Pawn"
         }
     },
     KNIGHT {
-        override fun getPieceName(): String {
+        override fun toName(): String {
             return "Knight"
         }
     },
     BISHOP {
-        override fun getPieceName(): String {
+        override fun toName(): String {
             return "Bishop"
         }
     },
     ROOK {
-        override fun getPieceName(): String {
+        override fun toName(): String {
             return "Rook"
         }
     },
     KING {
-        override fun getPieceName(): String {
+        override fun toName(): String {
             return "King"
         }
     },
     QUEEN {
-        override fun getPieceName(): String {
+        override fun toName(): String {
             return "Queen"
         }
     }
@@ -34,5 +34,5 @@ enum class PieceType: Nameable  {
 }
 
 interface Nameable {
-    fun getPieceName():String
+    fun toName():String
 }
