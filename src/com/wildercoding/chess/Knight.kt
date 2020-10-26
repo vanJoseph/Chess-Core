@@ -1,8 +1,8 @@
 package wildercoding.chess
 
 class Knight(color:Player): Piece(PieceType.KNIGHT,color) {
-    override fun verifyMove() {
-        TODO("Not yet implemented")
+    public override fun verifyMove(coord: Coord): Boolean {
+
     }
 
 }

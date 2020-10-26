@@ -1,7 +1,7 @@
 package wildercoding.chess
 
 class Rook(color: Player) : Piece(PieceType.ROOK,color) {
-    override fun verifyMove() {
+    override fun verifyMove(coord: Coord): Boolean {
         TODO("Not yet implemented")
     }
 
