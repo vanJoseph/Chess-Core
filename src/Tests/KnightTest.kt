@@ -13,7 +13,7 @@ class KnightTest {
     fun Should_MoveLegal_When_PossibleMoves() {
         val board = Board()
         val knight=Knight(Player.WHITE)
-        board.add(knight, Coord(0, 0))
+        board.addPiece(knight, Coord(0, 0))
         printBoard(board)
 
         // legal moves
