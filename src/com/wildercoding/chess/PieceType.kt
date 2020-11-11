@@ -56,7 +56,3 @@ enum class PieceType: Nameable  {
 
 }
 
-interface Nameable {
-    fun getTypeName():String
-    fun getAbbr():Char
-}
