@@ -1,4 +1,5 @@
-import org.junit.Test
+
+import org.junit.jupiter.api.Test
 import wildercoding.chess.Board
 import wildercoding.chess.Coord
 import wildercoding.chess.Knight
@@ -12,7 +13,8 @@ class KnightTest {
     fun Should_MoveLegal_When_PossibleMoves() {
         val board = Board()
         val knight=Knight(Player.WHITE)
-        board.add(Knight(Player.WHITE), Coord(0, 0))
+        board.add(knight, Coord(0, 0))
+        printBoard(board)
 
         // legal moves
         val move1=Coord(2,1)
