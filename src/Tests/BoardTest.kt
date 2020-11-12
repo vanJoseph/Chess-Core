@@ -6,16 +6,6 @@ import wildercoding.chess.*
 class BoardTest {
 
     @Test
-    fun When_BoradObjectCreated_BoardFieldSquare_Should_NotEqualNull() {
-        val board=Board()
-        for (rank in 7 downTo 0) {
-            for (file in 0..7) {
-                assertFalse(board.board[rank][file]==null)
-                assertTrue(board.board[rank][file] is Square)
-            }
-        }
-    }
-    @Test
     fun When_PieceAdded_PieceIsInSquare(){
         val board=Board()
         val pieces= arrayListOf<Piece>()
