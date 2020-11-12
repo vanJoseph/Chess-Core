@@ -4,6 +4,7 @@ import wildercoding.chess.Board
 import wildercoding.chess.Coord
 import wildercoding.chess.Knight
 import wildercoding.chess.Player
+import org.junit.jupiter.api.Assertions.assertTrue
 
 class KnightTest: PieceTest {
 
@@ -18,8 +19,8 @@ class KnightTest: PieceTest {
         // legal moves
         val legalMove1 = Coord(2, 1)
         val legalMove2 = Coord(1, 2)
-        assertFalse(!knight.verifyMove(legalMove1))
-        assertFalse(!knight.verifyMove(legalMove2))
+        assertTrue(knight.verifyMove(legalMove1))
+        assertTrue(knight.verifyMove(legalMove2))
     }
 
 
