@@ -6,7 +6,7 @@ import wildercoding.chess.Knight
 import wildercoding.chess.Player
 import org.junit.jupiter.api.Assertions.assertTrue
 
-class KnightTest: PieceTest {
+class KnightTest: PieceTest() {
 
 
     @Test
@@ -38,7 +38,5 @@ class KnightTest: PieceTest {
         }
     }
 
-    fun printBoard(board: Board) {
-        println(board.toString())
-    }
+
 }
