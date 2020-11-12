@@ -32,10 +32,10 @@ class KnightTest: PieceTest {
         printBoard(board)
 
         // legal moves
-        val illegalMove1 = Coord(0, 0)
-        val illegalMove2 = Coord(7, 7)
-        assertFalse(knight.verifyMove(illegalMove1))
-        assertFalse(knight.verifyMove(illegalMove2))
+        val illegalMoves =arrayOf<Coord>( Coord(0, 0),Coord(7, 7))
+        for (move in illegalMoves) {
+            assertFalse(knight.verifyMove(move))
+        }
     }
 
     fun printBoard(board: Board) {
