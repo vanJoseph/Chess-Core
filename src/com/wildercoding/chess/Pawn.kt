@@ -5,5 +5,9 @@ class Pawn(color:Player) : Piece(PieceType.PAWN,color) {
         TODO("Not yet implemented")
     }
 
+    override fun generateMovesList(): List<Coord> {
+        TODO("Not yet implemented")
+    }
+
 
 }

@@ -3,6 +3,7 @@ package wildercoding.chess
 abstract class Piece(var type: PieceType, val color:Player) {
     var location = Coord(-1,-1)
     abstract fun verifyMove(coord: Coord): Boolean
+    abstract fun generateMovesList():List<Coord>
 
 companion object{
     fun filterOutOfBoardPositions(moves: List<Coord>): List<Coord> {
