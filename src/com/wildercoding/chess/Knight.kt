@@ -10,7 +10,7 @@ class Knight(color:Player): Piece(PieceType.KNIGHT,color) {
         return false
     }
 
-    fun generatMoves(): List<Coord> {
+    private fun generatMoves(): List<Coord> {
         val moves= arrayListOf<Coord>()
         var position = location.copy()
 
