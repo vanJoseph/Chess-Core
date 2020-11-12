@@ -15,7 +15,7 @@ class Board {
         addPiece(piece,coord.file,coord.rank)
     }
     fun addPiece(piece: Piece?, file: Int, rank: Int) {
-        board!![rank][file].piece = piece
+        board[rank][file].piece = piece
     }
     fun clearboard(){
         for (y in 7 downTo 0) {
@@ -61,6 +61,9 @@ class Board {
         board!![0][4].piece = King(Player.WHITE)
 
         board!![7][4].piece = King(Player.BLACK)
+    }
+    fun getPiece(coord: Coord):Piece?{
+        return getPiece( coord.file,coord.rank)
     }
     fun getPiece(file: Int, rank: Int): Piece? {
         return board!![rank][file].piece
