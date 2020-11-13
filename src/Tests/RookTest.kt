@@ -1,10 +1,10 @@
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import wildercoding.chess.Board
 import wildercoding.chess.Coord
 import wildercoding.chess.Player
 import wildercoding.chess.Rook
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Assertions.assertFalse
 
 
 class RookTest : PieceTest {
