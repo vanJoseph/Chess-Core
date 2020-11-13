@@ -1,14 +1,6 @@
 package wildercoding.chess
 
 class Knight(color:Player): Piece(PieceType.KNIGHT,color) {
-    public override fun verifyMove(coord: Coord): Boolean {
-        val filterdMoves = Piece.filterOutOfBoardPositions(generateMovesList())
-        for (move in filterdMoves) {
-            if(move == coord)
-                return true
-        }
-        return false
-    }
 
     override fun generateMovesList(): List<Coord> {
         val moves= arrayListOf<Coord>()

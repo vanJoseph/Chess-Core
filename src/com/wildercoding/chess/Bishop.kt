@@ -1,17 +1,6 @@
 package wildercoding.chess
 
 class Bishop(color: Player) : Piece(PieceType.BISHOP, color) {
-    override fun verifyMove(coord: Coord): Boolean {
-        if (location.equals(coord)) {
-            return false
-        }
-        for (move in generateMovesList()) {
-            if (move == coord) {
-                return true
-            }
-        }
-        return false
-    }
 
     override fun generateMovesList(): List<Coord> {
         val moveList = arrayListOf<Coord>()

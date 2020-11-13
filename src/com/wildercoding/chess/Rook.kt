@@ -1,16 +1,6 @@
 package wildercoding.chess
 
 class Rook(color: Player) : Piece(PieceType.ROOK, color) {
-    override fun verifyMove(coord: Coord): Boolean {
-        if (coord.equals(location))
-            return false
-
-        for (move in generateMovesList()) {
-            if (move.equals(coord))
-                return true
-        }
-        return false
-    }
 
     override fun generateMovesList(): List<Coord> {
         val possibleLocations = arrayListOf<Coord>()
