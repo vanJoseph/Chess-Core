@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Assertions.assertFalse
 
 
-class RookTest : PieceTest() {
+class RookTest : PieceTest {
 
     @Test
     override fun Should_VerifyCorrectMovePattern_When_GivenAMove() {
@@ -22,7 +22,6 @@ class RookTest : PieceTest() {
         for (move in legalMoves) {
             assertTrue(rook.verifyMove(move))
         }
-        printBoard(board)
 
     }
     @Test
@@ -38,6 +37,5 @@ class RookTest : PieceTest() {
         for (move in ilegalMoves) {
             assertFalse(rook.verifyMove(move))
         }
-        printBoard(board)
     }
 }

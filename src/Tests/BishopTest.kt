@@ -3,7 +3,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import wildercoding.chess.*
 
-class BishopTest: PieceTest() {
+class BishopTest: PieceTest {
     @Test
     override fun Should_VerifyCorrectMovePattern_When_GivenAMove() {
         val board = Board()
