@@ -8,6 +8,9 @@ abstract class Piece(var type: PieceType, val color: Player) {
 
     fun verifyMove(coord: Coord): Boolean {
         val filterdMoves = generateMovesList()
+
+        if(coord==location) // The current position is not a valid move
+            return false
         for (move in filterdMoves) {
             if (move == coord)
                 return true
