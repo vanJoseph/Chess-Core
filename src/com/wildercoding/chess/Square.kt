@@ -1,19 +1,17 @@
 package wildercoding.chess
 
-class Square (val file:Int, val rank:Int){
-    var boardPosition=Coord(file,rank)
-    var piece:Piece? = null
+class Square(val file: Int, val rank: Int) {
+    var boardPosition = Coord(file, rank)
+    var piece: Piece? = null
         set(value) {
-        if(value!=null) {
-            field=value
+            if (value != null)
+                value.location = boardPosition // Assigns the square boardPosition to the piece location
 
-            // Assigns the square boardPosition to the piece location
-            value.location = boardPosition
+            field = value
         }
-    }
 
     override fun toString(): String {
-        val pieceString=piece?.type?.getTypeName() ?:"None"
+        val pieceString = piece?.type?.getTypeName() ?: "None"
         return "$pieceString:$boardPosition"
     }
 }
