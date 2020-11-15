@@ -26,8 +26,20 @@ class BoardTest {
         for (i in 0 until 6) {
             assertTrue(board.getPiece(coords[i])==pieces[i],"\n board.getPiece= ${board.getPiece(coords[i])}\t expectedPiece=${pieces[i]}\n")
         }
+    }
 
+    @Test
+    fun TestRemovePiece() {
+        val board=Board()
+        val piece = Pawn(Player.WHITE)
+        val startPos =Coord(0,0)
+        board.addPiece(piece, startPos)
 
+        assertTrue(board.getPiece(startPos)?.type==PieceType.PAWN)
+
+        board.removePiece(startPos)
+
+        assertTrue(board.getPiece(startPos) == null)
     }
 
 }
