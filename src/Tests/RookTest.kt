@@ -35,7 +35,7 @@ class RookTest : PieceTest {
         board.addPiece(rook,startlocation)
 
         for (move in ilegalMoves) {
-            assertFalse(rook.verifyMove(move))
+            assertFalse(rook.verifyMove(move),"Rook should not be able to move to: $move")
         }
     }
 }
