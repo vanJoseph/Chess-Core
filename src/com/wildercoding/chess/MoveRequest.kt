@@ -1,6 +1,6 @@
 package wildercoding.chess
 
-data class MoveRequest(var piece: Piece,
+data class MoveRequest(var pieceType: PieceType?,
                        var fromPos: Coord,
                        var toPos: Coord,
                        var moveType: MoveType,
