@@ -1,27 +1,40 @@
 package wildercoding.chess
 
-class GameManager(val inputMethod: InputMethod) {
+class GameManager(val board:Board, val inputMethod: InputMethod, val outputMethod: OutputMethod) {
     var moveNumber = 0
         private set
     var playerTurn = Player.WHITE
-    val board = Board()
-    val movesMade = arrayListOf<MoveRequest>()
+        private set
 
+    val moveLog = arrayListOf<MoveRequest>()
+    var gameState=GameState.NEW
+
+    fun start() {
+        while(gameState==GameState.NEW) {
+            displayGame()
+            executeMove()
+        }
+    }
+
+    fun displayGame() {
+        outputMethod.display(GameInfo(playerTurn,board))
+    }
     /**
      * Execute one move for the correct player
+     * Todo Change the game state
      *
      * @return 1 if successful and -1 if there was a problem with validation
 
      */
-    fun executeMove(): Int {
-        val moveRequest = inputMethod.getMove(GameInfo(playerTurn))
+    fun executeMove(): Boolean {
+        val moveRequest = inputMethod.getMove(GameInfo(playerTurn,board))
         if (validate(moveRequest)) {
-            movesMade.add(moveRequest)
+            moveLog.add(moveRequest)
             moveNumber++
             changeTurn()
-            return 1
+            return true
         } else
-            return -1
+            return false
     }
 
 
@@ -37,19 +50,32 @@ class GameManager(val inputMethod: InputMethod) {
 
         when (moveRequest.moveType) {
             MoveType.MOVE -> {
-                val pieceType= getPieceTypeFromMoveRequest(moveRequest)
+                val pieceType = getPieceTypeFromMoveRequest(moveRequest)
                 val requestPiece = Piece.spawnPiece(pieceType ?: return false)
                 requestPiece.location = moveRequest.fromPos
+
+                // Verification that the piece can move to the location
                 if (!requestPiece.verifyMove(moveRequest.toPos))
                     return false
-                else
+                else {
                     moveRequest.pieceValidation = true
+                }
             }
         }
 
+        // Actually move the piece
+        movePiece(moveRequest.fromPos,moveRequest.toPos)
         return true
     }
-    fun getPieceTypeFromMoveRequest(moveRequest: MoveRequest):PieceType?{
+    private fun movePiece(fromPos:Coord, toPos:Coord){
+        // get the piece
+        val piece= board.getPiece(fromPos)!!
+        // null out the fromPos
+        board.removePiece(fromPos)
+        // move piece to toPos
+        board.addPiece(piece,toPos)
+    }
+    fun getPieceTypeFromMoveRequest(moveRequest: MoveRequest): PieceType? {
         return board.getPiece(moveRequest.fromPos)?.type
     }
 }
