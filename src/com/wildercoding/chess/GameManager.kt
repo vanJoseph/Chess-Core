@@ -2,10 +2,7 @@ package wildercoding.chess
 
 class GameManager(val board:Board, val inputMethod: InputMethod, val outputMethod: OutputMethod) {
     var moveNumber = 0
-        private set
     var playerTurn = Player.WHITE
-        private set
-
     val moveLog = arrayListOf<MoveRequest>()
     var gameState=GameState.NEW
 
@@ -50,11 +47,16 @@ class GameManager(val board:Board, val inputMethod: InputMethod, val outputMetho
 
         when (moveRequest.moveType) {
             MoveType.MOVE -> {
+                val piece= board.getPiece(moveRequest.fromPos)
+                // Verification that the piece being moved is the current player's piece
+                if (piece?.color!= playerTurn )
+                    return false
+                // Verification that the moveTo square is not ocupied
+
+                // Verification that the piece can move to the location
                 val pieceType = getPieceTypeFromMoveRequest(moveRequest)
                 val requestPiece = Piece.spawnPiece(pieceType ?: return false)
                 requestPiece.location = moveRequest.fromPos
-
-                // Verification that the piece can move to the location
                 if (!requestPiece.verifyMove(moveRequest.toPos))
                     return false
                 else {
@@ -67,6 +69,10 @@ class GameManager(val board:Board, val inputMethod: InputMethod, val outputMetho
         movePiece(moveRequest.fromPos,moveRequest.toPos)
         return true
     }
+
+    /**
+     * Moves the piece from @param fromPos to @param toPos nullify the fromPos
+     */
     private fun movePiece(fromPos:Coord, toPos:Coord){
         // get the piece
         val piece= board.getPiece(fromPos)!!

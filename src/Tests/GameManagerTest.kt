@@ -53,4 +53,35 @@ class GameManagerTest {
         assertTrue(gameManager.playerTurn==Player.WHITE,"The playerTurn shouldn't change, because of illegal move")
     }
 
+    @Test
+    fun Should_MoveOnlyCurrentPlayerPiece(){
+
+        // White Turn
+        var board= Board()
+
+        var pawn =Pawn(Player.WHITE)
+        var startPos=Coord(0,1)
+        board.addPiece(pawn,startPos)
+        var endPos= Coord(0,2)
+        var inputMethod=DirectInputMethod(startPos,endPos)
+        var gameManager=GameManager(board,inputMethod,ConsoleOutputMethod())
+        gameManager.playerTurn= Player.WHITE
+        assertTrue( gameManager.executeMove(),"${gameManager.playerTurn} can not move a ${pawn.color} piece.")
+
+
+        // Black Turn
+        board= Board()
+         startPos=Coord(0,1)
+         pawn =Pawn(Player.WHITE)
+        board.addPiece(pawn,startPos)
+        endPos= Coord(0,2)
+         inputMethod=DirectInputMethod(startPos,endPos)
+         gameManager=GameManager(board,inputMethod,ConsoleOutputMethod())
+        gameManager.playerTurn= Player.BLACK
+        assertFalse( gameManager.executeMove(),"${gameManager.playerTurn} can not move a ${pawn.color} piece.") // Todo geting weird output for the message when it fails
+
+    }
+
+
+
 }
