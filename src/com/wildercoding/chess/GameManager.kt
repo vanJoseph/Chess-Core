@@ -52,7 +52,8 @@ class GameManager(val board:Board, val inputMethod: InputMethod, val outputMetho
                 if (piece?.color!= playerTurn )
                     return false
                 // Verification that the moveTo square is not ocupied
-
+                if (board.getPiece(moveRequest.toPos)!=null)
+                    return false
                 // Verification that the piece can move to the location
                 val pieceType = getPieceTypeFromMoveRequest(moveRequest)
                 val requestPiece = Piece.spawnPiece(pieceType ?: return false)

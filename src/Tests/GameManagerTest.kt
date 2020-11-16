@@ -82,6 +82,23 @@ class GameManagerTest {
 
     }
 
+    @Test
+    fun When_SquareIsOccupied_Should_NotBeAbleToMoveThere() {
+        // White Turn
+        var board= Board()
+
+        var pawn1 =Pawn(Player.WHITE)
+        var pawn2 =Pawn(Player.WHITE)
+        var startPos=Coord(0,1)
+        var endPos= Coord(0,2)
+        board.addPiece(pawn1,startPos)
+        board.addPiece(pawn2,endPos)
+
+        var inputMethod=DirectInputMethod(startPos,endPos)
+        var gameManager=GameManager(board,inputMethod,ConsoleOutputMethod())
+        assertFalse( gameManager.executeMove(),"Illegal Move: Square $endPos is occupied.")
+    }
+
 
 
 }
