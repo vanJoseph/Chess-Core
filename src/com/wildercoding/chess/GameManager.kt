@@ -57,9 +57,7 @@ class GameManager(val board:Board, val inputMethod: InputMethod, val outputMetho
                     return MoveInfo(false,true,false,null)
                 // Verification that the piece can move to the location
                 val pieceType = getPieceTypeFromMoveRequest(moveRequest)
-                val requestPiece = Piece.spawnPiece(pieceType!!)
-                requestPiece.location = moveRequest.fromPos
-                if (!requestPiece.verifyMove(moveRequest.toPos))
+                if (!piece.verifyMove(moveRequest.toPos))
                     return MoveInfo(false,true,true,false )
                 else {
                     moveRequest.pieceValidation = true
