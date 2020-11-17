@@ -23,15 +23,16 @@ class GameManager(val board:Board, val inputMethod: InputMethod, val outputMetho
      * @return 1 if successful and -1 if there was a problem with validation
 
      */
-    fun executeMove(): Boolean {
+    fun executeMove(): MoveInfo {
         val moveRequest = inputMethod.getMove(GameInfo(playerTurn,board))
-        if (validate(moveRequest)) {
+        val moveInfo=validate(moveRequest)
+        if (moveInfo.success) {
             moveLog.add(moveRequest)
             moveNumber++
             changeTurn()
-            return true
+            return moveInfo
         } else
-            return false
+            return moveInfo
     }
 
 
@@ -43,23 +44,23 @@ class GameManager(val board:Board, val inputMethod: InputMethod, val outputMetho
      * Validate piece moves, game move, and execute the move
      *
      */
-    fun validate(moveRequest: MoveRequest): Boolean {
+    fun validate(moveRequest: MoveRequest): MoveInfo {
 
         when (moveRequest.moveType) {
             MoveType.MOVE -> {
                 val piece= board.getPiece(moveRequest.fromPos)
                 // Verification that the piece being moved is the current player's piece
                 if (piece?.color!= playerTurn )
-                    return false
+                    return MoveInfo(false,false,null,null)
                 // Verification that the moveTo square is not ocupied
                 if (board.getPiece(moveRequest.toPos)!=null)
-                    return false
+                    return MoveInfo(false,true,false,null)
                 // Verification that the piece can move to the location
                 val pieceType = getPieceTypeFromMoveRequest(moveRequest)
-                val requestPiece = Piece.spawnPiece(pieceType ?: return false)
+                val requestPiece = Piece.spawnPiece(pieceType!!)
                 requestPiece.location = moveRequest.fromPos
                 if (!requestPiece.verifyMove(moveRequest.toPos))
-                    return false
+                    return MoveInfo(false,true,true,false )
                 else {
                     moveRequest.pieceValidation = true
                 }
@@ -68,7 +69,7 @@ class GameManager(val board:Board, val inputMethod: InputMethod, val outputMetho
 
         // Actually move the piece
         movePiece(moveRequest.fromPos,moveRequest.toPos)
-        return true
+        return MoveInfo(true,true,true,true)
     }
 
     /**
