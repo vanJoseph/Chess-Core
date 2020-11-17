@@ -7,7 +7,7 @@ class PawnTest : PieceTest {
 
 
     @Test
-    fun When_PawnMove_Should_OnlyMoveInOneDirection() {
+    fun When_PawnOfCertainColorMove_Should_MoveDistinctDirection() {
 
         // Testing White Pawn direction
         var board = Board()
@@ -20,15 +20,42 @@ class PawnTest : PieceTest {
 
         // Testing black Pawn direction
         board = Board()
-        startPos = Coord(0, 1)
-        endPos = Coord(0, 0)
+        startPos = Coord(0, 2)
+        endPos = Coord(0, 1)
         pawn = Pawn(Player.BLACK)
         board.addPiece(pawn,startPos)
         gameManager=GameManager(board,DirectInputMethod(startPos,endPos),ConsoleOutputMethod())
         gameManager.playerTurn=Player.BLACK
         assertTrue(gameManager.executeMove().success,"Black pawn can not move in the right direction")
-        gameManager=GameManager(board,DirectInputMethod(startPos,Coord(0,2)),ConsoleOutputMethod())
+
+        // Test the first move 2 square move
+        board = Board()
+        pawn = Pawn(Player.BLACK)
+        board.addPiece(pawn,startPos)
+        gameManager=GameManager(board,DirectInputMethod(startPos,Coord(0,0)),ConsoleOutputMethod())
+        gameManager.playerTurn=Player.BLACK
         assertTrue(gameManager.executeMove().success, "This move is legal for black")
+
+
+        // Test that back for black is illegal
+        // One square Movement--Illegal
+        board = Board()
+        startPos = Coord(0, 2)
+        endPos = Coord(0, 3)
+        pawn = Pawn(Player.BLACK)
+        board.addPiece(pawn,startPos)
+        gameManager=GameManager(board,DirectInputMethod(startPos,endPos),ConsoleOutputMethod())
+        gameManager.playerTurn=Player.BLACK
+        assertFalse(gameManager.executeMove().success,"Black Pawn should not be able to move here")
+
+        // Two square movement --Illegal
+        board = Board()
+        pawn = Pawn(Player.BLACK)
+        board.addPiece(pawn,startPos)
+        gameManager=GameManager(board,DirectInputMethod(startPos,Coord(0,4)),ConsoleOutputMethod())
+        gameManager.playerTurn=Player.BLACK
+        assertFalse(gameManager.executeMove().success, "Black Pawn should not be able to move here")
+
     }
 
     @Test
