@@ -49,7 +49,7 @@ class GameManagerTest {
         val inputMethod=DirectInputMethod(startPos,endPos)
         val gameManager=GameManager(board,inputMethod,ConsoleOutputMethod())
 
-        assertFalse(gameManager.executeMove(),"The move is illegal and shouldn't execute")
+        assertFalse(gameManager.executeMove().success,"The move is illegal and shouldn't execute")
         assertTrue(gameManager.playerTurn==Player.WHITE,"The playerTurn shouldn't change, because of illegal move")
     }
 
@@ -66,7 +66,7 @@ class GameManagerTest {
         var inputMethod=DirectInputMethod(startPos,endPos)
         var gameManager=GameManager(board,inputMethod,ConsoleOutputMethod())
         gameManager.playerTurn= Player.WHITE
-        assertTrue( gameManager.executeMove(),"${gameManager.playerTurn} can not move a ${pawn.color} piece.")
+        assertTrue( gameManager.executeMove().success,"${gameManager.playerTurn} can not move a ${pawn.color} piece.")
 
 
         // Black Turn
@@ -78,7 +78,7 @@ class GameManagerTest {
          inputMethod=DirectInputMethod(startPos,endPos)
          gameManager=GameManager(board,inputMethod,ConsoleOutputMethod())
         gameManager.playerTurn= Player.BLACK
-        assertFalse( gameManager.executeMove(),"${gameManager.playerTurn} can not move a ${pawn.color} piece.") // Todo geting weird output for the message when it fails
+        assertFalse( gameManager.executeMove().success,"${gameManager.playerTurn} can not move a ${pawn.color} piece.") // Todo geting weird output for the message when it fails
 
     }
 
@@ -96,7 +96,7 @@ class GameManagerTest {
 
         var inputMethod=DirectInputMethod(startPos,endPos)
         var gameManager=GameManager(board,inputMethod,ConsoleOutputMethod())
-        assertFalse( gameManager.executeMove(),"Illegal Move: Square $endPos is occupied.")
+        assertFalse( gameManager.executeMove().success,"Illegal Move: Square $endPos is occupied.")
     }
 
 
