@@ -1,6 +1,6 @@
 package wildercoding.chess
 
-class GameManager(val board:Board, val inputMethod: InputMethod, val outputMethod: OutputMethod) {
+class GameManager(val board:Board, val inputMethod: InputMethod, val outputMethod: OutputMethod?) {
     var moveNumber = 0
     var playerTurn = Player.WHITE
     val moveLog = arrayListOf<MoveRequest>()
@@ -14,7 +14,7 @@ class GameManager(val board:Board, val inputMethod: InputMethod, val outputMetho
     }
 
     fun displayGame() {
-        outputMethod.display(GameInfo(playerTurn,board))
+        outputMethod?.display(GameInfo(playerTurn,board))
     }
     /**
      * Execute one move for the correct player
