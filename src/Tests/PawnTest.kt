@@ -4,7 +4,38 @@ import org.junit.jupiter.api.Test
 import wildercoding.chess.*
 
 class PawnTest : PieceTest {
+    @Test
+    fun Should_NotPassPiece_When_PieceIsBlockingPath() {
+        // For White Pawn
+        var board = Board()
+        var pawn = Pawn(Player.WHITE,board)
+        var startlocation = Coord(0, 1)
+        board.addPiece(pawn, startlocation)
+        var passingMoves = Coord(0,3)
+        var blockingPieceLocation = Coord(0,2)
 
+        // Populate the board with Blocking pieces
+            board.addPiece(Pawn(Player.WHITE), blockingPieceLocation)
+        // Test the passing move in all directions
+            assertFalse(pawn.verifyMove(passingMoves),
+                    "White Pawn@: ${pawn.location} should not pass ${board.getPiece(blockingPieceLocation)!!.type}@: $blockingPieceLocation")
+
+
+        // For White Pawn
+         board = Board()
+         pawn = Pawn(Player.BLACK,board)
+         startlocation = Coord(0, 6)
+        board.addPiece(pawn, startlocation)
+         passingMoves = Coord(0,4)
+         blockingPieceLocation = Coord(0,5)
+
+        // Populate the board with Blocking pieces
+        board.addPiece(Pawn(Player.WHITE), blockingPieceLocation)
+        // Test the passing move in all directions
+        assertFalse(pawn.verifyMove(passingMoves),
+                "White Pawn@: ${pawn.location} should not pass ${board.getPiece(blockingPieceLocation)!!.type}@: $blockingPieceLocation")
+
+    }
 
     @Test
     fun When_PawnOfCertainColorMove_Should_MoveDistinctDirection() {
