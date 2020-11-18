@@ -19,15 +19,11 @@ class RookTest : PieceTest {
         for (location in blockingPieceLocation) {
             board.addPiece(Pawn(Player.WHITE), location)
         }
-        val gameManager = GameManager(board, DirectInputMethod(startlocation, passingMoves[0]), null)
-        //val debug=gameManager.executeMove()
-        assertFalse(gameManager.executeMove().success, "This piece can not pass another")
-//        // Attempt the passing moves
-//        for (move in passingMoves) {
-//            val gameManager = GameManager(board, DirectInputMethod(startlocation, move), null)
-//            //val debug=gameManager.executeMove()
-//            assertFalse(gameManager.executeMove().success, "This piece can not pass another")
-//        }
+        // Test the passing move in all directions
+        for (move in passingMoves) {
+            val gameManager = GameManager(board, DirectInputMethod(startlocation, move), null)
+            assertFalse(gameManager.executeMove().success, "This piece can not pass another")
+        }
 
     }
 
