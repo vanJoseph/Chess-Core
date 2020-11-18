@@ -34,6 +34,7 @@ class Rook(color: Player) : Piece(PieceType.ROOK, color) {
             for (rank in location.rank..7) {
                 if (board!!.getPiece(location.file,rank)==null) {
                     possibleLocations.add(Coord(location.file, rank))
+                }else{
                     break
                 }
             }
@@ -41,6 +42,7 @@ class Rook(color: Player) : Piece(PieceType.ROOK, color) {
             for (rank in location.rank downTo 0) {
                 if (board!!.getPiece(location.file,rank)==null) {
                     possibleLocations.add(Coord(location.file, rank))
+                }else{
                     break
                 }
             }
@@ -48,6 +50,7 @@ class Rook(color: Player) : Piece(PieceType.ROOK, color) {
             for (file in location.file..7) {
                 if (board!!.getPiece(file,location.rank)==null) {
                     possibleLocations.add(Coord(file, location.rank))
+                }else{
                     break
                 }
             }
@@ -55,6 +58,7 @@ class Rook(color: Player) : Piece(PieceType.ROOK, color) {
             for (file in location.file downTo 0) {
                 if (board!!.getPiece(file,location.rank)==null) {
                     possibleLocations.add(Coord(file, location.rank))
+                }else{
                     break
                 }
             }
