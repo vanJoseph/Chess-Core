@@ -1,8 +1,9 @@
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.Test
+import org.junit.Assert.assertTrue
+import org.junit.Test
 import wildercoding.chess.Coord
 import wildercoding.chess.InvalidCoordException
 import java.lang.RuntimeException
+
 
 class CoordTest {
     @Test
@@ -12,13 +13,13 @@ class CoordTest {
 
         for (value in outOfRangeValues) {
             // Test the file to see if
-            var fileTest:Coord? = null
+            var fileTest: Coord? = null
             try {
                 fileTest = Coord(value,0)
             } catch (ex: InvalidCoordException) {
                 exception = ex
             }
-            assertTrue(exception is InvalidCoordException, "Coord$fileTest should throw a exception.")
+            assertTrue("Coord$fileTest should throw a exception.",exception is InvalidCoordException )
 
             var rankTest: Coord? = null
             try {
@@ -26,7 +27,7 @@ class CoordTest {
             } catch (ex: InvalidCoordException) {
                 exception = ex
             }
-            assertTrue(exception is InvalidCoordException,"Coord$rankTest should throw a exception.")
+            assertTrue("Coord$rankTest should throw a exception.", exception is InvalidCoordException)
 
             var fullCoordTest:Coord? = null
             try {
@@ -34,7 +35,7 @@ class CoordTest {
             } catch (ex: InvalidCoordException) {
                 exception = ex
             }
-            assertTrue(exception is InvalidCoordException,"Coord$fullCoordTest should throw a exception.")
+            assertTrue("Coord$fullCoordTest should throw a exception.",exception is InvalidCoordException)
         }
     }
 
@@ -52,6 +53,6 @@ class CoordTest {
             }
         }
 
-        assertTrue(exception == null, "Coord$coord is valid")
+        assertTrue("Coord$coord is valid",exception == null)
     }
 }
