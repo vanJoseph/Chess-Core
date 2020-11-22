@@ -95,8 +95,19 @@ class BoardTest {
     }
 
     @Test
-    fun testPrintingBoard() {
-        println(board)
+    fun Should_AllSquareAreNone_When_BoardIsCleared() {
+        val piece=King(Color.WHITE)
+
+        // Add piece to all of the squares
+        val addPieceToSquare ={coord: Coord -> board.addPiece(piece,coord); Unit }
+        cycleThruBoardCoords(addPieceToSquare)
+
+        // Clear board
+        board.clear()
+        // Check all of the squares for None
+        val assertLambda ={coord: Coord -> assertTrue(board.getPiece(coord) is None)}
+        cycleThruBoardCoords(assertLambda)
+
     }
 
 
