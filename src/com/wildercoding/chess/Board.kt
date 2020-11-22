@@ -61,6 +61,17 @@ class Board {
         return true
     }
 
+    /**
+     * Turn all square to [None]
+     */
+    fun clear() {
+        for (y in 7 downTo 0) {
+            for (x in 0..7) {
+                removePiece(Coord(x,y))
+            }
+        }
+    }
+
     override fun toString(): String {
         var boardString= StringBuilder()
         for (y in 7 downTo 0) {
