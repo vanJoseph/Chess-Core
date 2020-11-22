@@ -1,58 +1,69 @@
 package wildercoding.chess
-enum class PieceType: Nameable  {
+enum class PieceType: Abbreviation {
     PAWN {
-        override fun getTypeName(): String {
+        override fun toString(): String {
             return "Pawn"
         }
 
-        override fun getAbbr(): Char {
-            return Char.MIN_VALUE
+        override fun abbr(): Char {
+            return 'P'
         }
     },
     KNIGHT {
-        override fun getTypeName(): String {
+        override fun toString(): String {
             return "Knight"
         }
 
-        override fun getAbbr(): Char {
+        override fun abbr(): Char {
             return 'N'
         }
     },
     BISHOP {
-        override fun getTypeName(): String {
+        override fun toString(): String {
             return "Bishop"
         }
-        override fun getAbbr(): Char {
+
+        override fun abbr(): Char {
             return 'B'
         }
     },
     ROOK {
-        override fun getTypeName(): String {
+        override fun toString(): String {
             return "Rook"
         }
 
-        override fun getAbbr(): Char {
+        override fun abbr(): Char {
             return 'R'
         }
     },
     KING {
-        override fun getTypeName(): String {
+        override fun toString(): String {
             return "King"
         }
 
-        override fun getAbbr(): Char {
+        override fun abbr(): Char {
             return 'K'
         }
     },
     QUEEN {
-        override fun getTypeName(): String {
+        override fun toString(): String {
             return "Queen"
         }
 
-        override fun getAbbr(): Char {
+        override fun abbr(): Char {
             return 'Q'
         }
+    },
+    NONE {
+        override fun toString(): String {
+            return "None"
+        }
+
+        override fun abbr(): Char {
+            return '_'
+        }
     }
-
 }
-
+interface Abbreviation {
+    fun abbr():Char;
+}
