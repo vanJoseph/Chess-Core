@@ -35,7 +35,7 @@ class SquareTest {
 
     @Test
     fun Should_ReturnTrue_When_RemovingANonNonePiece() {
-        piece= King(Color.WHITE,Coord(0,0))
+        piece= King(Color.WHITE)
         square.addPiece(piece)
         val results = square.removePiece()
         assertTrue(results)
