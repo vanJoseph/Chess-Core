@@ -1,91 +1,76 @@
 package wildercoding.chess
 
+
+/**
+ * The Representation of Chess board
+ *
+ * It contains an 8x8 array of [Square].
+ * Use the methods to add and remove pieces in each square.
+ *
+ */
 class Board {
-    val squares=Array(8){ rank->Array(8){ file->Square(file,rank)}}
+    private val squares = Array(8) { rank -> Array(8) { file -> Square(Coord(file, rank)) } }
 
-    fun initNewGame(){
-        addPawns()
-        addRooks()
-        addKnights()
-        addBishops()
-        addKings()
-        addQueens()
-    }
-    fun addPiece(piece: Piece, coord: Coord) {
-        addPiece(piece,coord.file,coord.rank)
-    }
-    fun addPiece(piece: Piece, file: Int, rank: Int) {
 
-        squares[rank][file].piece = piece
+    /**
+     * Returns a [Square] on the board
+     *
+     * @param coord the board position
+     */
+    fun getSquare(coord: Coord): Square {
+        return squares[coord.rank][coord.file]
     }
-    fun removePiece(target: Coord) {
-        removePiece(target.file,target.rank)
+
+    /**
+     * Returns a [Piece] from the board
+     *
+     * @param target the board position
+     */
+    fun getPiece(target:Coord): Piece {
+        return squares[target.rank][target.file].piece
     }
-    fun removePiece(targetFile:Int, targetRank:Int){
-        squares[targetRank][targetFile].piece = null
-    }
-    fun clearboard(){
-        for (rank in 7 downTo 0) {
-            for (file in 0..7) {
-                removePiece(file,rank)
-            }
+
+    /**
+     * Adds a piece to the board
+     *
+     *@param piece The [Piece]
+     * @param toCoord The board position
+     *
+     * @return true if a piece was added  false if no piece was added
+     */
+    fun addPiece(piece: Piece, toCoord: Coord): Boolean {
+        if (piece is None) {
+            return false
         }
+        val square = getSquare(toCoord)
+        square.addPiece(piece)
+        return true
     }
 
-    private fun addPawns() {
-        for (y in 0..7){
-            squares!![1][y].piece=Pawn(Player.WHITE)
-            squares!![6][y].piece=Pawn(Player.BLACK)
+    /**
+     * Removes a piece from the board
+     *
+     * @param target the board position
+     */
+    fun removePiece(target: Coord): Boolean {
+        val square=getSquare(target)
+        if(getPiece(target) is None) {
+            return false
         }
+        square.removePiece()
+        return true
     }
-    private fun addRooks() {
-        squares!![0][0].piece = Rook(Player.WHITE)
-        squares[0][7].piece = Rook(Player.WHITE)
 
-        squares!![7][0].piece = Rook(Player.BLACK)
-        squares!![7][7].piece = Rook(Player.BLACK)
-    }
-    private fun addKnights() {
-        squares!![0][1].piece = Knight(Player.WHITE)
-        squares!![0][6].piece = Knight(Player.WHITE)
-
-        squares!![7][1].piece = Knight(Player.BLACK)
-        squares!![7][6].piece = Knight(Player.BLACK)
-    }
-    private fun addBishops() {
-        squares!![0][2].piece = Bishop(Player.WHITE)
-        squares!![0][5].piece = Bishop(Player.WHITE)
-
-        squares!![7][2].piece = Bishop(Player.BLACK)
-        squares!![7][5].piece = Bishop(Player.BLACK)
-    }
-    private fun addQueens() {
-        squares!![0][3].piece = Queen(Player.WHITE)
-
-        squares!![7][3].piece = Queen(Player.BLACK)
-    }
-    private fun addKings() {
-        squares!![0][4].piece = King(Player.WHITE)
-
-        squares!![7][4].piece = King(Player.BLACK)
-    }
-    fun getPiece(coord: Coord):Piece?{
-        return getPiece( coord.file,coord.rank)
-    }
-    fun getPiece(file: Int, rank: Int): Piece? {
-        return squares[rank][file].piece
-    }
     override fun toString(): String {
-         var boardString= String()
-        for (rank in 7 downTo 0) {
-            for (file in 0..7) {
-                val piece:Piece?=getPiece(file,rank)
-                var pieceType=piece?.type ?:"None"
-                boardString+="$pieceType:($file,$rank)\t"
+        var boardString= StringBuilder()
+        for (y in 7 downTo 0) {
+            for (x in 0..7) {
+                val coord= Coord(x,y)
+                boardString.append("$coord: ${getPiece(coord).type.abbr()}\t")
             }
-            boardString+="\n"
+            boardString.append("\n")
         }
-        return boardString
+        return boardString.toString()
     }
 
 }
