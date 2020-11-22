@@ -14,7 +14,7 @@ class Square(val boardPostion: Coord) {
         return true
     }
     override fun toString(): String {
-        val pieceString = piece.type.getTypeName() ?: "None"
+        val pieceString = piece.type
         return "$pieceString:$boardPostion"
     }
 }
