@@ -1,44 +1,30 @@
 package wildercoding.chess
 
-class Knight(color:Player): Piece(PieceType.KNIGHT,color) {
+class Knight(color:Color): Piece(PieceType.KNIGHT,color) {
 
-    override fun generateMovesList(): List<Coord> {
-        val moves= arrayListOf<Coord>()
-        var position = location.copy()
 
-        position.rank+=2
-        position.file+=1
-        moves.add(position.copy())
-        position = location.copy()
-        position.rank+=2
-        position.file-=1
-        moves.add(position.copy())
-        position = location.copy()
-        position.rank-=2
-        position.file+=1
-        moves.add(position.copy())
-        position = location.copy()
-        position.rank-=2
-        position.file-=1
-        moves.add(position.copy())
-        position = location.copy()
-        position.rank+=1
-        position.file+=2
-        moves.add(position.copy())
-        position = location.copy()
-        position.rank+=1
-        position.file-=2
-        moves.add(position.copy())
-        position = location.copy()
-        position.rank-=1
-        position.file+=2
-        moves.add(position.copy())
-        position = location.copy()
-        position.rank-=1
-        position.file-=2
-        moves.add(position.copy())
+    override fun generateMovesList(location: Coord): List<Coord> {
+        val possibleMoves= arrayListOf<Coord?>()
+        possibleMoves.add(Coord.getValidatedCoord(location.file+2,location.rank+1))
+        possibleMoves.add(Coord.getValidatedCoord(location.file+2,location.rank-1))
+        possibleMoves.add(Coord.getValidatedCoord(location.file-2,location.rank+1))
+        possibleMoves.add(Coord.getValidatedCoord(location.file-2,location.rank-1))
 
-        return moves
+        possibleMoves.add(Coord.getValidatedCoord(location.file+1,location.rank+2))
+        possibleMoves.add(Coord.getValidatedCoord(location.file+1,location.rank-2))
+        possibleMoves.add(Coord.getValidatedCoord(location.file-1,location.rank+2))
+        possibleMoves.add(Coord.getValidatedCoord(location.file-1,location.rank-2))
+        return possibleMoves.filterNotNull()
     }
+
+    override fun verifyTake(): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun generateTakeList(): List<Coord> {
+        TODO("Not yet implemented")
+    }
+
+
 
 }
