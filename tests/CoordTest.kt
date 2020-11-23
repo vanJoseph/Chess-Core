@@ -55,4 +55,34 @@ class CoordTest {
 
         assertTrue("Coord$coord is valid",exception == null)
     }
+
+    @Test
+    fun Should_ReturnNull_When_ParamsAreNotInRange() {
+        val outOfRangeValues = arrayOf(-1, -2, -3, 8, 9, 10)
+
+        for (value in outOfRangeValues) {
+            assertTrue(Coord.getValidatedCoord(value,0)==null)
+            assertTrue(Coord.getValidatedCoord(0,value)==null)
+            assertTrue(Coord.getValidatedCoord(value,value)==null)
+        }
+    }
+
+    @Test
+    fun Should_ReturnCoord_When_ParamsAreInRange() {
+        for (y in 0..7) {
+            for (x in 0..7) {
+                assertTrue(Coord.getValidatedCoord(x,y) is Coord)
+            }
+        }
+    }
+
+    @Test
+    fun Should_ReturnCoorectCoord_When_ParamsAreInRange() {
+        for (y in 0..7) {
+            for (x in 0..7) {
+                assertTrue(Coord.getValidatedCoord(x,y) == Coord(x,y))
+            }
+        }
+    }
+
 }
