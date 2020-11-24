@@ -1,88 +1,62 @@
 package wildercoding.chess
 
-class Bishop(color: Player) : Piece(PieceType.BISHOP, color) {
-    constructor(color: Player, board: Board) : this(color) {
-        this.board = board
+class Bishop(color: Color) : Piece(PieceType.BISHOP, color) {
+
+    override fun generateMovesList(coord: Coord): List<Coord> {
+        val possibleLocations = arrayListOf<Coord>()
+
+        possibleLocations.addAll(generateNeMoveList(coord))
+        possibleLocations.addAll(generateNwMoveList(coord))
+        possibleLocations.addAll(generateSeMoveList(coord))
+        possibleLocations.addAll(generateSwMoveList(coord))
+
+        return possibleLocations
     }
 
-    var board: Board? = null
-    override fun generateMovesList(): List<Coord> {
-        val possibleLocations = arrayListOf<Coord?>()
-        // If there is a board no passing will be permitted
-        if (board == null) {
 
-            for (i in 1..7) {
-                // Add the NE Squares
-                var nextCoord = Coord(location.file + i, location.rank + i)
-                if (checkInbounds(nextCoord)) {
-                    possibleLocations.add(nextCoord)
-                }
-                // Add the NW Squares
-                nextCoord = Coord(location.file - i, location.rank + i)
-                if (checkInbounds(nextCoord)) {
-                    possibleLocations.add(nextCoord)
 
-                }
-
-                // Add the SE Squares
-                nextCoord = Coord(location.file + i, location.rank - i)
-                if (checkInbounds(nextCoord)) {
-                    possibleLocations.add(nextCoord)
-
-                }
-                // Add the SW Squares
-                nextCoord = Coord(location.file - i, location.rank - i)
-                if (checkInbounds(nextCoord)) {
-                    possibleLocations.add(nextCoord)
-
-                }
-            }
-        } else {
-            // Add the NE Squares
-            for (i in 1..7) {
-                val nextCoord = Coord(location.file + i, location.rank + i)
-                if (checkInbounds(nextCoord) && board!!.getPiece(nextCoord) == null) {
-                    possibleLocations.add(nextCoord)
-                }else
-                    break
-            }
-            // Add the NW Squares
-            for (i in 1..7) {
-                val nextCoord = Coord(location.file - i, location.rank + i)
-                if (checkInbounds(nextCoord) && board!!.getPiece(nextCoord) == null) {
-                    possibleLocations.add(nextCoord)
-                }else
-                    break
-            }
-
-            // Add the SE Squares
-            for (i in 1..7) {
-                val nextCoord = Coord(location.file + i, location.rank - i)
-                if (checkInbounds(nextCoord) && board!!.getPiece(nextCoord) == null) {
-                    possibleLocations.add(nextCoord)
-                }else
-                    break
-            }
-            // Add the SW Squares
-            for (i in 1..7) {
-                val nextCoord = Coord(location.file - i, location.rank - i)
-                if (checkInbounds(nextCoord) && board!!.getPiece(nextCoord) == null) {
-                    possibleLocations.add(nextCoord)
-                }else
-                    break
-            }
+    fun generateNeMoveList(coord: Coord): List<Coord> {
+        val possibleLocations = arrayListOf<Coord>()
+        for (i in 1..7) {
+            val nextCoord = Coord.getValidatedCoord(coord.file + i, coord.rank + i)
+            possibleLocations.add(nextCoord ?:break)
         }
-
-        return validateLocation(possibleLocations)
+        return possibleLocations
     }
 
-    private fun checkInbounds(coord: Coord): Boolean {
-        if (coord.file >= 0 || coord.file <= 7 &&
-                coord.rank >= 0 || coord.rank <= 7)
-            return true
-        else
-            return false
+    fun generateSeMoveList(coord: Coord): List<Coord> {
+        val possibleLocations = arrayListOf<Coord>()
+        for (i in 1..7) {
+            val nextCoord = Coord.getValidatedCoord(coord.file + i, coord.rank- i)
+            possibleLocations.add(nextCoord ?:break)
+        }
+        return possibleLocations
+    }
+
+    fun generateNwMoveList(coord: Coord): List<Coord> {
+        val possibleLocations = arrayListOf<Coord>()
+        for (i in 1..7) {
+            val nextCoord = Coord.getValidatedCoord(coord.file -i, coord.rank+i)
+            possibleLocations.add(nextCoord ?:break)
+        }
+        return possibleLocations
+    }
+
+    fun generateSwMoveList(coord: Coord): List<Coord> {
+        val possibleLocations = arrayListOf<Coord>()
+        for (i in 1..7) {
+            val nextCoord = Coord.getValidatedCoord(coord.file -i, coord.rank-i)
+            possibleLocations.add(nextCoord ?:break)
+        }
+        return possibleLocations
+    }
+
+    override fun generateTakeList(): List<Coord> {
+        TODO("Not yet implemented")
     }
 
 
+    override fun verifyTake(): Boolean {
+        TODO("Not yet implemented")
+    }
 }
