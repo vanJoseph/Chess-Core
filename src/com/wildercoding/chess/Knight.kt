@@ -16,15 +16,4 @@ class Knight(color:Color): Piece(PieceType.KNIGHT,color) {
         possibleMoves.add(Coord.getValidatedCoord(location.file-1,location.rank-2))
         return possibleMoves.filterNotNull()
     }
-
-    override fun verifyTake(): Boolean {
-        TODO("Not yet implemented")
-    }
-
-    override fun generateTakeList(): List<Coord> {
-        TODO("Not yet implemented")
-    }
-
-
-
 }

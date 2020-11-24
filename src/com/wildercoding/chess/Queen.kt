@@ -80,11 +80,4 @@ class Queen(color: Color) : Piece(PieceType.QUEEN, color) {
         }
         return possibleLocations
     }
-    override fun generateTakeList(): List<Coord> {
-        TODO("Not yet implemented")
-    }
-
-    override fun verifyTake(): Boolean {
-        TODO("Not yet implemented")
-    }
 }

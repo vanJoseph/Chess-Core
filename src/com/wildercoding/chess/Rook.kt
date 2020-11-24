@@ -44,16 +44,4 @@ class Rook(color: Color) : Piece(PieceType.ROOK, color) {
         }
         return possibleLocations
     }
-
-    override fun verifyTake(): Boolean {
-        TODO("Not yet implemented")
-    }
-
-
-    override fun generateTakeList(): List<Coord> {
-        val possibleTakes = listOf<Coord>()//getNorthMoves()
-        return possibleTakes
-    }
-
-
 }

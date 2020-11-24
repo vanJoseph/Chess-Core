@@ -16,13 +16,4 @@ class Pawn(color: Color) : Piece(PieceType.PAWN, color) {
         return possibleMoves.filterNotNull()
     }
 
-    override fun generateTakeList(): List<Coord> {
-        TODO("Not yet implemented")
-    }
-
-    override fun verifyTake(): Boolean {
-        TODO("Not yet implemented")
-    }
-
-
 }
