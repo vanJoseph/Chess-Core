@@ -1,60 +1,27 @@
 package wildercoding.chess
 
-class Pawn(color: Player) : Piece(PieceType.PAWN, color) {
-    constructor(color: Player,board: Board): this(color){
-        this.board=board
-    }
-    var board:Board?=null
+class Pawn(color: Color) : Piece(PieceType.PAWN, color) {
+
     var firstMove = true
 
-    override fun generateMovesList(): List<Coord> {
+    override fun generateMovesList(coord: Coord): List<Coord> {
         val possibleMoves = arrayListOf<Coord?>()
-
-        if(board==null) {
-            when (firstMove) {
-                true -> {
-                    if (color == Player.BLACK) {
-                        possibleMoves.add(Coord(location.file, location.rank - 1))
-                        possibleMoves.add(Coord(location.file, location.rank - 2))
-
-                    } else {
-                        possibleMoves.add(Coord(location.file, location.rank + 1))
-                        possibleMoves.add(Coord(location.file, location.rank + 2))
-                    }
-                }
-                false -> {
-                    if (color == Player.BLACK)
-                        possibleMoves.add(Coord(location.file, location.rank - 1))
-                    else
-                        possibleMoves.add(Coord(location.file, location.rank + 1))
-                }
-            }
-        }else {
-
-            //  This if statement is trash and unclear i just wanted to see if i could write it
-            if(board!!.getPiece(location.file, location.rank + if (color==Player.BLACK)-1 else 1)==null) {
-
-                when (firstMove) {
-                    true -> {
-                        if (color == Player.BLACK) {
-                            possibleMoves.add(Coord(location.file, location.rank - 1))
-                            possibleMoves.add(Coord(location.file, location.rank - 2))
-
-                        } else {
-                            possibleMoves.add(Coord(location.file, location.rank + 1))
-                            possibleMoves.add(Coord(location.file, location.rank + 2))
-                        }
-                    }
-                    false -> {
-                        if (color == Player.BLACK)
-                            possibleMoves.add(Coord(location.file, location.rank - 1))
-                        else
-                            possibleMoves.add(Coord(location.file, location.rank + 1))
-                    }
-                }
-            }
+        val blackModifier = if(color == Color.WHITE) 1 else-1
+        if (firstMove){
+            possibleMoves.add(Coord.getValidatedCoord(coord.file,coord.rank+1 *blackModifier) ?:null)
+            possibleMoves.add(Coord.getValidatedCoord(coord.file,coord.rank+2*blackModifier) ?:null)
+        }else{
+            possibleMoves.add(Coord.getValidatedCoord(coord.file,coord.rank+1*blackModifier) ?:null)
         }
-        return validateLocation(possibleMoves)
+        return possibleMoves.filterNotNull()
+    }
+
+    override fun generateTakeList(): List<Coord> {
+        TODO("Not yet implemented")
+    }
+
+    override fun verifyTake(): Boolean {
+        TODO("Not yet implemented")
     }
 
 
