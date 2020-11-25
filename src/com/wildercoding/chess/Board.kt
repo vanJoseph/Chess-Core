@@ -8,7 +8,7 @@ package wildercoding.chess
  * Use the methods to add and remove pieces in each square.
  *
  */
-class Board {
+open class Board {
     private val squares = Array(8) { rank -> Array(8) { file -> Square(Coord(file, rank)) } }
 
 
@@ -77,7 +77,7 @@ class Board {
         for (y in 7 downTo 0) {
             for (x in 0..7) {
                 val coord= Coord(x,y)
-                boardString.append("$coord: ${getPiece(coord).type.abbr()}\t")
+                boardString.append("$coord: ${getPiece(coord).color.getAbbr()}${getPiece(coord).type.abbr()}\t")
             }
             boardString.append("\n")
         }
