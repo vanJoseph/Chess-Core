@@ -13,6 +13,14 @@ class Rook(color: Color) : Piece(PieceType.ROOK, color) {
         return possibleLocations
     }
 
+    override fun verifyMove(board: Board, fromPos: Coord, toPos: Coord): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun verifyTake(board: Board, fromPos: Coord, toPos: Coord): Boolean {
+        TODO("Not yet implemented")
+    }
+
     fun generateNorthMoveList(coord: Coord): List<Coord> {
         val possibleLocations = arrayListOf<Coord>()
         for (rank in coord.rank + 1..7) {

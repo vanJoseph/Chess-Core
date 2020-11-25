@@ -13,6 +13,13 @@ class Bishop(color: Color) : Piece(PieceType.BISHOP, color) {
         return possibleLocations
     }
 
+    override fun verifyMove(board: Board, fromPos: Coord, toPos: Coord): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun verifyTake(board: Board, fromPos: Coord, toPos: Coord): Boolean {
+        TODO("Not yet implemented")
+    }
 
 
     fun generateNeMoveList(coord: Coord): List<Coord> {

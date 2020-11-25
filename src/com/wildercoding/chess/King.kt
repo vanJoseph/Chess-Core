@@ -17,4 +17,12 @@ class King(color:Color):Piece(PieceType.KING,color) {
 
         return possibleMoves.filterNotNull()
     }
+
+    override fun verifyMove(board: Board, fromPos: Coord, toPos: Coord): Boolean {
+        TODO("Not yet implemented")
+    }
+
+    override fun verifyTake(board: Board, fromPos: Coord, toPos: Coord): Boolean {
+        TODO("Not yet implemented")
+    }
 }
