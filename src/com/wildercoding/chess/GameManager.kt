@@ -1,21 +1,12 @@
 package wildercoding.chess
 
-class GameManager(val board:Board, val inputMethod: InputMethod, val outputMethod: OutputMethod?) {
-    var moveNumber = 0
-    var playerTurn = Player.WHITE
+import java.util.function.ToDoubleBiFunction
+
+class GameManager(val board:Board) {
+    var playerTurn = Color.WHITE
     val moveLog = arrayListOf<MoveRequest>()
-    var gameState=GameState.NEW
+    var isPlayable = true
 
-    fun start() {
-        while(gameState==GameState.NEW) {
-            displayGame()
-            executeMove()
-        }
-    }
-
-    fun displayGame() {
-        outputMethod?.display(GameInfo(playerTurn,board))
-    }
     /**
      * Execute one move for the correct player
      * Todo Change the game state
@@ -23,65 +14,43 @@ class GameManager(val board:Board, val inputMethod: InputMethod, val outputMetho
      * @return 1 if successful and -1 if there was a problem with validation
 
      */
-    fun executeMove(): MoveInfo {
-        val moveRequest = inputMethod.getMove(GameInfo(playerTurn,board))
-        val moveInfo=validate(moveRequest)
+    fun executeMove(moveRequest: MoveRequest): MoveInfo {
+
+        val moveInfo = validateMove(moveRequest)
+
+        // Responsible for changing and logging Moves
         if (moveInfo.success) {
             moveLog.add(moveRequest)
-            moveNumber++
-            changeTurn()
-            return moveInfo
-        } else
-            return moveInfo
+            changeTurns()
+        }
+        return moveInfo
     }
 
 
-    private fun changeTurn() {
-        if (playerTurn == Player.WHITE) playerTurn = Player.BLACK else playerTurn = Player.WHITE
-    }
-
-    /**
-     * Validate piece moves, game move, and execute the move
-     *
-     */
-    fun validate(moveRequest: MoveRequest): MoveInfo {
-
-        when (moveRequest.moveType) {
-            MoveType.MOVE -> {
-                val piece= board.getPiece(moveRequest.fromPos)
-                // Verification that the piece being moved is the current player's piece
-                if (piece?.color!= playerTurn )
-                    return MoveInfo(false,false,null,null)
-                // Verification that the moveTo square is not ocupied
-                if (board.getPiece(moveRequest.toPos)!=null)
-                    return MoveInfo(false,true,false,null)
-                // Verification that the piece can move to the location
-                val pieceType = getPieceTypeFromMoveRequest(moveRequest)
-                if (!piece.verifyMove(moveRequest.toPos))
-                    return MoveInfo(false,true,true,false )
-                else {
-                    moveRequest.pieceValidation = true
-                }
-            }
+    fun validateMove(moveRequest: MoveRequest): MoveInfo {
+        val piece = board.getPiece(moveRequest.fromPos)
+        if (!isPlayable){
+            return MoveInfo(false,"Not Playable")
+        }
+        if (piece is None){
+            return MoveInfo(false, "There is no piece to move")
+        }
+        if(piece.color != playerTurn){
+            return MoveInfo(false, "Can not move other color piece")
+        }
+        if(board.getPiece(moveRequest.toPos).color == playerTurn){
+            return MoveInfo(false, "You can not take your own piece")
+        }else{
+            // Take verification goes here
         }
 
-        // Actually move the piece
-        movePiece(moveRequest.fromPos,moveRequest.toPos)
-        return MoveInfo(true,true,true,true)
+        return MoveInfo(true)
     }
 
-    /**
-     * Moves the piece from @param fromPos to @param toPos nullify the fromPos
-     */
-    private fun movePiece(fromPos:Coord, toPos:Coord){
-        // get the piece
-        val piece= board.getPiece(fromPos)!!
-        // null out the fromPos
-        board.removePiece(fromPos)
-        // move piece to toPos
-        board.addPiece(piece,toPos)
-    }
-    fun getPieceTypeFromMoveRequest(moveRequest: MoveRequest): PieceType? {
-        return board.getPiece(moveRequest.fromPos)?.type
+    fun changeTurns() {
+        if (playerTurn==Color.BLACK)
+            playerTurn=Color.WHITE
+        else
+            playerTurn=Color.BLACK
     }
 }
