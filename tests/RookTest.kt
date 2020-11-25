@@ -248,4 +248,5 @@ class RookTest {
             assertFalse(verifiedMoves.contains(move))
         }
     }
+
 }
