@@ -249,4 +249,53 @@ class RookTest {
         }
     }
 
+    @Test
+    fun Should_NotMoveToSquare_When_PassAnotherPiece() {
+        val pawnLocations = arrayOf<Coord>(
+                Coord(2, 3),
+                Coord(3, 4),
+                Coord(6, 3),
+                Coord(3, 1))
+        val moveToLocations = arrayOf<Coord>(
+                Coord(0, 1),
+                Coord(3, 7),
+                Coord(7, 3),
+                Coord(3, 0))
+        val startLocation = Coord(3, 3)
+        val board=Board()
+        board.addPiece(piece, startLocation)
+
+        // Add Pawns
+        pawnLocations.forEach { coord: Coord-> board.addPiece(Pawn(Color.WHITE),coord)}
+
+        // Try to move to the passing location
+        moveToLocations.forEach { coord: Coord ->
+            assertFalse(piece.verifyMove(board,startLocation,coord))
+        }
+    }
+    @Test
+    fun Should_MoveToSquare_When_NotPassAnotherPiece() {
+        val pawnLocations = arrayOf<Coord>(
+                Coord(0, 1),
+                Coord(3, 7),
+                Coord(7, 3),
+                Coord(3, 0))
+        val moveToLocations = arrayOf<Coord>(
+                Coord(2, 3),
+                Coord(3, 4),
+                Coord(6, 3),
+                Coord(3, 1))
+        val startLocation = Coord(3, 3)
+        val board=Board()
+        board.addPiece(piece, startLocation)
+
+        // Add Pawns
+        pawnLocations.forEach { coord: Coord-> board.addPiece(Pawn(Color.WHITE),coord)}
+
+        // Try to move to the passing location
+        moveToLocations.forEach { coord: Coord ->
+            assertTrue(piece.verifyMove(board,startLocation,coord))
+        }
+    }
+
 }
