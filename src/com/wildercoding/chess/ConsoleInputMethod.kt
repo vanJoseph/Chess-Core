@@ -1,11 +1,7 @@
 package wildercoding.chess
 
 class ConsoleInputMethod: InputMethod {
-    override fun getMove(gameInfo: GameInfo): MoveRequest {
-        println("${gameInfo.playerTurn.name} Turn:")
-
-        val fromValidation =false
-
+    override fun getMove(): MoveRequest {
         println("Choose piece: ")
         val fromPos = readLine()!!
 
@@ -13,10 +9,10 @@ class ConsoleInputMethod: InputMethod {
         println("Choose move: ")
         val toPos = readLine()!!
 
-        return validateMoveRequst(fromPos,toPos)
+        return parseInput(fromPos,toPos)
     }
 
-    fun validateMoveRequst(fromPos: String, toPos: String): MoveRequest {
+    fun parseInput(fromPos: String, toPos: String): MoveRequest {
 
         // create the fromPos Coord
         val fromFile = fromPos[0].toString().toInt()
@@ -30,7 +26,7 @@ class ConsoleInputMethod: InputMethod {
 
         val toCoord = Coord(toFile, toRank)
 
-        return MoveRequest(null,fromCoord,toCoord,MoveType.MOVE)
+        return MoveRequest(fromCoord,toCoord)
 
 
 
