@@ -110,4 +110,46 @@ class PawnTest  {
             assertFalse(verifiedMoves.contains(move))
         }
     }
+
+    @Test
+    fun Should_NotMoveToSquare_When_TheyAreOccupiedByAnyPiece() {
+        val piece= Pawn(Color.WHITE)
+        piece.firstMove = false
+        val startPos = Coord(5, 1)
+        val verifiedMoves = piece.generateMovesList(startPos)
+        val illegalMoves = arrayOf(Coord(5,2))
+
+        val board = Board()
+        // Add piece to the board
+        board.addPiece(piece, startPos)
+        // Add the Black pawns in front of the White pawn
+        illegalMoves.forEach { board.addPiece(Pawn(Color.BLACK),it)}
+
+
+        for (move in illegalMoves) {
+            assertFalse(piece.verifyMove(board,startPos,move))
+        }
+    }
+
+    @Test
+    fun Should_NotMoveToSquare_When_FirstMove_TheyAreOccupiedByAnyPiece() {
+        val piece= Pawn(Color.WHITE)
+        piece.firstMove = true
+        val startPos = Coord(5, 1)
+        val verifiedMoves = piece.generateMovesList(startPos)
+        val illegalMoves = arrayOf(Coord(5,3))
+
+        val board = Board()
+        // Add piece to the board
+        board.addPiece(piece, startPos)
+        // Add the Black pawns in front of the White pawn
+        illegalMoves.forEach { board.addPiece(Pawn(Color.BLACK),it)}
+
+
+        for (move in illegalMoves) {
+            assertFalse(piece.verifyMove(board,startPos,move))
+        }
+
+
+    }
 }
