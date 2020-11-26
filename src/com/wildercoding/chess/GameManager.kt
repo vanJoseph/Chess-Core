@@ -6,6 +6,7 @@ class GameManager(val board:Board) {
     var playerTurn = Color.WHITE
     val moveLog = arrayListOf<MoveRequest>()
     var isPlayable = true
+    var isInCheck = false
 
     /**
      * Execute one move for the correct player
@@ -20,10 +21,25 @@ class GameManager(val board:Board) {
 
         // Responsible for changing and logging Moves
         if (moveInfo.success) {
+            updateBoard(moveRequest)
             moveLog.add(moveRequest)
             changeTurns()
         }
         return moveInfo
+    }
+    fun executeMove(inputMethod: InputMethod, outputMethod: OutputMethod) {
+        if (moveLog.size<1) {
+            outputMethod.display(playerTurn, isPlayable, isInCheck, null, board)
+        }
+        val moveRequest = inputMethod.getMove()
+        val moveInfo = executeMove(moveRequest)
+        outputMethod.display(playerTurn,isPlayable,isInCheck,moveInfo,board)
+
+    }
+    fun updateBoard(moveRequest: MoveRequest) {
+        val piece =  board.getPiece(moveRequest.fromPos)
+        board.removePiece(moveRequest.fromPos)
+        board.addPiece(piece,moveRequest.toPos)
     }
 
 
@@ -41,10 +57,16 @@ class GameManager(val board:Board) {
         if(board.getPiece(moveRequest.toPos).color == playerTurn){
             return MoveInfo(false, "You can not take your own piece")
         }else{
-            // Take verification goes here
+            if(piece.verifyMove(board,moveRequest.fromPos,moveRequest.toPos)){
+                return MoveInfo(true)
+            }
         }
 
-        return MoveInfo(true)
+        if(piece.verifyMove(board,moveRequest.fromPos,moveRequest.toPos)){
+            return MoveInfo(true)
+        }
+
+        return MoveInfo(false)
     }
 
     fun changeTurns() {
