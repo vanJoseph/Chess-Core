@@ -232,5 +232,52 @@ class BishopTest {
             assertFalse(verifiedMoves.contains(move))
         }
     }
+    @Test
+    fun Should_NotMoveToSquare_When_PassAnotherPiece() {
+        val pawnLocations = arrayOf<Coord>(
+                Coord(1, 1),
+                Coord(2, 4),
+                Coord(5, 5),
+                Coord(5, 1))
+        val moveToLocations = arrayOf<Coord>(
+                Coord(0, 6),
+                Coord(0, 0),
+                Coord(6, 0),
+                Coord(7, 7))
+        val startLocation = Coord(3, 3)
+        val board=Board()
+        board.addPiece(piece, startLocation)
 
+        // Add Pawns
+        pawnLocations.forEach { coord: Coord-> board.addPiece(Pawn(Color.WHITE),coord)}
+
+        // Try to move to the passing location
+        moveToLocations.forEach { coord: Coord ->
+            assertFalse(piece.verifyMove(board,startLocation,coord))
+        }
+    }
+    @Test
+    fun Should_MoveToSquare_When_NotPassAnotherPiece() {
+        val pawnLocations = arrayOf<Coord>(
+                Coord(0, 6),
+                Coord(0, 0),
+                Coord(6, 0),
+                Coord(7, 7))
+        val moveToLocations = arrayOf<Coord>(
+                Coord(1, 1),
+                Coord(2, 4),
+                Coord(5, 5),
+                Coord(5, 1))
+        val startLocation = Coord(3, 3)
+        val board=Board()
+        board.addPiece(piece, startLocation)
+
+        // Add Pawns
+        pawnLocations.forEach { coord: Coord-> board.addPiece(Pawn(Color.WHITE),coord)}
+
+        // Try to move to the passing location
+        moveToLocations.forEach { coord: Coord ->
+            assertTrue(piece.verifyMove(board,startLocation,coord))
+        }
+    }
 }
