@@ -17,7 +17,15 @@ class Pawn(color: Color) : Piece(PieceType.PAWN, color) {
     }
 
     override fun verifyMove(board: Board, fromPos: Coord, toPos: Coord): Boolean {
-        TODO("Not yet implemented")
+
+        for(position in generateMovesList(fromPos)){
+            if(toPos == position && board.getPiece(toPos)is None){
+                return true
+            }
+        }
+        return false
+
+        return true
     }
 
     override fun verifyTake(board: Board, fromPos: Coord, toPos: Coord): Boolean {
