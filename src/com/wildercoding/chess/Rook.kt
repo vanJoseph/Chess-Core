@@ -13,8 +13,46 @@ class Rook(color: Color) : Piece(PieceType.ROOK, color) {
         return possibleLocations
     }
 
+
+    /**
+     * Checks to make sure that there is no pieces between the fromPos and the toPos
+     */
     override fun verifyMove(board: Board, fromPos: Coord, toPos: Coord): Boolean {
-        TODO("Not yet implemented")
+        val moveArray = arrayOf<List<Coord>>(
+                generateNorthMoveList(fromPos),
+                generateEastMoveList(fromPos),
+                generateSouthMoveList(fromPos),
+                generateWestMoveList(fromPos))
+
+        var positionDirection = -1
+        // Find out which direction has to the toPos
+        for ((index, direction) in moveArray.withIndex()){
+            for(coord in direction){ //
+                if(coord == toPos){
+                    positionDirection = index
+                }
+            }
+            if(positionDirection!=-1){ // Breaks the loop when it found the direction of the toPos
+                break
+            }
+        }
+
+
+        if (positionDirection==-1){
+            return false
+        }
+
+        // Go tru the list to make sure there isn't any Pieces in the way
+
+        for(position in moveArray[positionDirection]){
+            if(position ==  toPos){
+                break
+            }
+            if(board.getPiece(position)!is None){
+                return false
+            }
+        }
+        return true
     }
 
     override fun verifyTake(board: Board, fromPos: Coord, toPos: Coord): Boolean {
