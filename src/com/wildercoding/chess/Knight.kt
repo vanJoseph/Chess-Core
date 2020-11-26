@@ -18,7 +18,12 @@ class Knight(color:Color): Piece(PieceType.KNIGHT,color) {
     }
 
     override fun verifyMove(board: Board, fromPos: Coord, toPos: Coord): Boolean {
-        TODO("Not yet implemented")
+        for(position in generateMovesList(fromPos)){
+            if(toPos == position){
+                return true
+            }
+        }
+        return false
     }
 
     override fun verifyTake(board: Board, fromPos: Coord, toPos: Coord): Boolean {
