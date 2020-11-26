@@ -13,10 +13,6 @@ class Rook(color: Color) : Piece(PieceType.ROOK, color) {
         return possibleLocations
     }
 
-
-    /**
-     * Checks to make sure that there is no pieces between the fromPos and the toPos
-     */
     override fun verifyMove(board: Board, fromPos: Coord, toPos: Coord): Boolean {
         val moveArray = arrayOf<List<Coord>>(
                 generateNorthMoveList(fromPos),
