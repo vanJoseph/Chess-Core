@@ -29,7 +29,16 @@ class Pawn(color: Color) : Piece(PieceType.PAWN, color) {
     }
 
     override fun verifyTake(board: Board, fromPos: Coord, toPos: Coord): Boolean {
-        TODO("Not yet implemented")
+        val colorMod= if(color==Color.BLACK) -1 else 1
+        val takeSquare = arrayOf(
+                Coord.getValidatedCoord(fromPos.file+1, fromPos.rank+colorMod),
+                Coord.getValidatedCoord(fromPos.file-1, fromPos.rank+colorMod))
+        for (square in takeSquare.filterNotNull()) {
+            if(square==toPos){
+                return true
+            }
+        }
+        return false
     }
 
 }
