@@ -52,7 +52,7 @@ class Bishop(color: Color) : Piece(PieceType.BISHOP, color) {
     }
 
     override fun verifyTake(board: Board, fromPos: Coord, toPos: Coord): Boolean {
-        TODO("Not yet implemented")
+        return verifyMove(board,fromPos,toPos)
     }
 
 

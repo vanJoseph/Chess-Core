@@ -28,6 +28,6 @@ class King(color:Color):Piece(PieceType.KING,color) {
     }
 
     override fun verifyTake(board: Board, fromPos: Coord, toPos: Coord): Boolean {
-        TODO("Not yet implemented")
+        return verifyMove(board,fromPos,toPos)
     }
 }

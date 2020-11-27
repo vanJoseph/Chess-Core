@@ -60,7 +60,7 @@ class Queen(color: Color) : Piece(PieceType.QUEEN, color) {
     }
 
     override fun verifyTake(board: Board, fromPos: Coord, toPos: Coord): Boolean {
-        TODO("Not yet implemented")
+        return verifyMove(board,fromPos,toPos)
     }
 
     fun generateNorthMoveList(coord: Coord): List<Coord> {
