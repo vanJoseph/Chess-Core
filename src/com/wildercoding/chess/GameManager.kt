@@ -45,19 +45,19 @@ class GameManager(val board:Board) {
 
     fun validateMove(moveRequest: MoveRequest): MoveInfo {
         val piece = board.getPiece(moveRequest.fromPos)
-        if (!isPlayable){
+        if (!isPlayable){ // Check to see if the game is not finished
             return MoveInfo(false,"Not Playable")
         }
-        if (piece is None){
+        if (piece is None){// Check to see if the piece being moved is a moveable piece
             return MoveInfo(false, "There is no piece to move")
         }
-        if(piece.color != playerTurn){
+        if(piece.color != playerTurn){ //Check to see that the player is moving their piece
             return MoveInfo(false, "Can not move other color piece")
         }
-        if(board.getPiece(moveRequest.toPos).color == playerTurn){
+        if(board.getPiece(moveRequest.toPos).color == playerTurn){ // Check to see if a player is trying to take their own piece
             return MoveInfo(false, "You can not take your own piece")
         }else{
-            if(piece.verifyMove(board,moveRequest.fromPos,moveRequest.toPos)){
+            if(piece.verifyTake(board,moveRequest.fromPos,moveRequest.toPos)){ //Verify that a take is possible
                 return MoveInfo(true)
             }
         }
@@ -75,4 +75,5 @@ class GameManager(val board:Board) {
         else
             playerTurn=Color.BLACK
     }
+
 }
