@@ -149,7 +149,20 @@ class PawnTest  {
         for (move in illegalMoves) {
             assertFalse(piece.verifyMove(board,startPos,move))
         }
+    }
 
+    @Test
+    fun Should_TakePiece_When_PieceIsDiagonal() {
+        val piece= Pawn(Color.WHITE)
+        piece.firstMove = true
+        val startPos = Coord(1, 1)
+        val takeablePieces = arrayOf(Coord(0,2), Coord(2,2))
 
+        val board = Board()
+        board.addPiece(piece, startPos)
+        // Add opponent pawns to the board
+        takeablePieces.forEach { board.addPiece(Pawn(Color.BLACK),it) }
+        // Pawn should be able to take theses pieces
+        takeablePieces.forEach { assertTrue(piece.verifyTake(board,startPos,it)) }
     }
 }
