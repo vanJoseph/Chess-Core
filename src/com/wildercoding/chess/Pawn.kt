@@ -34,6 +34,9 @@ class Pawn(color: Color) : Piece(PieceType.PAWN, color) {
                 Coord.getValidatedCoord(fromPos.file+1, fromPos.rank+colorMod),
                 Coord.getValidatedCoord(fromPos.file-1, fromPos.rank+colorMod))
         for (square in takeSquare.filterNotNull()) {
+            if(board.getPiece(square).color == Color.NONE){
+                continue
+            }
             if(square==toPos){
                 return true
             }
