@@ -84,4 +84,24 @@ open class Board {
         return boardString.toString()
     }
 
+    /**
+     * Todo Create a Test for equals
+     */
+    override fun equals(other: Any?): Boolean {
+        if(other !is Board){
+            return false
+        }
+        val otherBoard = other as Board
+
+        for (y in 0..7){
+            for (x in 0..7){
+                val coord = Coord(x,y)
+                if(getPiece(coord).type != otherBoard.getPiece(coord).type ||
+                        getPiece(coord).color != otherBoard.getPiece(coord).color){
+                    return false
+                }
+            }
+        }
+        return true
+    }
 }
