@@ -90,10 +90,16 @@ class GameManager(val board: Board) {
         if (verifyRookCheck(coord, fromColor)) {
             return true
         }
+        if( verifyBishopCheck(coord, fromColor)){
+            return true
+        }
+        if (verifyQueenCheck(coord,fromColor)){
+            return true
+        }
         return false
     }
 
-    private fun verifyPawnCheck(coord: Coord, fromColor: Color): Boolean {
+    fun verifyPawnCheck(coord: Coord, fromColor: Color): Boolean {
         val colorMod = if (fromColor == Color.WHITE) -1 else 1
         val possiblePawnLoc = arrayOf(
                 Coord.getValidatedCoord(coord.file - 1, coord.rank + colorMod),
@@ -106,7 +112,7 @@ class GameManager(val board: Board) {
         }
         return false
     }
-    private fun verifyKingCheck(coord: Coord, fromColor: Color): Boolean {
+    fun verifyKingCheck(coord: Coord, fromColor: Color): Boolean {
         val possibleKingLoc = arrayOf(
                 Coord.getValidatedCoord(coord.file+1,coord.rank+1),Coord.getValidatedCoord(coord.file-1,coord.rank+1),
                 Coord.getValidatedCoord(coord.file+1,coord.rank),Coord.getValidatedCoord(coord.file-1,coord.rank),
@@ -121,7 +127,7 @@ class GameManager(val board: Board) {
         return false
     }
 
-    private fun verifyKnightCheck(coord: Coord, fromColor: Color): Boolean {
+    fun verifyKnightCheck(coord: Coord, fromColor: Color): Boolean {
         val possibleKnightLoc = arrayOf(
                 Coord.getValidatedCoord(coord.file+2,coord.rank+1),Coord.getValidatedCoord(coord.file-2,coord.rank+1),
                 Coord.getValidatedCoord(coord.file+2,coord.rank-1),Coord.getValidatedCoord(coord.file-2,coord.rank-1),
@@ -135,7 +141,7 @@ class GameManager(val board: Board) {
         }
         return false
     }
-    private fun verifyRookCheck(coord: Coord, fromColor: Color): Boolean {
+    fun verifyRookCheck(coord: Coord, fromColor: Color): Boolean {
 
         if(     verifyCheckNorth(coord,fromColor)||
                 verifyCheckSouth(coord,fromColor)||
@@ -145,6 +151,31 @@ class GameManager(val board: Board) {
         }
         return false
     }
+    fun verifyBishopCheck(coord: Coord, fromColor: Color): Boolean {
+
+        if(     verifyCheckNe(coord,fromColor)||
+                verifyCheckSe(coord, fromColor)||
+                verifyCheckNw(coord,fromColor)||
+                verifyCheckSw(coord,fromColor)){
+            return true
+        }
+        return false
+    }
+     fun verifyQueenCheck(coord: Coord, fromColor: Color): Boolean {
+        if(     verifyCheckNe(coord,fromColor)||
+                verifyCheckSe(coord, fromColor)||
+                verifyCheckNw(coord,fromColor)||
+                verifyCheckSw(coord,fromColor)||
+                verifyCheckNorth(coord,fromColor)||
+                verifyCheckSouth(coord,fromColor)||
+                verifyCheckWest(coord,fromColor)||
+                verifyCheckEast(coord,fromColor)){
+            return true
+        }
+        return false
+    }
+
+
     private fun verifyCheckNorth(coord: Coord, fromColor: Color): Boolean {
         for (rank in 1..7) {
             val tempCoord = Coord.getValidatedCoord(coord.file,coord.rank+rank)
@@ -152,8 +183,25 @@ class GameManager(val board: Board) {
             if(piece is None){
                 continue
             }
-            if(piece !is Rook && piece.color ==fromColor ||
-                    piece!is Queen && piece.color == fromColor){
+            if(piece  is Rook && piece.color ==fromColor ||
+                    piece is Queen && piece.color == fromColor){
+                return true
+
+            }else{
+                break
+            }
+        }
+        return false
+    }
+    fun verifyCheckNe(coord: Coord, fromColor: Color): Boolean {
+        for (i in 1..7) {
+            val tempCoord = Coord.getValidatedCoord(coord.file+i,coord.rank+i)
+            val piece = board.getPiece(tempCoord ?: return false )
+            if(piece is None){
+                continue
+            }
+            if(piece is Bishop && piece.color ==fromColor ||
+                    piece is Queen && piece.color == fromColor){
                 return true
 
             }else{
@@ -163,6 +211,59 @@ class GameManager(val board: Board) {
         return false
     }
 
+    fun verifyCheckSe(coord: Coord, fromColor: Color): Boolean {
+        for (i in 1..7) {
+            val tempCoord = Coord.getValidatedCoord(coord.file+i,coord.rank-i)
+            val piece = board.getPiece(tempCoord ?: return false )
+            if(piece is None){
+                continue
+            }
+            if(piece is Bishop && piece.color ==fromColor ||
+                    piece is Queen && piece.color == fromColor){
+                return true
+
+            }else{
+                break
+            }
+        }
+        return false
+    }
+
+    fun verifyCheckNw(coord: Coord, fromColor: Color): Boolean {
+        for (i in 1..7) {
+            val tempCoord = Coord.getValidatedCoord(coord.file-i,coord.rank+i)
+            val piece = board.getPiece(tempCoord ?: return false )
+            if(piece is None){
+                continue
+            }
+            if(piece is Bishop && piece.color ==fromColor ||
+                    piece is Queen && piece.color == fromColor){
+                return true
+
+            }else{
+                break
+            }
+        }
+        return false
+    }
+
+    fun verifyCheckSw(coord: Coord, fromColor: Color): Boolean {
+        for (i in 1..7) {
+            val tempCoord = Coord.getValidatedCoord(coord.file-i,coord.rank-i)
+            val piece = board.getPiece(tempCoord ?: return false )
+            if(piece is None){
+                continue
+            }
+            if(piece  is Bishop && piece.color ==fromColor ||
+                    piece is Queen && piece.color == fromColor){
+                return true
+
+            }else{
+                break
+            }
+        }
+        return false
+    }
     private fun verifyCheckSouth(coord: Coord, fromColor: Color): Boolean {
         for (rank in 1..7) {
             val tempCoord = Coord.getValidatedCoord(coord.file,coord.rank-rank)
@@ -170,8 +271,8 @@ class GameManager(val board: Board) {
             if(piece is None){
                 continue
             }
-            if(piece !is Rook && piece.color ==fromColor ||
-                    piece!is Queen && piece.color == fromColor){
+            if(piece  is Rook && piece.color ==fromColor ||
+                    piece is Queen && piece.color == fromColor){
                 return true
 
             }else{
@@ -188,8 +289,8 @@ class GameManager(val board: Board) {
             if(piece is None){
                 continue
             }
-            if(piece !is Rook && piece.color ==fromColor ||
-                    piece!is Queen && piece.color == fromColor){
+            if(piece  is Rook && piece.color ==fromColor ||
+                    piece is Queen && piece.color == fromColor){
                 return true
 
             }else{
@@ -206,8 +307,8 @@ class GameManager(val board: Board) {
             if(piece is None){
                 continue
             }
-            if(piece !is Rook && piece.color ==fromColor ||
-                    piece!is Queen && piece.color == fromColor){
+            if(piece  is Rook && piece.color ==fromColor ||
+                    piece is Queen && piece.color == fromColor){
                 return true
 
             }else{
