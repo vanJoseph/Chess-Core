@@ -1,5 +1,8 @@
 package wildercoding.chess
 
+import kotlin.reflect.KClass
+import kotlin.reflect.jvm.internal.impl.metadata.ProtoBuf
+
 class GameManager(val board: Board) {
     var playerTurn = Color.WHITE
     val moveLog = arrayListOf<MoveRequest>()
@@ -77,245 +80,255 @@ class GameManager(val board: Board) {
     }
 
 
-    fun checkForCheck(coord: Coord, fromColor: Color): Boolean {
-        if (verifyPawnCheck(coord, fromColor)){
-            return true
-        }
-        if (verifyKingCheck(coord, fromColor)){
-            return true
-        }
-        if (verifyKnightCheck(coord, fromColor)){
-            return true
-        }
-        if (verifyRookCheck(coord, fromColor)) {
-            return true
-        }
-        if( verifyBishopCheck(coord, fromColor)){
-            return true
-        }
-        if (verifyQueenCheck(coord,fromColor)){
-            return true
-        }
-        return false
+    fun checkForCheck(coord: Coord, fromColor: Color): Array<Coord> {
+        val checks = arrayListOf<Coord?>()
+        checks.addAll(verifyPawnCheck(coord, fromColor))
+        checks.addAll(verifyKnightCheck(coord, fromColor))
+        checks.add(verifyKingCheck(coord,fromColor)?:null)
+        checks.addAll(verifyRookCheck(coord, fromColor))
+        checks.addAll(verifyBishopCheck(coord, fromColor))
+        checks.addAll(verifyQueenCheck(coord, fromColor))
+        return checks.filterNotNull().toTypedArray()
     }
 
-    fun verifyPawnCheck(coord: Coord, fromColor: Color): Boolean {
+    fun verifyPawnCheck(coord: Coord, fromColor: Color): Array<Coord> {
         val colorMod = if (fromColor == Color.WHITE) -1 else 1
         val possiblePawnLoc = arrayOf(
                 Coord.getValidatedCoord(coord.file - 1, coord.rank + colorMod),
                 Coord.getValidatedCoord(coord.file + 1, coord.rank + colorMod))
+        val checkfromPawns = arrayListOf<Coord>()
         for (possiblePosition in possiblePawnLoc.filterNotNull()) {
             if (board.getPiece(possiblePosition) is Pawn &&
-                    board.getPiece(possiblePosition).color == fromColor){
-                return true
+                    board.getPiece(possiblePosition).color == fromColor) {
+                checkfromPawns.add(possiblePosition)
             }
         }
-        return false
+        return checkfromPawns.toTypedArray()
     }
-    fun verifyKingCheck(coord: Coord, fromColor: Color): Boolean {
+
+    fun verifyKingCheck(coord: Coord, fromColor: Color): Coord? {
         val possibleKingLoc = arrayOf(
-                Coord.getValidatedCoord(coord.file+1,coord.rank+1),Coord.getValidatedCoord(coord.file-1,coord.rank+1),
-                Coord.getValidatedCoord(coord.file+1,coord.rank),Coord.getValidatedCoord(coord.file-1,coord.rank),
-                Coord.getValidatedCoord(coord.file+1,coord.rank-1),Coord.getValidatedCoord(coord.file-1,coord.rank-1),
-                Coord.getValidatedCoord(coord.file,coord.rank+1),Coord.getValidatedCoord(coord.file,coord.rank-1))
+                Coord.getValidatedCoord(coord.file + 1, coord.rank + 1), Coord.getValidatedCoord(coord.file - 1, coord.rank + 1),
+                Coord.getValidatedCoord(coord.file + 1, coord.rank), Coord.getValidatedCoord(coord.file - 1, coord.rank),
+                Coord.getValidatedCoord(coord.file + 1, coord.rank - 1), Coord.getValidatedCoord(coord.file - 1, coord.rank - 1),
+                Coord.getValidatedCoord(coord.file, coord.rank + 1), Coord.getValidatedCoord(coord.file, coord.rank - 1))
         for (loc in possibleKingLoc.filterNotNull()) {
-            if(board.getPiece(loc) is King &&
-                    board.getPiece(loc).color == fromColor){
-                return true
+            if (board.getPiece(loc) is King &&
+                    board.getPiece(loc).color == fromColor) {
+                return loc
             }
         }
-        return false
+        return null
     }
 
-    fun verifyKnightCheck(coord: Coord, fromColor: Color): Boolean {
+    fun verifyKnightCheck(coord: Coord, fromColor: Color): Array<Coord> {
         val possibleKnightLoc = arrayOf(
-                Coord.getValidatedCoord(coord.file+2,coord.rank+1),Coord.getValidatedCoord(coord.file-2,coord.rank+1),
-                Coord.getValidatedCoord(coord.file+2,coord.rank-1),Coord.getValidatedCoord(coord.file-2,coord.rank-1),
-                Coord.getValidatedCoord(coord.file+1,coord.rank+2),Coord.getValidatedCoord(coord.file-1,coord.rank-2),
-                Coord.getValidatedCoord(coord.file-1,coord.rank+2),Coord.getValidatedCoord(coord.file+1,coord.rank-2))
+                Coord.getValidatedCoord(coord.file + 2, coord.rank + 1), Coord.getValidatedCoord(coord.file - 2, coord.rank + 1),
+                Coord.getValidatedCoord(coord.file + 2, coord.rank - 1), Coord.getValidatedCoord(coord.file - 2, coord.rank - 1),
+                Coord.getValidatedCoord(coord.file + 1, coord.rank + 2), Coord.getValidatedCoord(coord.file - 1, coord.rank - 2),
+                Coord.getValidatedCoord(coord.file - 1, coord.rank + 2), Coord.getValidatedCoord(coord.file + 1, coord.rank - 2))
+        val checkPieces = arrayListOf<Coord>()
         for (loc in possibleKnightLoc.filterNotNull()) {
-            if(board.getPiece(loc) is Knight &&
-                    board.getPiece(loc).color == fromColor){
-                return true
+            if (board.getPiece(loc) is Knight &&
+                    board.getPiece(loc).color == fromColor) {
+                checkPieces.add(loc)
             }
         }
-        return false
+        return checkPieces.toTypedArray()
     }
-    fun verifyRookCheck(coord: Coord, fromColor: Color): Boolean {
 
-        if(     verifyCheckNorth(coord,fromColor)||
-                verifyCheckSouth(coord,fromColor)||
-                verifyCheckWest(coord,fromColor)||
-                verifyCheckEast(coord,fromColor)){
-            return true
+    fun verifyRookCheck(coord: Coord, fromColor: Color): Array<Coord> {
+
+        val checkPieces = arrayListOf<Coord?>()
+        checkPieces.add(verifyCheckNorth(coord, fromColor, PieceType.ROOK) ?: null)
+        checkPieces.add(verifyCheckSouth(coord, fromColor, PieceType.ROOK) ?: null)
+        checkPieces.add(verifyCheckWest(coord, fromColor, PieceType.ROOK) ?: null)
+        checkPieces.add(verifyCheckEast(coord, fromColor, PieceType.ROOK) ?: null)
+
+        return checkPieces.filterNotNull().toTypedArray()
+    }
+
+    fun verifyBishopCheck(coord: Coord, fromColor: Color): Array<Coord> {
+        val checkPieces = arrayListOf<Coord?>()
+        checkPieces.add(verifyCheckNe(coord, fromColor, PieceType.BISHOP) ?: null)
+        checkPieces.add(verifyCheckSe(coord, fromColor, PieceType.BISHOP) ?: null)
+        checkPieces.add(verifyCheckNw(coord, fromColor, PieceType.BISHOP) ?: null)
+        checkPieces.add(verifyCheckSw(coord, fromColor, PieceType.BISHOP) ?: null)
+        return checkPieces.filterNotNull().toTypedArray()
+    }
+
+    fun verifyQueenCheck(coord: Coord, fromColor: Color): Array<Coord> {
+
+
+        val checkPieces = arrayListOf<Coord?>()
+        checkPieces.add(verifyCheckNorth(coord, fromColor, PieceType.QUEEN) ?: null)
+        checkPieces.add(verifyCheckSouth(coord, fromColor, PieceType.QUEEN) ?: null)
+        checkPieces.add(verifyCheckWest(coord, fromColor, PieceType.QUEEN) ?: null)
+        checkPieces.add(verifyCheckEast(coord, fromColor, PieceType.QUEEN) ?: null)
+        checkPieces.add(verifyCheckNe(coord, fromColor, PieceType.QUEEN) ?: null)
+        checkPieces.add(verifyCheckSe(coord, fromColor, PieceType.QUEEN) ?: null)
+        checkPieces.add(verifyCheckNw(coord, fromColor, PieceType.QUEEN) ?: null)
+        checkPieces.add(verifyCheckSw(coord, fromColor, PieceType.QUEEN) ?: null)
+        return checkPieces.filterNotNull().toTypedArray()
+    }
+
+
+    fun verifyCheckNe(coord: Coord, fromColor: Color, pieceType: PieceType): Coord? {
+        if (!(pieceType==PieceType.QUEEN|| pieceType== PieceType.BISHOP)){
+            return null
         }
-        return false
-    }
-    fun verifyBishopCheck(coord: Coord, fromColor: Color): Boolean {
+        for (i in 1..7) {
+            val tempCoord = Coord.getValidatedCoord(coord.file + i, coord.rank + i)
+            val piece = board.getPiece(tempCoord ?: return null)
+            if (piece is None) {
+                continue
+            }
+            if (piece.type ==pieceType && piece.color == fromColor) {
+                return tempCoord
 
-        if(     verifyCheckNe(coord,fromColor)||
-                verifyCheckSe(coord, fromColor)||
-                verifyCheckNw(coord,fromColor)||
-                verifyCheckSw(coord,fromColor)){
-            return true
+            } else {
+                break
+            }
         }
-        return false
+        return null
     }
-     fun verifyQueenCheck(coord: Coord, fromColor: Color): Boolean {
-        if(     verifyCheckNe(coord,fromColor)||
-                verifyCheckSe(coord, fromColor)||
-                verifyCheckNw(coord,fromColor)||
-                verifyCheckSw(coord,fromColor)||
-                verifyCheckNorth(coord,fromColor)||
-                verifyCheckSouth(coord,fromColor)||
-                verifyCheckWest(coord,fromColor)||
-                verifyCheckEast(coord,fromColor)){
-            return true
+
+    fun verifyCheckSe(coord: Coord, fromColor: Color, pieceType: PieceType): Coord? {
+        if (!(pieceType==PieceType.QUEEN|| pieceType== PieceType.BISHOP)){
+            return null
         }
-        return false
+        for (i in 1..7) {
+            val tempCoord = Coord.getValidatedCoord(coord.file + i, coord.rank - i)
+            val piece = board.getPiece(tempCoord ?: return null)
+            if (piece is None) {
+                continue
+            }
+            if (piece.type ==pieceType && piece.color == fromColor) {
+                return tempCoord
+
+            } else {
+                break
+            }
+        }
+        return null
     }
 
+    fun verifyCheckNw(coord: Coord, fromColor: Color, pieceType: PieceType): Coord? {
+        if (!(pieceType==PieceType.QUEEN|| pieceType== PieceType.BISHOP)){
+            return null
+        }
+        for (i in 1..7) {
+            val tempCoord = Coord.getValidatedCoord(coord.file - i, coord.rank + i)
+            val piece = board.getPiece(tempCoord ?: return null)
+            if (piece is None) {
+                continue
+            }
+            if (piece.type ==pieceType && piece.color == fromColor ) {
+                return tempCoord
 
-    private fun verifyCheckNorth(coord: Coord, fromColor: Color): Boolean {
+            } else {
+                break
+            }
+        }
+        return null
+    }
+
+    fun verifyCheckSw(coord: Coord, fromColor: Color, pieceType: PieceType): Coord? {
+        if (!(pieceType==PieceType.QUEEN|| pieceType== PieceType.BISHOP)){
+            return null
+        }
+        for (i in 1..7) {
+            val tempCoord = Coord.getValidatedCoord(coord.file - i, coord.rank - i)
+            val piece = board.getPiece(tempCoord ?: return null)
+            if (piece is None) {
+                continue
+            }
+            if (piece.type ==pieceType && piece.color == fromColor) {
+                return tempCoord
+
+            } else {
+                break
+            }
+        }
+        return null
+    }
+
+    private fun verifyCheckNorth(coord: Coord, fromColor: Color, pieceType: PieceType): Coord? {
+        if (!(pieceType==PieceType.QUEEN|| pieceType== PieceType.ROOK)){
+            return null
+        }
         for (rank in 1..7) {
-            val tempCoord = Coord.getValidatedCoord(coord.file,coord.rank+rank)
-            val piece = board.getPiece(tempCoord ?: return false )
-            if(piece is None){
+            val tempCoord = Coord.getValidatedCoord(coord.file, coord.rank + rank)
+            val piece = board.getPiece(tempCoord ?: return null)
+            if (piece is None) {
                 continue
             }
-            if(piece  is Rook && piece.color ==fromColor ||
-                    piece is Queen && piece.color == fromColor){
-                return true
+            if (piece.type ==pieceType && piece.color == fromColor) {
+                return tempCoord
 
-            }else{
+            } else {
                 break
             }
         }
-        return false
+        return null
     }
-    fun verifyCheckNe(coord: Coord, fromColor: Color): Boolean {
-        for (i in 1..7) {
-            val tempCoord = Coord.getValidatedCoord(coord.file+i,coord.rank+i)
-            val piece = board.getPiece(tempCoord ?: return false )
-            if(piece is None){
-                continue
-            }
-            if(piece is Bishop && piece.color ==fromColor ||
-                    piece is Queen && piece.color == fromColor){
-                return true
 
-            }else{
-                break
-            }
+    private fun verifyCheckSouth(coord: Coord, fromColor: Color, pieceType: PieceType): Coord? {
+        if (!(pieceType==PieceType.QUEEN|| pieceType== PieceType.ROOK)){
+            return null
         }
-        return false
-    }
-
-    fun verifyCheckSe(coord: Coord, fromColor: Color): Boolean {
-        for (i in 1..7) {
-            val tempCoord = Coord.getValidatedCoord(coord.file+i,coord.rank-i)
-            val piece = board.getPiece(tempCoord ?: return false )
-            if(piece is None){
-                continue
-            }
-            if(piece is Bishop && piece.color ==fromColor ||
-                    piece is Queen && piece.color == fromColor){
-                return true
-
-            }else{
-                break
-            }
-        }
-        return false
-    }
-
-    fun verifyCheckNw(coord: Coord, fromColor: Color): Boolean {
-        for (i in 1..7) {
-            val tempCoord = Coord.getValidatedCoord(coord.file-i,coord.rank+i)
-            val piece = board.getPiece(tempCoord ?: return false )
-            if(piece is None){
-                continue
-            }
-            if(piece is Bishop && piece.color ==fromColor ||
-                    piece is Queen && piece.color == fromColor){
-                return true
-
-            }else{
-                break
-            }
-        }
-        return false
-    }
-
-    fun verifyCheckSw(coord: Coord, fromColor: Color): Boolean {
-        for (i in 1..7) {
-            val tempCoord = Coord.getValidatedCoord(coord.file-i,coord.rank-i)
-            val piece = board.getPiece(tempCoord ?: return false )
-            if(piece is None){
-                continue
-            }
-            if(piece  is Bishop && piece.color ==fromColor ||
-                    piece is Queen && piece.color == fromColor){
-                return true
-
-            }else{
-                break
-            }
-        }
-        return false
-    }
-    private fun verifyCheckSouth(coord: Coord, fromColor: Color): Boolean {
         for (rank in 1..7) {
-            val tempCoord = Coord.getValidatedCoord(coord.file,coord.rank-rank)
-            val piece = board.getPiece(tempCoord ?: return false )
-            if(piece is None){
+            val tempCoord = Coord.getValidatedCoord(coord.file, coord.rank - rank)
+            val piece = board.getPiece(tempCoord ?: return null)
+            if (piece is None) {
                 continue
             }
-            if(piece  is Rook && piece.color ==fromColor ||
-                    piece is Queen && piece.color == fromColor){
-                return true
-
-            }else{
+            if (piece.type ==pieceType && piece.color == fromColor) {
+                return tempCoord
+            } else {
                 break
             }
         }
-        return false
+        return null
     }
 
-    private fun verifyCheckWest(coord: Coord, fromColor: Color): Boolean {
+    private fun verifyCheckWest(coord: Coord, fromColor: Color, pieceType: PieceType): Coord? {
+        if (!(pieceType==PieceType.QUEEN|| pieceType== PieceType.ROOK)){
+            return null
+        }
         for (file in 1..7) {
-            val tempCoord = Coord.getValidatedCoord(coord.file-file,coord.rank)
-            val piece = board.getPiece(tempCoord ?: return false )
-            if(piece is None){
+            val tempCoord = Coord.getValidatedCoord(coord.file - file, coord.rank)
+            val piece = board.getPiece(tempCoord ?: return null)
+            if (piece is None) {
                 continue
             }
-            if(piece  is Rook && piece.color ==fromColor ||
-                    piece is Queen && piece.color == fromColor){
-                return true
+            if (piece.type ==pieceType && piece.color == fromColor) {
+                return tempCoord
 
-            }else{
+            } else {
                 break
             }
         }
-        return false
+        return null
     }
 
-    private fun verifyCheckEast(coord: Coord,fromColor: Color): Boolean {
+    private fun verifyCheckEast(coord: Coord, fromColor: Color, pieceType: PieceType): Coord? {
+        if (!(pieceType==PieceType.QUEEN|| pieceType== PieceType.ROOK)){
+            return null
+        }
         for (file in 1..7) {
-            val tempCoord = Coord.getValidatedCoord(coord.file+file,coord.rank)
-            val piece = board.getPiece(tempCoord ?: return false )
-            if(piece is None){
+            val tempCoord = Coord.getValidatedCoord(coord.file + file, coord.rank)
+            val piece = board.getPiece(tempCoord ?: return null)
+            if (piece is None) {
                 continue
             }
-            if(piece  is Rook && piece.color ==fromColor ||
-                    piece is Queen && piece.color == fromColor){
-                return true
+            if (piece.type ==pieceType  && piece.color == fromColor) {
+                return tempCoord
 
-            }else{
+            } else {
                 break
             }
         }
-        return false
+        return null
     }
-
 }
