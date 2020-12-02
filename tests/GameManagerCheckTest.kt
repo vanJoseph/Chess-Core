@@ -1,5 +1,7 @@
+
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
+import org.hamcrest.core.IsCollectionContaining.hasItem
 import org.junit.Before
 import org.junit.Test
 import wildercoding.chess.*
@@ -22,15 +24,16 @@ class GameManagerCheckTest {
     }
     @Test
     fun Should_NotCheck_When_BoardIsEmpty() {
-        val assertLambda = {coord: Coord -> assertThat(gameManager.checkForCheck(coord,Color.BLACK),`is`(false))}
+        val assertLambda = {coord: Coord -> assertThat(gameManager.checkForCheck(coord,Color.BLACK).size,`is`(0))}
         cycleThruBoardCoords(assertLambda)
     }
 
     @Test
     fun Should_Check_When_InCheckByPawn() {
-        board.addPiece(Pawn(Color.BLACK),Coord(3,2))
+        val pawnLoc = Coord(3,2)
+        board.addPiece(Pawn(Color.BLACK),pawnLoc)
         val testSquare = Coord(2,1)
-        assertThat(gameManager.verifyPawnCheck(testSquare,Color.BLACK),`is`(true))
+        assertThat(gameManager.verifyPawnCheck(testSquare,Color.BLACK).asList(), hasItem(pawnLoc))
     }
 
     @Test
@@ -44,7 +47,7 @@ class GameManagerCheckTest {
 
         for (pos in kingSquares) {
             board.addPiece(King(Color.WHITE),pos)
-            assertThat(gameManager.verifyKingCheck(testSquare,Color.WHITE), `is`(true))
+            assertThat(gameManager.verifyKingCheck(testSquare,Color.WHITE), `is`(pos))
             board.removePiece(pos)
         }
     }
@@ -60,7 +63,7 @@ class GameManagerCheckTest {
 
         for (pos in knightSquares) {
             board.addPiece(Knight(Color.WHITE),pos)
-            assertThat(gameManager.verifyKnightCheck(testSquare,Color.WHITE), `is`(true))
+            assertThat(gameManager.verifyKnightCheck(testSquare,Color.WHITE).asList(), hasItem(pos))
             board.removePiece(pos)
         }
     }
@@ -74,7 +77,7 @@ class GameManagerCheckTest {
 
         for (pos in rookSquares) {
             board.addPiece(Rook(Color.WHITE),pos)
-            assertThat(gameManager.verifyRookCheck(testSquare,Color.WHITE), `is`(true))
+            assertThat(gameManager.verifyRookCheck(testSquare,Color.WHITE).asList(), hasItem(pos))
             board.removePiece(pos)
         }
     }
@@ -88,7 +91,7 @@ class GameManagerCheckTest {
 
         for (pos in bishopSquares) {
             board.addPiece(Bishop(Color.WHITE),pos)
-            assertThat(gameManager.verifyBishopCheck(testSquare,Color.WHITE), `is`(true))
+            assertThat(gameManager.verifyBishopCheck(testSquare,Color.WHITE).asList(), hasItem(pos))
             board.removePiece(pos)
         }
     }
@@ -104,9 +107,30 @@ class GameManagerCheckTest {
 
         for (pos in bishopSquares) {
             board.addPiece(Queen(Color.WHITE),pos)
-            assertThat(gameManager.verifyQueenCheck(testSquare,Color.WHITE), `is`(true))
+            assertThat(gameManager.verifyQueenCheck(testSquare,Color.WHITE).asList(), hasItem(pos))
             board.removePiece(pos)
         }
+    }
+
+    @Test
+    fun Should_ReturnTheNumberOfChecks_When_AllPIecesAreChecking() {
+        val startingPos = Coord(2, 3)
+        val knightPos = Coord(1, 1)
+        val kingPos = Coord(1, 3)
+        val queenPos = Coord(2, 6)
+        val pawnPos = Coord(3, 4)
+        val rookPos = Coord(5, 3)
+        val bishopPos = Coord(5, 0)
+
+        board.addPiece(Pawn(Color.BLACK), pawnPos)
+        board.addPiece(Knight(Color.BLACK), knightPos)
+        board.addPiece(Bishop(Color.BLACK), bishopPos)
+        board.addPiece(Rook(Color.BLACK), rookPos)
+        board.addPiece(King(Color.BLACK), kingPos)
+        board.addPiece(Queen(Color.BLACK), queenPos)
+
+
+        assertThat(gameManager.checkForCheck(startingPos, Color.BLACK).size, `is`(6))
     }
 
 }
