@@ -1,4 +1,5 @@
 
+import com.sun.source.tree.WhileLoopTree
 import com.wildercoding.chess.NoKingFoundException
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
@@ -148,6 +149,46 @@ class GameManagerCheckTest {
         assertThat(gameManager.findKing(Color.BLACK), `is`(kingLocation))
     }
 
+    @Test
+    fun Should_GiveCoordOfCheckReliefPieces() {
+        board.addPiece(King(Color.WHITE), Coord(2, 0))
+        val checkingPiecePos = Coord(3,2)
+        board.addPiece(Knight(Color.BLACK), checkingPiecePos)
+        val reliefPawn = Coord(4, 1)
+        board.addPiece(Pawn(Color.WHITE), reliefPawn)
+        board.addPiece(King(Color.BLACK), Coord(4, 7))
+
+        assertThat(gameManager.getCheckReliefPiece().get(checkingPiecePos), `is`(reliefPawn) )
+
+    }
+
+    @Test
+    fun Should_BoardIsTheSame_When_Simulated(){
+        board.addPiece(King(Color.WHITE), Coord(2, 0))
+        val checkingPiecePos = Coord(3,2)
+        board.addPiece(Knight(Color.BLACK), checkingPiecePos)
+        val reliefPawn = Coord(4, 1)
+        board.addPiece(Pawn(Color.WHITE), reliefPawn)
+        board.addPiece(King(Color.BLACK), Coord(4, 7))
+
+        val preSimBoard = gameManager.board.toString()
+        val moveRequest = MoveRequest(Coord(4,1),Coord(3,2))
+        gameManager.simulateCheckRelief(moveRequest)
+        val posSimBoard = gameManager.board.toString()
+        assertThat(posSimBoard, `is`(preSimBoard) )
+    }
+    @Test
+    fun Should_SimulateMove() {
+        board.addPiece(King(Color.WHITE), Coord(2, 0))
+        val checkingPiecePos = Coord(3,2)
+        board.addPiece(Knight(Color.BLACK), checkingPiecePos)
+        val reliefPawn = Coord(4, 1)
+        board.addPiece(Pawn(Color.WHITE), reliefPawn)
+        board.addPiece(King(Color.BLACK), Coord(4, 7))
+
+        val moveRequest = MoveRequest(Coord(4,1),Coord(3,2))
+        assertThat(gameManager.simulateCheckRelief(moveRequest), `is`(true) )
+    }
 
 
 
