@@ -1,4 +1,5 @@
 
+import com.wildercoding.chess.NoKingFoundException
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
 import org.hamcrest.core.IsCollectionContaining.hasItem
@@ -24,7 +25,7 @@ class GameManagerCheckTest {
     }
     @Test
     fun Should_NotCheck_When_BoardIsEmpty() {
-        val assertLambda = {coord: Coord -> assertThat(gameManager.checkForCheck(coord,Color.BLACK).size,`is`(0))}
+        val assertLambda = {coord: Coord -> assertThat(gameManager.checkSquareCheck(coord,Color.BLACK).size,`is`(0))}
         cycleThruBoardCoords(assertLambda)
     }
 
@@ -130,7 +131,24 @@ class GameManagerCheckTest {
         board.addPiece(Queen(Color.BLACK), queenPos)
 
 
-        assertThat(gameManager.checkForCheck(startingPos, Color.BLACK).size, `is`(6))
+        assertThat(gameManager.checkSquareCheck(startingPos, Color.BLACK).size, `is`(6))
     }
+
+
+    @Test(expected = NoKingFoundException::class)
+    fun Should_ThrowException_When_AKingIsMissing() {
+        val kingLocation = Coord(4, 7)
+       gameManager.findKing(Color.BLACK)
+    }
+    @Test
+    fun Should_FindKing() {
+        val kingLocation = Coord(4, 7)
+        board.addPiece(King(Color.BLACK), kingLocation)
+
+        assertThat(gameManager.findKing(Color.BLACK), `is`(kingLocation))
+    }
+
+
+
 
 }
