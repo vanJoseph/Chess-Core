@@ -1,9 +1,6 @@
 package wildercoding.chess
 
 import com.wildercoding.chess.NoKingFoundException
-import java.lang.RuntimeException
-import kotlin.reflect.KClass
-import kotlin.reflect.jvm.internal.impl.metadata.ProtoBuf
 
 class GameManager(val board: Board) {
     var playerTurn = Color.WHITE
@@ -343,5 +340,43 @@ class GameManager(val board: Board) {
             }
         }
         throw NoKingFoundException()
+    }
+
+    /**
+     * Finds all the pieces that can capture the piece that is checking the current player king
+     */
+    fun getCheckReliefPiece(): Map<Coord,Coord> {
+        val reliefMap = mutableMapOf<Coord,Coord>()
+        val kingPos = findKing(playerTurn)
+        val opponentColor = if (playerTurn == Color.BLACK) Color.WHITE else Color.BLACK
+        val checkingPieces = checkSquareCheck(kingPos, opponentColor)
+        for (checkingPiece in checkingPieces) {
+            for(reliefPiece in checkSquareCheck(checkingPieces.get(0), playerTurn)) {
+                reliefMap.put(checkingPiece,reliefPiece)
+            }
+        }
+        return reliefMap
+    }
+
+    fun simulateCheckRelief(moveRequest: MoveRequest): Boolean {
+        if(!validateMove(moveRequest).success)
+            return false
+
+        // Make the Simulated Move
+        val piece = board.getPiece(moveRequest.fromPos)
+        val removedPiece = board.getPiece(moveRequest.toPos)
+        board.removePiece(moveRequest.fromPos)
+        board.addPiece(piece, moveRequest.toPos)
+        // Check for Check allieviation
+        val kingPos = findKing(playerTurn)
+        val opponentColor = if (playerTurn == Color.BLACK) Color.WHITE else Color.BLACK
+        val relief = checkSquareCheck(kingPos,opponentColor).isEmpty()
+        // Reverse the Simulated Move
+        board.addPiece(piece, moveRequest.fromPos)
+        board.removePiece(moveRequest.toPos)
+        board.addPiece(removedPiece,moveRequest.toPos)
+
+
+        return relief
     }
 }
