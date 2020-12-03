@@ -1,5 +1,7 @@
 package wildercoding.chess
 
+import com.wildercoding.chess.NoKingFoundException
+import java.lang.RuntimeException
 import kotlin.reflect.KClass
 import kotlin.reflect.jvm.internal.impl.metadata.ProtoBuf
 
@@ -80,7 +82,7 @@ class GameManager(val board: Board) {
     }
 
 
-    fun checkForCheck(coord: Coord, fromColor: Color): Array<Coord> {
+    fun checkSquareCheck(coord: Coord, fromColor: Color): Array<Coord> {
         val checks = arrayListOf<Coord?>()
         checks.addAll(verifyPawnCheck(coord, fromColor))
         checks.addAll(verifyKnightCheck(coord, fromColor))
@@ -330,5 +332,16 @@ class GameManager(val board: Board) {
             }
         }
         return null
+    }
+
+    fun findKing(color: Color): Coord {
+        for (y in 0..7) {
+            for (x in 0..7) {
+                val coord = Coord(x, y)
+                if(board.getPiece(coord) is King && board.getPiece(coord). color ==color)
+                    return coord
+            }
+        }
+        throw NoKingFoundException()
     }
 }
