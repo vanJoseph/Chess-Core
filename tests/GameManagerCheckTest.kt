@@ -1,6 +1,9 @@
 
+import com.sun.source.tree.BlockTree
 import com.sun.source.tree.WhileLoopTree
+import com.wildercoding.chess.MultiMap
 import com.wildercoding.chess.NoKingFoundException
+import org.hamcrest.CoreMatchers.hasItems
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
 import org.hamcrest.core.IsCollectionContaining.hasItem
@@ -190,6 +193,91 @@ class GameManagerCheckTest {
         assertThat(gameManager.simulateCheckRelief(moveRequest), `is`(true) )
     }
 
+    @Test
+    fun Should_ReturnCheck_When_KingIsUnderAttack() {
+        board.addPiece(King(Color.WHITE), Coord(3, 0))
+        board.addPiece(Bishop(Color.BLACK), Coord(6, 3))
+        board.addPiece(King(Color.BLACK), Coord(7,7))
+
+        assertThat(gameManager.checkForKingCheck(Color.WHITE), `is`(true))
+    }
+    @Test
+    fun Should_NotReturnCheck_When_KingIsNotUnderAttack() {
+        board.addPiece(King(Color.WHITE), Coord(3, 0))
+        board.addPiece(Bishop(Color.BLACK), Coord(5, 4))
+        board.addPiece(King(Color.BLACK), Coord(7,7))
+
+        assertThat(gameManager.checkForKingCheck(Color.WHITE), `is`(false))
+    }
+
+    @Test
+    fun Should_ReturnSquaresKingCanMove_When_SquareIsNotUnderCheck() {
+        board.addPiece(King(Color.WHITE), Coord(3, 0))
+        board.addPiece(Bishop(Color.BLACK), Coord(6, 3))
+        board.addPiece(King(Color.BLACK), Coord(7,7))
+        val safeSquares= arrayOf(
+                Coord(2,0), Coord(2,1),
+                Coord(3,1), Coord(4,0))
 
 
+        val generatedSafeSquares = gameManager.canMoveOutofCheck()
+        for (square in safeSquares) {
+            assertThat(generatedSafeSquares.asList(), hasItem(square))
+        }
+        assertThat(generatedSafeSquares.size,  `is`(safeSquares.size))
+    }
+    @Test
+    fun Should_ReturnSquaresKingCanMove_When_SameColorPieceIsBlocking() {
+        board.addPiece(King(Color.WHITE), Coord(3, 0))
+        board.addPiece(Bishop(Color.BLACK), Coord(6, 3))
+        board.addPiece(King(Color.BLACK), Coord(7,7))
+        board.addPiece(Pawn(Color.WHITE), Coord(2,0))
+        val safeSquares= arrayOf(
+                Coord(2,1),
+                Coord(3,1), Coord(4,0))
+
+
+        val generatedSafeSquares = gameManager.canMoveOutofCheck()
+        for (square in safeSquares) {
+            assertThat(generatedSafeSquares.asList(), hasItem(square))
+        }
+        assertThat(generatedSafeSquares.size,  `is`(safeSquares.size))
+    }
+    @Test
+    fun Should_ReturnSquaresKingCanMove_When_OppositeColorPieceIsBlocking() {
+        board.addPiece(King(Color.WHITE), Coord(3, 0))
+        board.addPiece(Bishop(Color.BLACK), Coord(6, 3))
+        board.addPiece(King(Color.BLACK), Coord(7,7))
+        board.addPiece(Knight(Color.WHITE), Coord(6,0))
+
+        val moveMap= MultiMap<Coord,Coord>()
+                moveMap.put(Coord(6,0), Coord(4,1))
+                moveMap.put(Coord(6,0), Coord(5,2))
+
+        val generatedMap = gameManager.canBlockCheck()
+
+        for (key in moveMap.keySet()) {
+            assertThat( generatedMap.keySet(), hasItem(key))
+            for(value in moveMap.get(key)!!){
+                assertThat(generatedMap.get(key), hasItem(value))
+            }
+        }
+        assertThat(generatedMap.size(),  `is`(moveMap.size()))
+    }
+
+    @Test
+    fun Should_DeclareCheckmate() {
+        board.addPiece(King(Color.WHITE), Coord(3, 0))
+        board.addPiece(Rook(Color.BLACK), Coord(0,0))
+        board.addPiece(Rook(Color.BLACK), Coord(0,1))
+
+        assertThat(gameManager.checkForCheckmate(),`is`(true))
+    }
+    @Test
+    fun Should_NotDeclareCheckmate() {
+        board.addPiece(King(Color.WHITE), Coord(3, 0))
+        board.addPiece(Rook(Color.BLACK), Coord(0,0))
+
+        assertThat(gameManager.checkForCheckmate(),`is`(false))
+    }
 }
