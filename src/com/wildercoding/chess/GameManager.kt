@@ -1,5 +1,6 @@
 package wildercoding.chess
 
+import com.wildercoding.chess.MultiMap
 import com.wildercoding.chess.NoKingFoundException
 
 class GameManager(val board: Board) {
@@ -376,7 +377,87 @@ class GameManager(val board: Board) {
         board.removePiece(moveRequest.toPos)
         board.addPiece(removedPiece,moveRequest.toPos)
 
-
         return relief
     }
+
+    fun checkForKingCheck(color: Color): Boolean {
+        val kingPos = findKing(color)
+        val opponentColor = if (playerTurn == Color.BLACK) Color.WHITE else Color.BLACK
+        if(!checkSquareCheck(kingPos,opponentColor).isEmpty()){
+            return true
+        }
+
+        return false
+    }
+
+    /**
+     * return all the postions of non check squares
+     */
+    fun canMoveOutofCheck(): Array<Coord> {
+        val kingPos = findKing(playerTurn)
+        val opponentColor = if (playerTurn == Color.BLACK) Color.WHITE else Color.BLACK
+        val king = board.getPiece(kingPos)
+        val validatedSquares= arrayListOf<Coord>()
+
+        val potentialMoves = king.generateMovesList(kingPos)
+        for(square in potentialMoves){
+            val moveInfo = validateMove(MoveRequest(kingPos,square))
+            if (moveInfo.success){
+                val checksOnSquare = checkSquareCheck(square,opponentColor)
+                if (checksOnSquare.isEmpty()){
+                    val moveRequest = MoveRequest(kingPos,square)
+                    if(simulateCheckRelief(moveRequest)){
+                        validatedSquares.add(square)
+                    }
+                }
+            }
+        }
+//        king.generateMovesList(kingPos).forEach{
+//            val moveInfo = validateMove(MoveRequest(kingPos,it))
+//            if(moveInfo.success && checkSquareCheck(it,opponentColor).isEmpty()){
+//                validatedSquares.add(it)
+//            }
+//        }
+        return validatedSquares.toTypedArray()
+    }
+
+    fun canBlockCheck(): MultiMap<Coord, Coord> {
+        val kingPos= findKing(playerTurn)
+        val opponentColor = if (playerTurn == Color.BLACK) Color.WHITE else Color.BLACK
+        val attackingPiecePos = checkSquareCheck(kingPos, opponentColor)
+        val attackingPiece =board.getPiece(attackingPiecePos[0])
+        val attackRange= attackingPiece.generateMovesList(attackingPiecePos[0])
+
+        val blockingPieces = MultiMap<Coord, Coord>()
+        for (square in attackRange) {
+            val checkPieces = checkSquareCheck(square, playerTurn)
+            for(piece in checkPieces){
+                val simMoveRequest =MoveRequest(piece,square)
+                if(simulateCheckRelief(simMoveRequest)){
+                    blockingPieces.put(piece,square)
+                }
+            }
+        }
+
+        return blockingPieces
+    }
+
+
+    fun checkForCheckmate(): Boolean {
+        //Check that the king is in check
+        val kingPos = findKing(playerTurn)
+        if(!checkForKingCheck(playerTurn)){
+            return false
+        }
+        //Check that the king can not move out of check
+        if(!canMoveOutofCheck().isEmpty()){
+            return false
+        }
+        // verify that a peice can not block the checking pieces
+        if(!canBlockCheck().isEmpty)
+            return false
+        return true
+    }
+
+
 }
