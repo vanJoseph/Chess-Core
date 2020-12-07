@@ -264,20 +264,4 @@ class GameManagerCheckTest {
         }
         assertThat(generatedMap.size(),  `is`(moveMap.size()))
     }
-
-    @Test
-    fun Should_DeclareCheckmate() {
-        board.addPiece(King(Color.WHITE), Coord(3, 0))
-        board.addPiece(Rook(Color.BLACK), Coord(0,0))
-        board.addPiece(Rook(Color.BLACK), Coord(0,1))
-
-        assertThat(gameManager.checkForCheckmate(),`is`(true))
-    }
-    @Test
-    fun Should_NotDeclareCheckmate() {
-        board.addPiece(King(Color.WHITE), Coord(3, 0))
-        board.addPiece(Rook(Color.BLACK), Coord(0,0))
-
-        assertThat(gameManager.checkForCheckmate(),`is`(false))
-    }
 }
