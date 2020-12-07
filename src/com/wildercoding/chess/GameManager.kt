@@ -359,6 +359,9 @@ class GameManager(val board: Board) {
         return reliefMap
     }
 
+    /**
+     * Simulates a move if it results in a check it will return false
+     */
     fun simulateCheckRelief(moveRequest: MoveRequest): Boolean {
         if(!validateMove(moveRequest).success)
             return false
@@ -458,6 +461,52 @@ class GameManager(val board: Board) {
             return false
         return true
     }
+    fun hasLegalMove(coord: Coord): Boolean {
+        val piece = board.getPiece(coord)
+        val moves = piece.generateMovesList(coord)
+        for (move in moves) {
 
+            val moveRequest= MoveRequest(coord, move)
+            if(simulateCheckRelief(moveRequest)){
+                return true
+            }
+        }
+        return false
+    }
+
+    fun checkForLegalMoves(color: Color): Boolean {
+        val piecePositions = arrayListOf<Coord>()
+
+        // Gather all the pieces for the color
+        for (y in 0..7) {
+            for (x in 0..7) {
+                val coord = Coord(x, y)
+                val piece = board.getPiece(coord)
+
+                if (piece.color == color) {
+                    piecePositions.add(coord)
+                }
+
+            }
+        }
+
+        // Check to see if each one has a legal move
+        // return after the first legal move found
+
+        piecePositions.forEach {
+            if(hasLegalMove(it)){
+                return true
+            }
+        }
+        return false
+    }
+
+    fun checkForStalemate():Boolean {
+        if (!checkForKingCheck(playerTurn)&&
+                !checkForLegalMoves(playerTurn)){
+            return true
+        }
+        return false
+    }
 
 }
