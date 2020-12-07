@@ -1,4 +1,6 @@
 
+import org.hamcrest.MatcherAssert
+import org.hamcrest.core.Is
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -164,5 +166,18 @@ class PawnTest  {
         takeablePieces.forEach { board.addPiece(Pawn(Color.BLACK),it) }
         // Pawn should be able to take theses pieces
         takeablePieces.forEach { assertTrue(piece.verifyTake(board,startPos,it)) }
+    }
+
+    @Test
+    fun Should_NotMovePassPiece_When_FirstMove() {
+        val board= Board()
+        val fromCoord = Coord(7, 0)
+        board.addPiece(Rook(Color.BLACK), Coord(7,1))
+        val pawn = Pawn(Color.WHITE)
+        board.addPiece(pawn, fromCoord)
+
+        println(board)
+
+        assertFalse(pawn.verifyMove(board,fromCoord, Coord(7,2)))
     }
 }
