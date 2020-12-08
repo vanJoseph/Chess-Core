@@ -19,10 +19,13 @@ class GameManager(val board: Board) {
     fun executeMove(moveRequest: MoveRequest): MoveInfo {
 
         val moveInfo = validateMove(moveRequest)
+        val piece = board.getPiece(moveRequest.fromPos)
 
         // Responsible for changing and logging Moves
         if (moveInfo.success) {
             updateBoard(moveRequest)
+            // update the piece that moved first move
+            piece.firstMove=false
             moveLog.add(moveRequest)
             changeTurns()
         }
