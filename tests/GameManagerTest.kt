@@ -1,5 +1,7 @@
 import com.sun.source.tree.WhileLoopTree
 import com.wildercoding.chess.StandardChessBoard
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.MatcherAssert.assertThat
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Before
@@ -81,4 +83,28 @@ class GameManagerTest {
         val moveInfo= gameManager.executeMove(moveRequest)
         assertFalse(moveInfo.success)
     }
+
+    @Test
+    fun Should_UpdateFirstMove_When_PieceMoves() {
+
+        val moveTo = Coord(3, 3)
+        val moveRequest = MoveRequest(Coord(3, 1), moveTo)
+
+        gameManager.executeMove(moveRequest)
+        val movedPiece= gameManager.board.getPiece(moveTo)
+        assertThat(movedPiece.firstMove, `is`(false))
+    }
+
+    @Test
+    fun Should_FirstMoveTrue_When_PieceHasNotMoved() {
+
+        for (y in 0..7) {
+            for (x in 0..7) {
+                val coord = Coord(x, y)
+                val firstMove = gameManager.board.getPiece(coord).firstMove
+                assertThat(firstMove, `is`(true))
+            }
+        }
+    }
+
 }
