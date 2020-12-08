@@ -2,8 +2,6 @@ package wildercoding.chess
 
 class Pawn(color: Color) : Piece(PieceType.PAWN, color) {
 
-    var firstMove = true
-
     override fun generateMovesList(coord: Coord): List<Coord> {
         val possibleMoves = arrayListOf<Coord?>()
         val blackModifier = if (color == Color.WHITE) 1 else -1
