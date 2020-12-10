@@ -30,4 +30,22 @@ class King(color:Color):Piece(PieceType.KING,color) {
     override fun verifyTake(board: Board, fromPos: Coord, toPos: Coord): Boolean {
         return verifyMove(board,fromPos,toPos)
     }
+
+    fun verifyCastling(moveRequest: MoveRequest): Boolean {
+        when(color){
+            Color.WHITE ->{
+                if(moveRequest== MoveRequest(Coord(4,0), Coord(6,0))||
+                        moveRequest== MoveRequest(Coord(4,0), Coord(2,0))){
+                    return true
+                }
+            }
+            Color.BLACK ->{
+                if(moveRequest ==MoveRequest(Coord(4,7), Coord(6,7)) ||
+                        moveRequest == MoveRequest(Coord(4,7), Coord(2,7))){
+                    return true
+                }
+            }
+        }
+        return false
+    }
 }
