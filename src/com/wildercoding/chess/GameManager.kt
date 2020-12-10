@@ -5,6 +5,10 @@ import com.wildercoding.chess.NoKingFoundException
 
 class GameManager(val board: Board) {
     var playerTurn = Color.WHITE
+    var opponentColor: Color = Color.BLACK
+        get() {
+            return if (playerTurn == Color.BLACK) Color.WHITE else Color.BLACK
+        }
     val moveLog = arrayListOf<MoveRequest>()
     var isPlayable = true
     var isInCheck = false
@@ -20,14 +24,26 @@ class GameManager(val board: Board) {
 
         val moveInfo = validateMove(moveRequest)
         val piece = board.getPiece(moveRequest.fromPos)
-
+        if (!moveInfo.success){
+            return moveInfo
+        }
         // Responsible for changing and logging Moves
-        if (moveInfo.success) {
-            updateBoard(moveRequest)
-            // update the piece that moved first move
-            piece.firstMove=false
-            moveLog.add(moveRequest)
-            changeTurns()
+        when(moveInfo.moveType) {
+            MoveType.MOVE -> {
+                movePieces(moveRequest)
+                moveLog.add(moveRequest)// update the piece that moved first move
+                changeTurns()
+            }
+            MoveType.CASTLE_KINGSIDE,MoveType.CASTLE_QUEENSIDE ->{ //Castling
+                val moveInfo = verifyCastling(moveRequest)
+                if(moveInfo.success) {
+                    castlePieces(moveInfo)
+                    moveLog.add(moveRequest)
+                    changeTurns()
+                }else{
+                    return moveInfo
+                }
+            }
         }
         return moveInfo
     }
@@ -42,15 +58,42 @@ class GameManager(val board: Board) {
 
     }
 
-    fun updateBoard(moveRequest: MoveRequest) {
+    fun movePieces(moveRequest: MoveRequest) {
         val piece = board.getPiece(moveRequest.fromPos)
+        piece.firstMove=false
         board.removePiece(moveRequest.fromPos)
         board.addPiece(piece, moveRequest.toPos)
     }
 
+    fun castlePieces(moveInfo: MoveInfo){
+        val player = if(playerTurn == Color.WHITE)0 else 7
+        when (moveInfo.moveType) {
+             MoveType.CASTLE_KINGSIDE-> {
+                 val kingFromPos = Coord(4, player)
+                 val kingToPos = Coord(6,player)
+                 val kingMoveRequest = MoveRequest(kingFromPos, kingToPos)
+                 val rookFromPos = Coord(7, player)
+                 val rookToPos = Coord(5, player)
+                 val rookMoveRequest = MoveRequest( rookFromPos, rookToPos)
+                 movePieces(kingMoveRequest)
+                 movePieces(rookMoveRequest)
+            }
+            MoveType.CASTLE_QUEENSIDE ->{
+                val kingFromPos = Coord(4, player)
+                val kingToPos = Coord(2,player)
+                val kingMoveRequest = MoveRequest(kingFromPos, kingToPos)
+                val rookFromPos = Coord(0, player)
+                val rookToPos = Coord(3, player)
+                val rookMoveRequest = MoveRequest( rookFromPos, rookToPos)
+                movePieces(kingMoveRequest)
+                movePieces(rookMoveRequest)
+            }
+        }
+    }
 
     fun validateMove(moveRequest: MoveRequest): MoveInfo {
         val piece = board.getPiece(moveRequest.fromPos)
+        // Validation for Rules
         if (!isPlayable) { // Check to see if the game is not finished
             return MoveInfo(false, "Not Playable")
         }
@@ -60,6 +103,9 @@ class GameManager(val board: Board) {
         if (piece.color != playerTurn) { //Check to see that the player is moving their piece
             return MoveInfo(false, "Can not move other color piece")
         }
+
+
+        // Validation for Takes
         if (board.getPiece(moveRequest.toPos).color == playerTurn) { // Check to see if a player is trying to take their own piece
             return MoveInfo(false, "You can not take your own piece")
         } else {
@@ -68,6 +114,15 @@ class GameManager(val board: Board) {
             }
         }
 
+        // Validation for Castling
+        if(piece is King && piece.verifyCastling(moveRequest) ){
+            if (moveRequest.toPos.file> moveRequest.fromPos.file) {
+                return MoveInfo(true, MoveType.CASTLE_KINGSIDE)
+            }else{
+                return MoveInfo(true, MoveType.CASTLE_QUEENSIDE)
+            }
+        }
+        // Validation for Movement
         if (piece.verifyMove(board, moveRequest.fromPos, moveRequest.toPos)) {
             return MoveInfo(true)
         }
@@ -87,7 +142,7 @@ class GameManager(val board: Board) {
         val checks = arrayListOf<Coord?>()
         checks.addAll(verifyPawnCheck(coord, fromColor))
         checks.addAll(verifyKnightCheck(coord, fromColor))
-        checks.add(verifyKingCheck(coord,fromColor)?:null)
+        checks.add(verifyKingCheck(coord, fromColor) ?: null)
         checks.addAll(verifyRookCheck(coord, fromColor))
         checks.addAll(verifyBishopCheck(coord, fromColor))
         checks.addAll(verifyQueenCheck(coord, fromColor))
@@ -177,7 +232,7 @@ class GameManager(val board: Board) {
 
 
     fun verifyCheckNe(coord: Coord, fromColor: Color, pieceType: PieceType): Coord? {
-        if (!(pieceType==PieceType.QUEEN|| pieceType== PieceType.BISHOP)){
+        if (!(pieceType == PieceType.QUEEN || pieceType == PieceType.BISHOP)) {
             return null
         }
         for (i in 1..7) {
@@ -186,7 +241,7 @@ class GameManager(val board: Board) {
             if (piece is None) {
                 continue
             }
-            if (piece.type ==pieceType && piece.color == fromColor) {
+            if (piece.type == pieceType && piece.color == fromColor) {
                 return tempCoord
 
             } else {
@@ -197,7 +252,7 @@ class GameManager(val board: Board) {
     }
 
     fun verifyCheckSe(coord: Coord, fromColor: Color, pieceType: PieceType): Coord? {
-        if (!(pieceType==PieceType.QUEEN|| pieceType== PieceType.BISHOP)){
+        if (!(pieceType == PieceType.QUEEN || pieceType == PieceType.BISHOP)) {
             return null
         }
         for (i in 1..7) {
@@ -206,7 +261,7 @@ class GameManager(val board: Board) {
             if (piece is None) {
                 continue
             }
-            if (piece.type ==pieceType && piece.color == fromColor) {
+            if (piece.type == pieceType && piece.color == fromColor) {
                 return tempCoord
 
             } else {
@@ -217,7 +272,7 @@ class GameManager(val board: Board) {
     }
 
     fun verifyCheckNw(coord: Coord, fromColor: Color, pieceType: PieceType): Coord? {
-        if (!(pieceType==PieceType.QUEEN|| pieceType== PieceType.BISHOP)){
+        if (!(pieceType == PieceType.QUEEN || pieceType == PieceType.BISHOP)) {
             return null
         }
         for (i in 1..7) {
@@ -226,7 +281,7 @@ class GameManager(val board: Board) {
             if (piece is None) {
                 continue
             }
-            if (piece.type ==pieceType && piece.color == fromColor ) {
+            if (piece.type == pieceType && piece.color == fromColor) {
                 return tempCoord
 
             } else {
@@ -237,7 +292,7 @@ class GameManager(val board: Board) {
     }
 
     fun verifyCheckSw(coord: Coord, fromColor: Color, pieceType: PieceType): Coord? {
-        if (!(pieceType==PieceType.QUEEN|| pieceType== PieceType.BISHOP)){
+        if (!(pieceType == PieceType.QUEEN || pieceType == PieceType.BISHOP)) {
             return null
         }
         for (i in 1..7) {
@@ -246,7 +301,7 @@ class GameManager(val board: Board) {
             if (piece is None) {
                 continue
             }
-            if (piece.type ==pieceType && piece.color == fromColor) {
+            if (piece.type == pieceType && piece.color == fromColor) {
                 return tempCoord
 
             } else {
@@ -257,7 +312,7 @@ class GameManager(val board: Board) {
     }
 
     private fun verifyCheckNorth(coord: Coord, fromColor: Color, pieceType: PieceType): Coord? {
-        if (!(pieceType==PieceType.QUEEN|| pieceType== PieceType.ROOK)){
+        if (!(pieceType == PieceType.QUEEN || pieceType == PieceType.ROOK)) {
             return null
         }
         for (rank in 1..7) {
@@ -266,7 +321,7 @@ class GameManager(val board: Board) {
             if (piece is None) {
                 continue
             }
-            if (piece.type ==pieceType && piece.color == fromColor) {
+            if (piece.type == pieceType && piece.color == fromColor) {
                 return tempCoord
 
             } else {
@@ -277,7 +332,7 @@ class GameManager(val board: Board) {
     }
 
     private fun verifyCheckSouth(coord: Coord, fromColor: Color, pieceType: PieceType): Coord? {
-        if (!(pieceType==PieceType.QUEEN|| pieceType== PieceType.ROOK)){
+        if (!(pieceType == PieceType.QUEEN || pieceType == PieceType.ROOK)) {
             return null
         }
         for (rank in 1..7) {
@@ -286,7 +341,7 @@ class GameManager(val board: Board) {
             if (piece is None) {
                 continue
             }
-            if (piece.type ==pieceType && piece.color == fromColor) {
+            if (piece.type == pieceType && piece.color == fromColor) {
                 return tempCoord
             } else {
                 break
@@ -296,7 +351,7 @@ class GameManager(val board: Board) {
     }
 
     private fun verifyCheckWest(coord: Coord, fromColor: Color, pieceType: PieceType): Coord? {
-        if (!(pieceType==PieceType.QUEEN|| pieceType== PieceType.ROOK)){
+        if (!(pieceType == PieceType.QUEEN || pieceType == PieceType.ROOK)) {
             return null
         }
         for (file in 1..7) {
@@ -305,7 +360,7 @@ class GameManager(val board: Board) {
             if (piece is None) {
                 continue
             }
-            if (piece.type ==pieceType && piece.color == fromColor) {
+            if (piece.type == pieceType && piece.color == fromColor) {
                 return tempCoord
 
             } else {
@@ -316,7 +371,7 @@ class GameManager(val board: Board) {
     }
 
     private fun verifyCheckEast(coord: Coord, fromColor: Color, pieceType: PieceType): Coord? {
-        if (!(pieceType==PieceType.QUEEN|| pieceType== PieceType.ROOK)){
+        if (!(pieceType == PieceType.QUEEN || pieceType == PieceType.ROOK)) {
             return null
         }
         for (file in 1..7) {
@@ -325,7 +380,7 @@ class GameManager(val board: Board) {
             if (piece is None) {
                 continue
             }
-            if (piece.type ==pieceType  && piece.color == fromColor) {
+            if (piece.type == pieceType && piece.color == fromColor) {
                 return tempCoord
 
             } else {
@@ -339,7 +394,7 @@ class GameManager(val board: Board) {
         for (y in 0..7) {
             for (x in 0..7) {
                 val coord = Coord(x, y)
-                if(board.getPiece(coord) is King && board.getPiece(coord). color ==color)
+                if (board.getPiece(coord) is King && board.getPiece(coord).color == color)
                     return coord
             }
         }
@@ -349,14 +404,14 @@ class GameManager(val board: Board) {
     /**
      * Finds all the pieces that can capture the piece that is checking the current player king
      */
-    fun getCheckReliefPiece(): Map<Coord,Coord> {
-        val reliefMap = mutableMapOf<Coord,Coord>()
+    fun getCheckReliefPiece(): Map<Coord, Coord> {
+        val reliefMap = mutableMapOf<Coord, Coord>()
         val kingPos = findKing(playerTurn)
         val opponentColor = if (playerTurn == Color.BLACK) Color.WHITE else Color.BLACK
         val checkingPieces = checkSquareCheck(kingPos, opponentColor)
         for (checkingPiece in checkingPieces) {
-            for(reliefPiece in checkSquareCheck(checkingPieces.get(0), playerTurn)) {
-                reliefMap.put(checkingPiece,reliefPiece)
+            for (reliefPiece in checkSquareCheck(checkingPieces.get(0), playerTurn)) {
+                reliefMap.put(checkingPiece, reliefPiece)
             }
         }
         return reliefMap
@@ -366,7 +421,7 @@ class GameManager(val board: Board) {
      * Simulates a move if it results in a check it will return false
      */
     fun simulateCheckRelief(moveRequest: MoveRequest): Boolean {
-        if(!validateMove(moveRequest).success)
+        if (!validateMove(moveRequest).success)
             return false
 
         // Make the Simulated Move
@@ -377,11 +432,11 @@ class GameManager(val board: Board) {
         // Check for Check allieviation
         val kingPos = findKing(playerTurn)
         val opponentColor = if (playerTurn == Color.BLACK) Color.WHITE else Color.BLACK
-        val relief = checkSquareCheck(kingPos,opponentColor).isEmpty()
+        val relief = checkSquareCheck(kingPos, opponentColor).isEmpty()
         // Reverse the Simulated Move
         board.addPiece(piece, moveRequest.fromPos)
         board.removePiece(moveRequest.toPos)
-        board.addPiece(removedPiece,moveRequest.toPos)
+        board.addPiece(removedPiece, moveRequest.toPos)
 
         return relief
     }
@@ -389,7 +444,7 @@ class GameManager(val board: Board) {
     fun checkForKingCheck(color: Color): Boolean {
         val kingPos = findKing(color)
         val opponentColor = if (playerTurn == Color.BLACK) Color.WHITE else Color.BLACK
-        if(!checkSquareCheck(kingPos,opponentColor).isEmpty()){
+        if (!checkSquareCheck(kingPos, opponentColor).isEmpty()) {
             return true
         }
 
@@ -403,16 +458,16 @@ class GameManager(val board: Board) {
         val kingPos = findKing(playerTurn)
         val opponentColor = if (playerTurn == Color.BLACK) Color.WHITE else Color.BLACK
         val king = board.getPiece(kingPos)
-        val validatedSquares= arrayListOf<Coord>()
+        val validatedSquares = arrayListOf<Coord>()
 
         val potentialMoves = king.generateMovesList(kingPos)
-        for(square in potentialMoves){
-            val moveInfo = validateMove(MoveRequest(kingPos,square))
-            if (moveInfo.success){
-                val checksOnSquare = checkSquareCheck(square,opponentColor)
-                if (checksOnSquare.isEmpty()){
-                    val moveRequest = MoveRequest(kingPos,square)
-                    if(simulateCheckRelief(moveRequest)){
+        for (square in potentialMoves) {
+            val moveInfo = validateMove(MoveRequest(kingPos, square))
+            if (moveInfo.success) {
+                val checksOnSquare = checkSquareCheck(square, opponentColor)
+                if (checksOnSquare.isEmpty()) {
+                    val moveRequest = MoveRequest(kingPos, square)
+                    if (simulateCheckRelief(moveRequest)) {
                         validatedSquares.add(square)
                     }
                 }
@@ -428,19 +483,19 @@ class GameManager(val board: Board) {
     }
 
     fun canBlockCheck(): MultiMap<Coord, Coord> {
-        val kingPos= findKing(playerTurn)
+        val kingPos = findKing(playerTurn)
         val opponentColor = if (playerTurn == Color.BLACK) Color.WHITE else Color.BLACK
         val attackingPiecePos = checkSquareCheck(kingPos, opponentColor)
-        val attackingPiece =board.getPiece(attackingPiecePos[0])
-        val attackRange= attackingPiece.generateMovesList(attackingPiecePos[0])
+        val attackingPiece = board.getPiece(attackingPiecePos[0])
+        val attackRange = attackingPiece.generateMovesList(attackingPiecePos[0])
 
         val blockingPieces = MultiMap<Coord, Coord>()
         for (square in attackRange) {
             val checkPieces = checkSquareCheck(square, playerTurn)
-            for(piece in checkPieces){
-                val simMoveRequest =MoveRequest(piece,square)
-                if(simulateCheckRelief(simMoveRequest)){
-                    blockingPieces.put(piece,square)
+            for (piece in checkPieces) {
+                val simMoveRequest = MoveRequest(piece, square)
+                if (simulateCheckRelief(simMoveRequest)) {
+                    blockingPieces.put(piece, square)
                 }
             }
         }
@@ -452,25 +507,26 @@ class GameManager(val board: Board) {
     fun checkForCheckmate(): Boolean {
         //Check that the king is in check
         val kingPos = findKing(playerTurn)
-        if(!checkForKingCheck(playerTurn)){
+        if (!checkForKingCheck(playerTurn)) {
             return false
         }
         //Check that the king can not move out of check
-        if(!canMoveOutofCheck().isEmpty()){
+        if (!canMoveOutofCheck().isEmpty()) {
             return false
         }
         // verify that a peice can not block the checking pieces
-        if(!canBlockCheck().isEmpty)
+        if (!canBlockCheck().isEmpty)
             return false
         return true
     }
+
     fun hasLegalMove(coord: Coord): Boolean {
         val piece = board.getPiece(coord)
         val moves = piece.generateMovesList(coord)
         for (move in moves) {
 
-            val moveRequest= MoveRequest(coord, move)
-            if(simulateCheckRelief(moveRequest)){
+            val moveRequest = MoveRequest(coord, move)
+            if (simulateCheckRelief(moveRequest)) {
                 return true
             }
         }
@@ -497,19 +553,95 @@ class GameManager(val board: Board) {
         // return after the first legal move found
 
         piecePositions.forEach {
-            if(hasLegalMove(it)){
+            if (hasLegalMove(it)) {
                 return true
             }
         }
         return false
     }
 
-    fun checkForStalemate():Boolean {
-        if (!checkForKingCheck(playerTurn)&&
-                !checkForLegalMoves(playerTurn)){
+    fun checkForStalemate(): Boolean {
+        if (!checkForKingCheck(playerTurn) &&
+                !checkForLegalMoves(playerTurn)) {
             return true
         }
         return false
+    }
+
+    fun verifyCastling(moveRequest: MoveRequest): MoveInfo {
+
+        if (checkForKingCheck(playerTurn)) {
+            return MoveInfo(false, "Player is in Check")
+        }
+
+        var moveInfo: MoveInfo
+        if (moveRequest.toPos.file > moveRequest.fromPos.file) {
+            moveInfo = verifyCastleKingside(moveRequest)
+        } else {
+            moveInfo = verifyCastleQueenside(moveRequest)
+        }
+        if (!moveInfo.success) {
+            return moveInfo
+        }
+        return moveInfo
+    }
+
+    fun verifyCastleKingside(moveRequest: MoveRequest): MoveInfo {
+
+        //Check to see that it is the kings's first move
+        val kingPos = findKing(playerTurn)
+        if (!board.getPiece(kingPos).firstMove) {
+            return MoveInfo(false, "the King has move already")
+        }
+        // Check to see that the Rook hasn't moved
+        val rookPos =Coord(7,moveRequest.fromPos.rank)
+        if (!board.getPiece(rookPos).firstMove) {
+            return MoveInfo(false, "the Rook has move already")
+        }
+
+        // Check to see that to see that there are no pieces in between
+        // And that no square in between is under attack
+        val checkfiles = arrayOf(5, 6)
+        for (file in checkfiles) {
+            val tempCoord = Coord(file, moveRequest.fromPos.rank)
+            if (board.getPiece(tempCoord) !is None) {
+                return MoveInfo(false, "Piece is Blocking")
+            }
+            if (!checkSquareCheck(tempCoord, opponentColor).isEmpty()) {
+                return MoveInfo(false, "Can not move thru check")
+            }
+        }
+        return MoveInfo(true,MoveType.CASTLE_KINGSIDE)
+    }
+
+    fun verifyCastleQueenside(moveRequest: MoveRequest): MoveInfo {
+
+        //Check to see that the
+        //Check to see that it is the kings's first move
+        val kingPos = findKing(playerTurn)
+        if (!board.getPiece(kingPos).firstMove) {
+            return MoveInfo(false, "the King has move already")
+        }
+
+
+        // Check to see that the Rook hasn't moved
+        val rookPos =Coord(0,moveRequest.fromPos.rank)
+        if (!board.getPiece(rookPos).firstMove) {
+            return MoveInfo(false, "the Rook has move already")
+        }
+        // Check to see that to see that there are no pieces in between
+        // And that no square in between is under attack
+        val checkfiles = arrayOf(3, 2, 1)
+        for (file in checkfiles) {
+            val tempCoord = Coord(file, moveRequest.fromPos.rank)
+            if (board.getPiece(tempCoord) !is None) {
+                return MoveInfo(false, "Piece is Blocking")
+            }
+            if (!checkSquareCheck(tempCoord, opponentColor).isEmpty()) {
+                return MoveInfo(false, "Can not move thru check")
+            }
+        }
+        return MoveInfo(true, MoveType.CASTLE_QUEENSIDE)
     }
 
 }
