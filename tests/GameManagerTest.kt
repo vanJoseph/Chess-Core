@@ -8,6 +8,7 @@ import org.junit.Before
 import org.junit.Ignore
 import org.junit.Test
 import wildercoding.chess.*
+import java.lang.RuntimeException
 
 class GameManagerTest {
     lateinit var gameManager: GameManager
@@ -107,4 +108,424 @@ class GameManagerTest {
         }
     }
 
+    fun setupForCastling(kingSide: Boolean = true, playerTurn: Color= Color.WHITE): MoveRequest {
+        val board = Board()
+        gameManager = GameManager(board)
+        board.addPiece(Rook(Color.WHITE),Coord(0,0))
+        board.addPiece(Rook(Color.WHITE),Coord(7,0))
+        board.addPiece(King(Color.WHITE),Coord(4,0))
+
+        board.addPiece(King(Color.BLACK),Coord(4,7))
+        board.addPiece(Rook(Color.BLACK),Coord(0,7))
+        board.addPiece(Rook(Color.BLACK),Coord(7,7))
+        when (playerTurn) {
+            Color.WHITE ->{
+                gameManager.playerTurn =Color.WHITE
+                if(kingSide){
+                    return MoveRequest(Coord(4,0), Coord(6,0))
+                }else{
+                    return MoveRequest(Coord(4,0), Coord(2,0))
+                }
+            }
+            Color.BLACK ->{
+                gameManager.playerTurn = Color.BLACK
+                if(kingSide){
+                    return MoveRequest(Coord(4,7), Coord(6,7))
+                }else{
+                    return MoveRequest(Coord(4,7), Coord(2,7))
+                }
+            }
+            else -> throw RuntimeException("Unreachable")
+        }
+    }
+    @Test
+    fun Should_NotVerifyCastling_When_CastlingIsNotPosible() {
+        //Using a standard Chess setup
+        val moveRequest = setupForCastling()
+        gameManager= GameManager(StandardChessBoard())
+        assertThat(gameManager.verifyCastling(moveRequest).success,`is`(false))
+    }
+
+
+    @Test
+    fun Should_VerifyCastling_When_FullyPossible_Kingside_White() {
+        val moveRequest = setupForCastling()
+        assertThat(gameManager.verifyCastleKingside(moveRequest).success, `is`(true))
+    }
+    @Test
+    fun Should_VerifyCastling_When_FullyPossible_Kingside_Black() {
+        val moveRequest = setupForCastling(true,Color.BLACK)
+        assertThat(gameManager.verifyCastleKingside(moveRequest).success, `is`(true))
+    }
+
+    @Test
+    fun Should_VerifyCastling_When_FullyPossible_Queenside_White() {
+        val moveRequest = setupForCastling(false)
+        assertThat(gameManager.verifyCastling(moveRequest).success, `is`(true))
+    }
+    @Test
+    fun Should_VerifyCastling_When_FullyPossible_Queenside_Black() {
+        val moveRequest = setupForCastling(false,Color.BLACK)
+        assertThat(gameManager.verifyCastling(moveRequest).success, `is`(true))
+    }
+    @Test
+    fun Should_NotVerifyCastling_When_KingInCheck_White() {
+        val moveRequest = setupForCastling()
+
+        //The Checking bishop
+        gameManager.board.addPiece(Bishop(Color.BLACK),Coord(5,1))
+
+        assertThat(gameManager.verifyCastling(moveRequest).success, `is`(false))
+    }
+
+    @Test
+    fun Should_NotVerifyCastling_When_KingInCheck_Black() {
+        val moveRequest = setupForCastling(true,Color.BLACK)
+
+        //The Checking bishop
+        gameManager.board.addPiece(Bishop(Color.WHITE),Coord(5,6))
+
+        assertThat(gameManager.verifyCastling(moveRequest).success, `is`(false))
+    }
+
+    @Test
+    fun Should_NotVerifyCastling_When_PiecesInTheWay_Kingside_White() {
+        val moveRequest = setupForCastling()
+
+        //The Checking bishop
+        gameManager.board.addPiece(Bishop(Color.WHITE),Coord(5,0))
+
+        assertThat(gameManager.verifyCastleKingside(moveRequest).success, `is`(false))
+    }
+    @Test
+    fun Should_NotVerifyCastling_When_PiecesInTheWay_Kingside_Black() {
+        val moveRequest = setupForCastling(true,Color.BLACK)
+
+        //The Checking bishop
+        gameManager.board.addPiece(Bishop(Color.BLACK),Coord(5,7))
+
+        assertThat(gameManager.verifyCastleKingside(moveRequest).success, `is`(false))
+    }
+
+    @Test
+    fun Should_NotVerifyCastling_When_PiecesInTheWay_Queenside_White() {
+        val moveRequest = setupForCastling(false)
+
+        //The Checking bishop
+        gameManager.board.addPiece(Bishop(Color.WHITE),Coord(1,0))
+
+        println(gameManager.board)
+        assertThat(gameManager.verifyCastleQueenside(moveRequest).success, `is`(false))
+    }
+    @Test
+    fun Should_NotVerifyCastling_When_PiecesInTheWay_Queenside_Black() {
+        val moveRequest = setupForCastling(false,Color.BLACK)
+
+        //The Checking bishop
+        gameManager.board.addPiece(Bishop(Color.BLACK),Coord(1,7))
+
+        assertThat(gameManager.verifyCastleQueenside(moveRequest).success, `is`(false))
+    }
+    @Test
+    fun Should_NotVerifyCastling_When_KingMovesThruCheck_Kingside_White() {
+        val moveRequest = setupForCastling()
+
+        //The Checking bishop
+        gameManager.board.addPiece(Bishop(Color.BLACK),Coord(4,2))
+        println(gameManager.board)
+        assertThat(gameManager.verifyCastleKingside(moveRequest).success, `is`(false))
+    }
+
+    @Test
+    fun Should_NotVerifyCastling_When_KingMovesThruCheck_Kingside_Black() {
+        val moveRequest = setupForCastling(true,Color.BLACK)
+
+        //The Checking bishop
+        gameManager.board.addPiece(Bishop(Color.WHITE),Coord(4,5))
+        println(gameManager.board)
+        assertThat(gameManager.verifyCastleKingside(moveRequest).success, `is`(false))
+    }
+
+    @Test
+    fun Should_NotVerifyCastling_When_KingMovesThruCheck_Queenside_White() {
+        val moveRequest = setupForCastling(false)
+
+        //The Checking bishop
+        gameManager.board.addPiece(Bishop(Color.BLACK),Coord(4,2))
+        println(gameManager.board)
+        assertThat(gameManager.verifyCastleQueenside(moveRequest).success, `is`(false))
+    }
+    @Test
+    fun Should_NotVerifyCastling_When_KingMovesThruCheck_Queenside_Black() {
+        val moveRequest = setupForCastling(false,Color.BLACK)
+
+        //The Checking bishop
+        gameManager.board.addPiece(Bishop(Color.WHITE),Coord(4,5))
+        println(gameManager.board)
+        assertThat(gameManager.verifyCastleQueenside(moveRequest).success, `is`(false))
+    }
+
+    @Test
+    fun Should_NotVerifyCastling_When_NotKingFirstMove_Kingside_White() {
+        val moveRequest = setupForCastling()
+        val kingPos = gameManager.findKing(Color.WHITE)
+        gameManager.board.getPiece(kingPos).firstMove = false
+        println(gameManager.board)
+        assertThat(gameManager.verifyCastleKingside(moveRequest).success, `is`(false))
+    }
+    @Test
+    fun Should_NotVerifyCastling_When_NotKingFirstMove_Kingside_Black() {
+        val moveRequest = setupForCastling(true, Color.BLACK)
+        val kingPos = gameManager.findKing(Color.BLACK)
+        gameManager.board.getPiece(kingPos).firstMove = false
+        println(gameManager.board)
+        assertThat(gameManager.verifyCastleKingside(moveRequest).success, `is`(false))
+    }
+
+    @Test
+    fun Should_NotVerifyCastling_When_NotKingFirstMove_Queenside_White() {
+        val moveRequest = setupForCastling(false)
+        val kingPos = gameManager.findKing(Color.WHITE)
+        gameManager.board.getPiece(kingPos).firstMove = false
+        println(gameManager.board)
+        assertThat(gameManager.verifyCastleQueenside(moveRequest).success, `is`(false))
+    }
+    @Test
+    fun Should_NotVerifyCastling_When_NotKingFirstMove_Queenside_Black() {
+        val moveRequest = setupForCastling(false, Color.BLACK)
+        val kingPos = gameManager.findKing(Color.BLACK)
+        gameManager.board.getPiece(kingPos).firstMove = false
+        println(gameManager.board)
+        assertThat(gameManager.verifyCastleQueenside(moveRequest).success, `is`(false))
+    }
+
+
+    @Test
+    fun Should_NotVerifyCastling_When_NotRookFirstMove_Kingside_White() {
+        val moveRequest = setupForCastling()
+        val rookPos = Coord(7,moveRequest.fromPos.rank)
+        gameManager.board.getPiece(rookPos).firstMove = false
+        println(gameManager.board)
+        assertThat(gameManager.verifyCastleKingside(moveRequest).success, `is`(false))
+    }
+    @Test
+    fun Should_NotVerifyCastling_When_NotRookFirstMove_Kingside_Black() {
+        val moveRequest = setupForCastling(true, Color.BLACK)
+        val rookPos = Coord(7,moveRequest.fromPos.rank)
+        gameManager.board.getPiece(rookPos).firstMove = false
+        println(gameManager.board)
+        assertThat(gameManager.verifyCastleKingside(moveRequest).success, `is`(false))
+    }
+
+    @Test
+    fun Should_NotVerifyCastling_When_NotRookFirstMove_Queenside_White() {
+        val moveRequest = setupForCastling(false)
+        val rookPos =  Coord(0,moveRequest.fromPos.rank)
+        gameManager.board.getPiece(rookPos).firstMove = false
+        println(gameManager.board)
+        assertThat(gameManager.verifyCastleQueenside(moveRequest).success, `is`(false))
+    }
+    @Test
+    fun Should_NotVerifyCastling_When_NotRookFirstMove_Queenside_Black() {
+        val moveRequest = setupForCastling(false, Color.BLACK)
+        val rookPos = Coord(0,moveRequest.fromPos.rank)
+        gameManager.board.getPiece(rookPos).firstMove = false
+        println(gameManager.board)
+        assertThat(gameManager.verifyCastleQueenside(moveRequest).success, `is`(false))
+    }
+
+    @Test
+    fun Should_ValidateCastling() {
+        val moveRequest = setupForCastling()
+
+        assertThat(gameManager.validateMove(moveRequest), `is`(MoveInfo(true,MoveType.CASTLE_KINGSIDE)))
+    }
+    @Test
+    fun Should_NotValidateCastling() {
+        val moveRequest = setupForCastling()
+        gameManager = GameManager(StandardChessBoard())
+        assertThat(gameManager.validateMove(moveRequest).success, `is`(false))
+    }
+
+    @Test
+    fun Should_ExecuteCastling_When_Kingside_White() {
+        val moveRequest = setupForCastling()
+        val moveInfo = gameManager.executeMove(moveRequest)
+
+        assertThat(moveInfo.moveType, `is`(MoveType.CASTLE_KINGSIDE))
+    }
+    @Test
+    fun Should_ExecuteCastling_When_Kingside_Black() {
+        val moveRequest = setupForCastling(true,Color.BLACK)
+        val moveInfo = gameManager.executeMove(moveRequest)
+
+        assertThat(moveInfo.moveType, `is`(MoveType.CASTLE_KINGSIDE))
+    }
+    @Test
+    fun Should_ExecuteCastling_When_Queenside_White() {
+        val moveRequest = setupForCastling(false)
+        val moveInfo = gameManager.executeMove(moveRequest)
+
+        assertThat(moveInfo.moveType, `is`(MoveType.CASTLE_QUEENSIDE))
+    }
+    @Test
+    fun Should_ExecuteCastling_When_Queenside_Black() {
+        val moveRequest = setupForCastling(false,Color.BLACK)
+        val moveInfo = gameManager.executeMove(moveRequest)
+
+        assertThat(moveInfo.moveType, `is`(MoveType.CASTLE_QUEENSIDE))
+    }
+
+    @Test
+    fun Should_MovePieces_When_Castling_Kingside_White() {
+        gameManager = GameManager(Board())
+        gameManager.board.addPiece(King(Color.WHITE), Coord(4, 0))
+        gameManager.board.addPiece(Rook(Color.WHITE), Coord(7, 0))
+
+
+        gameManager.castlePieces(MoveInfo(true,MoveType.CASTLE_KINGSIDE))
+        val kingEndPos = Coord(6, 0)
+        val rookEndPos = Coord(5,0)
+        println(gameManager.board)
+        assertThat(gameManager.board.getPiece(kingEndPos).type, `is`(PieceType.KING))
+        assertThat(gameManager.board.getPiece(rookEndPos).type,  `is`(PieceType.ROOK))
+    }
+    @Test
+    fun Should_MovePieces_When_Castling_Kingside_Black() {
+        gameManager = GameManager(Board())
+        gameManager.playerTurn = Color.BLACK
+        gameManager.board.addPiece(King(Color.BLACK), Coord(4, 7))
+        gameManager.board.addPiece(Rook(Color.BLACK), Coord(7, 7))
+
+
+        gameManager.castlePieces(MoveInfo(true,MoveType.CASTLE_KINGSIDE))
+        val kingEndPos = Coord(6, 7)
+        val rookEndPos = Coord(5,7)
+        println(gameManager.board)
+        assertThat(gameManager.board.getPiece(kingEndPos).type, `is`(PieceType.KING))
+        assertThat(gameManager.board.getPiece(rookEndPos).type,  `is`(PieceType.ROOK))
+    }
+
+    @Test
+    fun Should_MovePieces_When_Castling_Queenside_White() {
+        gameManager = GameManager(Board())
+        gameManager.board.addPiece(King(Color.WHITE), Coord(4, 0))
+        gameManager.board.addPiece(Rook(Color.WHITE), Coord(0, 0))
+
+
+        gameManager.castlePieces(MoveInfo(true,MoveType.CASTLE_QUEENSIDE))
+        val kingEndPos = Coord(2, 0)
+        val rookEndPos = Coord(3,0)
+        println(gameManager.board)
+        assertThat(gameManager.board.getPiece(kingEndPos).type, `is`(PieceType.KING))
+        assertThat(gameManager.board.getPiece(rookEndPos).type,  `is`(PieceType.ROOK))
+    }
+
+    @Test
+    fun Should_MovePieces_When_Castling_Queenside_Black() {
+        gameManager = GameManager(Board())
+        gameManager.playerTurn = Color.BLACK
+        gameManager.board.addPiece(King(Color.BLACK), Coord(4, 7))
+        gameManager.board.addPiece(Rook(Color.BLACK), Coord(0, 7))
+
+
+        gameManager.castlePieces(MoveInfo(true,MoveType.CASTLE_QUEENSIDE))
+        val kingEndPos = Coord(2, 7)
+        val rookEndPos = Coord(3,7)
+        println(gameManager.board)
+        assertThat(gameManager.board.getPiece(kingEndPos).type, `is`(PieceType.KING))
+        assertThat(gameManager.board.getPiece(rookEndPos).type,  `is`(PieceType.ROOK))
+    }
+
+    @Test
+    fun Should_Castle_When_Kingside_White() {
+        val moveRequest = setupForCastling()
+        val moveInfo = gameManager.executeMove(moveRequest)
+        val kingEndPos = Coord(6, 0)
+        val rookEndPos = Coord(5,0)
+        println(gameManager.board)
+
+        assertThat(moveInfo.success,`is`(true))
+        assertThat(gameManager.board.getPiece(kingEndPos).type, `is`(PieceType.KING))
+        assertThat(gameManager.board.getPiece(rookEndPos).type,  `is`(PieceType.ROOK))
+    }
+
+    @Test
+    fun Should_Castle_When_Kingside_Black() {
+        val moveRequest = setupForCastling(true,Color.BLACK)
+        val moveInfo = gameManager.executeMove(moveRequest)
+        val kingEndPos = Coord(6, 7)
+        val rookEndPos = Coord(5,7)
+        println(gameManager.board)
+
+        assertThat(moveInfo.success,`is`(true))
+        assertThat(gameManager.board.getPiece(kingEndPos).type, `is`(PieceType.KING))
+        assertThat(gameManager.board.getPiece(rookEndPos).type,  `is`(PieceType.ROOK))
+    }
+
+    @Test
+    fun Should_Castle_When_Queenside_White() {
+        val moveRequest = setupForCastling(false)
+        val moveInfo = gameManager.executeMove(moveRequest)
+        val kingEndPos = Coord(2,0)
+        val rookEndPos = Coord(3,0)
+        println(gameManager.board)
+
+        assertThat(moveInfo.success,`is`(true))
+        assertThat(gameManager.board.getPiece(kingEndPos).type, `is`(PieceType.KING))
+        assertThat(gameManager.board.getPiece(rookEndPos).type,  `is`(PieceType.ROOK))
+    }
+
+    @Test
+    fun Should_Castle_When_Queenside_Black() {
+        val moveRequest = setupForCastling(false, Color.BLACK)
+        val moveInfo = gameManager.executeMove(moveRequest)
+        val kingEndPos = Coord(2,7)
+        val rookEndPos = Coord(3,7)
+        println(gameManager.board)
+
+        assertThat(moveInfo.success,`is`(true))
+        assertThat(gameManager.board.getPiece(kingEndPos).type, `is`(PieceType.KING))
+        assertThat(gameManager.board.getPiece(rookEndPos).type,  `is`(PieceType.ROOK))
+    }
+
+
+
+    @Test
+    fun Should_NotCastle_When_Kingside_White() {
+        val moveRequest = setupForCastling()
+        gameManager.board.addPiece(Bishop(Color.BLACK), Coord(4,1))
+        val moveInfo = gameManager.executeMove(moveRequest)
+        println(gameManager.board)
+
+        assertThat(moveInfo.success,`is`(false))
+    }
+    @Test
+    fun Should_NotCastle_When_Kingside_Black() {
+        val moveRequest = setupForCastling(true,Color.BLACK)
+        gameManager.board.addPiece(Bishop(Color.WHITE), Coord(4,6))
+        val moveInfo = gameManager.executeMove(moveRequest)
+        println(gameManager.board)
+
+        assertThat(moveInfo.success,`is`(false))
+    }
+
+    @Test
+    fun Should_NotCastle_When_Queenside_White() {
+        val moveRequest = setupForCastling(false)
+        gameManager.board.addPiece(Bishop(Color.BLACK), Coord(4,1))
+        val moveInfo = gameManager.executeMove(moveRequest)
+        println(gameManager.board)
+
+        assertThat(moveInfo.success,`is`(false))
+    }
+    @Test
+    fun Should_NotCastle_When_Queenside_Black() {
+        val moveRequest = setupForCastling(false,Color.BLACK)
+        gameManager.board.addPiece(Bishop(Color.WHITE), Coord(4,6))
+        val moveInfo = gameManager.executeMove(moveRequest)
+        println(gameManager.board)
+
+        assertThat(moveInfo.success,`is`(false))
+    }
 }
