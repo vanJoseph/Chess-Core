@@ -1,5 +1,7 @@
-import org.junit.Assert.assertTrue
-import org.junit.Test
+
+
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Test
 import wildercoding.chess.Coord
 import wildercoding.chess.InvalidCoordException
 import java.lang.RuntimeException

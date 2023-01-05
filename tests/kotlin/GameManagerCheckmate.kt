@@ -1,14 +1,13 @@
-import org.junit.Before
-import org.junit.Test
-import org.hamcrest.MatcherAssert.assertThat
-import org.hamcrest.core.Is.`is`
+
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import wildercoding.chess.*
 
 class GameManagerCheckmate {
 
     lateinit var gameManager: GameManager
     lateinit var board: Board
-    @Before
+    @BeforeEach
     fun setup() {
         board = Board()
         gameManager = GameManager(board)
