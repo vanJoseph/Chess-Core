@@ -44,6 +44,8 @@ class GameManager(val board: Board) {
                     return moveInfo
                 }
             }
+
+            else -> {}
         }
         return moveInfo
     }
@@ -88,6 +90,8 @@ class GameManager(val board: Board) {
                 movePieces(kingMoveRequest)
                 movePieces(rookMoveRequest)
             }
+
+            else -> {}
         }
     }
 

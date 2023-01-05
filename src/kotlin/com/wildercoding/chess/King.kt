@@ -45,6 +45,8 @@ class King(color:Color):Piece(PieceType.KING,color) {
                     return true
                 }
             }
+
+            else -> {}
         }
         return false
     }
