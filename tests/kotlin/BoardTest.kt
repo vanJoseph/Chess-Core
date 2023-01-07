@@ -1,5 +1,6 @@
 
 import com.wildercoding.chess.pieces.King
+import com.wildercoding.chess.pieces.None
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -30,7 +31,7 @@ class BoardTest {
 
     @Test
     fun Should_RecieveAllNonePieces_When_BoardIsInstantiated(){
-        val assertLambda= { coord: Coord-> assertTrue(board.getPiece(coord) is None )}
+        val assertLambda= { coord: Coord-> assertTrue(board.getPiece(coord) is None)}
         cycleThruBoardCoords(assertLambda)
     }
 
@@ -90,7 +91,7 @@ class BoardTest {
         cycleThruBoardCoords(removePieceFromSquare)
 
         // Check all of the squares for None
-        val assertLambda ={coord: Coord -> assertTrue(board.getPiece(coord) is None )}
+        val assertLambda ={coord: Coord -> assertTrue(board.getPiece(coord) is None)}
         cycleThruBoardCoords(assertLambda)
     }
 

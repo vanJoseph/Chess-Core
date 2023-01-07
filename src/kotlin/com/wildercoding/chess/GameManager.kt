@@ -6,6 +6,7 @@ import com.wildercoding.chess.iomethods.InputMethod
 import com.wildercoding.chess.iomethods.OutputMethod
 import com.wildercoding.chess.pieces.King
 import com.wildercoding.chess.pieces.Knight
+import com.wildercoding.chess.pieces.None
 import com.wildercoding.chess.pieces.Pawn
 
 class GameManager(val board: Board) {

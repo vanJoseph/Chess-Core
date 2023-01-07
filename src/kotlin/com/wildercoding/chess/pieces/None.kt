@@ -1,6 +1,9 @@
-package wildercoding.chess
+package com.wildercoding.chess.pieces
 
-import com.wildercoding.chess.pieces.Piece
+import wildercoding.chess.Board
+import wildercoding.chess.Color
+import wildercoding.chess.Coord
+import wildercoding.chess.PieceType
 
 class None() : Piece(PieceType.NONE, Color.NONE) {
     override fun generateMovesList(position: Coord): List<Coord> = listOf()

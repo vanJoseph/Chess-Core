@@ -1,5 +1,6 @@
 package wildercoding.chess
 
+import com.wildercoding.chess.pieces.None
 import com.wildercoding.chess.pieces.Piece
 
 class Square(val boardPostion: Coord) {
@@ -12,7 +13,7 @@ class Square(val boardPostion: Coord) {
     fun removePiece(): Boolean {
         if (piece is None)
             return false
-        piece=None()
+        piece= None()
         return true
     }
     override fun toString(): String {

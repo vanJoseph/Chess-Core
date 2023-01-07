@@ -1,5 +1,6 @@
 package wildercoding.chess
 
+import com.wildercoding.chess.pieces.None
 import com.wildercoding.chess.pieces.Piece
 
 
