@@ -1,21 +1,23 @@
 
 import com.wildercoding.chess.pieces.King
 import com.wildercoding.chess.pieces.None
+import com.wildercoding.chess.units.Board
+import com.wildercoding.chess.units.Color
+import com.wildercoding.chess.units.Coord
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import wildercoding.chess.*
 
 class BoardTest {
-    lateinit var board:Board
+    lateinit var board: Board
 
     @BeforeEach
     fun setup(){
         board = Board()
     }
 
-    fun cycleThruBoardCoords(assertLambda:(coord:Coord)->Unit){
+    fun cycleThruBoardCoords(assertLambda:(coord: Coord)->Unit){
         for (y in 0..7) {
             for (x in 0 .. 7){
                 assertLambda(Coord(x,y))
@@ -25,13 +27,13 @@ class BoardTest {
 
     @Test
     fun Should_RecieveTheCorrectSquare_Given_ACoord() {
-        val assertLambda ={coord: Coord-> assertTrue(board.getSquare(coord).boardPostion == coord)}
+        val assertLambda ={coord: Coord -> assertTrue(board.getSquare(coord).boardPostion == coord)}
         cycleThruBoardCoords(assertLambda)
     }
 
     @Test
     fun Should_RecieveAllNonePieces_When_BoardIsInstantiated(){
-        val assertLambda= { coord: Coord-> assertTrue(board.getPiece(coord) is None)}
+        val assertLambda= { coord: Coord -> assertTrue(board.getPiece(coord) is None)}
         cycleThruBoardCoords(assertLambda)
     }
 

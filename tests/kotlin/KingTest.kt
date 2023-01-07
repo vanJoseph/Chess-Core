@@ -1,10 +1,11 @@
 import com.wildercoding.chess.pieces.King
 import com.wildercoding.chess.pieces.Piece
+import com.wildercoding.chess.units.Color
+import com.wildercoding.chess.units.Coord
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import wildercoding.chess.*
 
 class KingTest {
     lateinit var piece: Piece
@@ -30,7 +31,8 @@ class KingTest {
         val legalMoves = arrayOf(
                 Coord(2, 4), Coord(2, 3), Coord(3, 2),
                 Coord(3, 4), Coord(4, 3), Coord(4, 2),
-                Coord(4, 4), Coord(2, 2))
+                Coord(4, 4), Coord(2, 2)
+        )
         for (move in legalMoves) {
             assertTrue(verifiedMoves.contains(move))
         }
@@ -43,7 +45,8 @@ class KingTest {
         val legalMoves = arrayOf(
                 Coord(2, 4), Coord(2, 3), Coord(3, 2),
                 Coord(3, 4), Coord(4, 3), Coord(4, 2),
-                Coord(4, 4), Coord(2, 2))
+                Coord(4, 4), Coord(2, 2)
+        )
 
         val illegalMoves = allCoordList.subtract(legalMoves.toList())
 
@@ -59,7 +62,8 @@ class KingTest {
         val legalMoves = arrayOf(
                 Coord(0, 1),
                 Coord(1, 1),
-                Coord(1, 0))
+                Coord(1, 0)
+        )
         for (move in legalMoves) {
             assertTrue(verifiedMoves.contains(move))
         }
@@ -72,7 +76,8 @@ class KingTest {
         val legalMoves = arrayOf(
                 Coord(0, 1),
                 Coord(1, 1),
-                Coord(1, 0))
+                Coord(1, 0)
+        )
         val illegalMoves = allCoordList.subtract(legalMoves.toList())
         for (move in illegalMoves) {
             assertFalse(verifiedMoves.contains(move))
@@ -86,7 +91,8 @@ class KingTest {
         val legalMoves = arrayOf(
                 Coord(6, 3), Coord(7, 2),
                 Coord(6, 4), Coord(6, 2),
-                Coord(7, 4))
+                Coord(7, 4)
+        )
         for (move in legalMoves) {
             assertTrue(verifiedMoves.contains(move))
         }
@@ -99,7 +105,8 @@ class KingTest {
         val legalMoves = arrayOf(
                 Coord(6, 3), Coord(7, 2),
                 Coord(6, 4), Coord(6, 2),
-                Coord(7, 4))
+                Coord(7, 4)
+        )
         val illegalMoves = allCoordList.subtract(legalMoves.toList())
         for (move in illegalMoves) {
             assertFalse(verifiedMoves.contains(move))

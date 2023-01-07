@@ -1,8 +1,8 @@
 package com.wildercoding.chess.pieces
 
-import wildercoding.chess.Board
-import wildercoding.chess.Color
-import wildercoding.chess.Coord
+import com.wildercoding.chess.units.Board
+import com.wildercoding.chess.units.Color
+import com.wildercoding.chess.units.Coord
 import wildercoding.chess.PieceType
 
 abstract class Piece(val type: PieceType, val color: Color) {

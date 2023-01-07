@@ -1,4 +1,4 @@
-package com.wildercoding.chess
+package com.wildercoding.chess.data
 
 /**
  * Copied From

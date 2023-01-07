@@ -1,4 +1,4 @@
-package wildercoding.chess
+package com.wildercoding.chess.data
 
 enum class MoveType {
     MOVE,

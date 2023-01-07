@@ -2,11 +2,13 @@
 import com.wildercoding.chess.pieces.Bishop
 import com.wildercoding.chess.pieces.Pawn
 import com.wildercoding.chess.pieces.Piece
+import com.wildercoding.chess.units.Board
+import com.wildercoding.chess.units.Color
+import com.wildercoding.chess.units.Coord
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import wildercoding.chess.*
 
 
 class BishopTest {
@@ -37,7 +39,8 @@ class BishopTest {
                 Coord(7, 7), Coord(2, 2),
                 Coord(2, 4), Coord(1, 1),
                 Coord(1, 5), Coord(0, 0),
-                Coord(0, 6))
+                Coord(0, 6)
+        )
         for (move in legalMoves) {
             assertTrue(verifiedMoves.contains(move))
         }
@@ -54,7 +57,8 @@ class BishopTest {
                 Coord(7, 7), Coord(2, 2),
                 Coord(2, 4), Coord(1, 1),
                 Coord(1, 5), Coord(0, 0),
-                Coord(0, 6))
+                Coord(0, 6)
+        )
 
         val illegalMoves = allCoordList.subtract(legalMoves.toList())
 
@@ -71,7 +75,8 @@ class BishopTest {
                 Coord(1, 1), Coord(5, 5),
                 Coord(2, 2), Coord(6, 6),
                 Coord(3, 3), Coord(7, 7),
-                Coord(4, 4))
+                Coord(4, 4)
+        )
         for (move in legalMoves) {
             assertTrue(verifiedMoves.contains(move))
         }
@@ -85,7 +90,8 @@ class BishopTest {
                 Coord(1, 1), Coord(5, 5),
                 Coord(2, 2), Coord(6, 6),
                 Coord(3, 3), Coord(7, 7),
-                Coord(4, 4))
+                Coord(4, 4)
+        )
         val illegalMoves = allCoordList.subtract(legalMoves.toList())
         for (move in illegalMoves) {
             assertFalse(verifiedMoves.contains(move))
@@ -100,7 +106,8 @@ class BishopTest {
                 Coord(6, 4), Coord(6, 2),
                 Coord(5, 5), Coord(5, 1),
                 Coord(4, 6), Coord(4, 0),
-                Coord(3, 7))
+                Coord(3, 7)
+        )
         for (move in legalMoves) {
             assertTrue(verifiedMoves.contains(move))
         }
@@ -114,7 +121,8 @@ class BishopTest {
                 Coord(6, 4), Coord(6, 2),
                 Coord(5, 5), Coord(5, 1),
                 Coord(4, 6), Coord(4, 0),
-                Coord(3, 7))
+                Coord(3, 7)
+        )
         val illegalMoves = allCoordList.subtract(legalMoves.toList())
         for (move in illegalMoves) {
             assertFalse(verifiedMoves.contains(move))
@@ -129,7 +137,8 @@ class BishopTest {
                 Coord(4, 4),
                 Coord(5, 5),
                 Coord(6, 6),
-                Coord(7, 7))
+                Coord(7, 7)
+        )
         for (move in legalMoves) {
             assertTrue(verifiedMoves.contains(move))
         }
@@ -144,7 +153,8 @@ class BishopTest {
                 Coord(4, 4),
                 Coord(5, 5),
                 Coord(6, 6),
-                Coord(7, 7))
+                Coord(7, 7)
+        )
         val nonMoves = allCoordList.subtract(legalMoves.toList())
         for (move in nonMoves) {
             assertFalse(verifiedMoves.contains(move))
@@ -159,7 +169,8 @@ class BishopTest {
         val legalMoves = arrayOf(
                 Coord(4, 2),
                 Coord(5, 1),
-                Coord(6, 0))
+                Coord(6, 0)
+        )
         for (move in legalMoves) {
             assertTrue(verifiedMoves.contains(move))
         }
@@ -173,7 +184,8 @@ class BishopTest {
         val legalMoves = arrayOf(
                 Coord(4, 2),
                 Coord(5, 1),
-                Coord(6, 0))
+                Coord(6, 0)
+        )
         val nonMoves = allCoordList.subtract(legalMoves.toList())
         for (move in nonMoves) {
             assertFalse(verifiedMoves.contains(move))
@@ -188,7 +200,8 @@ class BishopTest {
         val legalMoves = arrayOf(
                 Coord(0, 6),
                 Coord(1, 5),
-                Coord(2, 4))
+                Coord(2, 4)
+        )
         for (move in legalMoves) {
             assertTrue(verifiedMoves.contains(move))
         }
@@ -202,7 +215,8 @@ class BishopTest {
         val legalMoves = arrayOf(
                 Coord(0, 6),
                 Coord(1, 5),
-                Coord(2, 4))
+                Coord(2, 4)
+        )
         val nonMoves = allCoordList.subtract(legalMoves.toList())
         for (move in nonMoves) {
             assertFalse(verifiedMoves.contains(move))
@@ -217,7 +231,8 @@ class BishopTest {
         val legalMoves = arrayOf(
                 Coord(2, 2),
                 Coord(1, 1),
-                Coord(0, 0))
+                Coord(0, 0)
+        )
         for (move in legalMoves) {
             assertTrue(verifiedMoves.contains(move))
         }
@@ -231,7 +246,8 @@ class BishopTest {
         val legalMoves = arrayOf(
                 Coord(2, 2),
                 Coord(1, 1),
-                Coord(0, 0))
+                Coord(0, 0)
+        )
         val nonMoves = allCoordList.subtract(legalMoves.toList())
         for (move in nonMoves) {
             assertFalse(verifiedMoves.contains(move))
@@ -243,18 +259,20 @@ class BishopTest {
                 Coord(1, 1),
                 Coord(2, 4),
                 Coord(5, 5),
-                Coord(5, 1))
+                Coord(5, 1)
+        )
         val moveToLocations = arrayOf<Coord>(
                 Coord(0, 6),
                 Coord(0, 0),
                 Coord(6, 0),
-                Coord(7, 7))
+                Coord(7, 7)
+        )
         val startLocation = Coord(3, 3)
-        val board=Board()
+        val board= Board()
         board.addPiece(piece, startLocation)
 
         // Add Pawns
-        pawnLocations.forEach { coord: Coord-> board.addPiece(Pawn(Color.WHITE),coord)}
+        pawnLocations.forEach { coord: Coord -> board.addPiece(Pawn(Color.WHITE),coord)}
 
         // Try to move to the passing location
         moveToLocations.forEach { coord: Coord ->
@@ -267,18 +285,20 @@ class BishopTest {
                 Coord(0, 6),
                 Coord(0, 0),
                 Coord(6, 0),
-                Coord(7, 7))
+                Coord(7, 7)
+        )
         val moveToLocations = arrayOf<Coord>(
                 Coord(1, 1),
                 Coord(2, 4),
                 Coord(5, 5),
-                Coord(5, 1))
+                Coord(5, 1)
+        )
         val startLocation = Coord(3, 3)
-        val board=Board()
+        val board= Board()
         board.addPiece(piece, startLocation)
 
         // Add Pawns
-        pawnLocations.forEach { coord: Coord-> board.addPiece(Pawn(Color.WHITE),coord)}
+        pawnLocations.forEach { coord: Coord -> board.addPiece(Pawn(Color.WHITE),coord)}
 
         // Try to move to the passing location
         moveToLocations.forEach { coord: Coord ->

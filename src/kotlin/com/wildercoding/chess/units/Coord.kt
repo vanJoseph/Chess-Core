@@ -1,4 +1,4 @@
-package wildercoding.chess
+package com.wildercoding.chess.units
 
 import com.wildercoding.chess.exceptions.InvalidCoordException
 

@@ -1,9 +1,9 @@
 import com.wildercoding.chess.pieces.None
 import com.wildercoding.chess.pieces.Piece
+import com.wildercoding.chess.units.Coord
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import wildercoding.chess.*
 
 class NoneTest {
     lateinit var piece: Piece
@@ -24,7 +24,7 @@ class NoneTest {
 
     @Test
     fun Should_GenerateNoMoves_When_InAnyPosition() {
-        val assertLambda = {coord : Coord-> assertTrue(piece.generateMovesList(coord).none()) }
+        val assertLambda = {coord : Coord -> assertTrue(piece.generateMovesList(coord).none()) }
         allCoordList.forEach(assertLambda)
     }
 }

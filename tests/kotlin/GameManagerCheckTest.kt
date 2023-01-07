@@ -1,6 +1,10 @@
 
-import com.wildercoding.chess.MultiMap
+import com.wildercoding.chess.data.MoveRequest
+import com.wildercoding.chess.data.MultiMap
 import com.wildercoding.chess.pieces.*
+import com.wildercoding.chess.units.Board
+import com.wildercoding.chess.units.Color
+import com.wildercoding.chess.units.Coord
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
 import org.hamcrest.core.IsCollectionContaining.hasItem
@@ -26,7 +30,7 @@ class GameManagerCheckTest {
     }
     @Test
     fun Should_NotCheck_When_BoardIsEmpty() {
-        val assertLambda = {coord: Coord -> assertThat(gameManager.checkSquareCheck(coord,Color.BLACK).size,`is`(0))}
+        val assertLambda = {coord: Coord -> assertThat(gameManager.checkSquareCheck(coord, Color.BLACK).size,`is`(0))}
         cycleThruBoardCoords(assertLambda)
     }
 
@@ -35,21 +39,22 @@ class GameManagerCheckTest {
         val pawnLoc = Coord(3,2)
         board.addPiece(Pawn(Color.BLACK),pawnLoc)
         val testSquare = Coord(2,1)
-        assertThat(gameManager.verifyPawnCheck(testSquare,Color.BLACK).asList(), hasItem(pawnLoc))
+        assertThat(gameManager.verifyPawnCheck(testSquare, Color.BLACK).asList(), hasItem(pawnLoc))
     }
 
     @Test
     fun Should_Check_When_InCheckByKing() {
         val testSquare = Coord(3,3)
         val kingSquares = arrayOf(
-                Coord(4,4),Coord(2,4),
-                Coord(4,3),Coord(2,3),
-                Coord(4,2),Coord(2,2),
-                Coord(3,4),Coord(3,2))
+                Coord(4,4), Coord(2,4),
+                Coord(4,3), Coord(2,3),
+                Coord(4,2), Coord(2,2),
+                Coord(3,4), Coord(3,2)
+        )
 
         for (pos in kingSquares) {
             board.addPiece(King(Color.WHITE),pos)
-            assertThat(gameManager.verifyKingCheck(testSquare,Color.WHITE), `is`(pos))
+            assertThat(gameManager.verifyKingCheck(testSquare, Color.WHITE), `is`(pos))
             board.removePiece(pos)
         }
     }
@@ -58,14 +63,15 @@ class GameManagerCheckTest {
     fun Should_Check_When_InCheckByKnight() {
         val testSquare = Coord(3,3)
         val knightSquares = arrayOf(
-                Coord(2,5),Coord(4,5),
-                Coord(1,4),Coord(5,4),
-                Coord(1,2),Coord(5,2),
-                Coord(2,1),Coord(4,1))
+                Coord(2,5), Coord(4,5),
+                Coord(1,4), Coord(5,4),
+                Coord(1,2), Coord(5,2),
+                Coord(2,1), Coord(4,1)
+        )
 
         for (pos in knightSquares) {
             board.addPiece(Knight(Color.WHITE),pos)
-            assertThat(gameManager.verifyKnightCheck(testSquare,Color.WHITE).asList(), hasItem(pos))
+            assertThat(gameManager.verifyKnightCheck(testSquare, Color.WHITE).asList(), hasItem(pos))
             board.removePiece(pos)
         }
     }
@@ -75,11 +81,12 @@ class GameManagerCheckTest {
         val testSquare = Coord(3,3)
         val rookSquares = arrayOf(
                 Coord(3,7), Coord(3,0),
-                Coord(0,3), Coord(7,3))
+                Coord(0,3), Coord(7,3)
+        )
 
         for (pos in rookSquares) {
             board.addPiece(Rook(Color.WHITE),pos)
-            assertThat(gameManager.verifyRookCheck(testSquare,Color.WHITE).asList(), hasItem(pos))
+            assertThat(gameManager.verifyRookCheck(testSquare, Color.WHITE).asList(), hasItem(pos))
             board.removePiece(pos)
         }
     }
@@ -89,11 +96,12 @@ class GameManagerCheckTest {
         val testSquare = Coord(3,3)
         val bishopSquares = arrayOf(
                 Coord(7,7), Coord(6,0),
-                Coord(0,6), Coord(0,0))
+                Coord(0,6), Coord(0,0)
+        )
 
         for (pos in bishopSquares) {
             board.addPiece(Bishop(Color.WHITE),pos)
-            assertThat(gameManager.verifyBishopCheck(testSquare,Color.WHITE).asList(), hasItem(pos))
+            assertThat(gameManager.verifyBishopCheck(testSquare, Color.WHITE).asList(), hasItem(pos))
             board.removePiece(pos)
         }
     }
@@ -105,11 +113,12 @@ class GameManagerCheckTest {
                 Coord(7,7), Coord(6,0),
                 Coord(0,6), Coord(0,0),
                 Coord(3,7), Coord(3,0),
-                Coord(0,3), Coord(7,3))
+                Coord(0,3), Coord(7,3)
+        )
 
         for (pos in bishopSquares) {
             board.addPiece(Queen(Color.WHITE),pos)
-            assertThat(gameManager.verifyQueenCheck(testSquare,Color.WHITE).asList(), hasItem(pos))
+            assertThat(gameManager.verifyQueenCheck(testSquare, Color.WHITE).asList(), hasItem(pos))
             board.removePiece(pos)
         }
     }
@@ -172,7 +181,7 @@ class GameManagerCheckTest {
         board.addPiece(King(Color.BLACK), Coord(4, 7))
 
         val preSimBoard = gameManager.board.toString()
-        val moveRequest = MoveRequest(Coord(4,1),Coord(3,2))
+        val moveRequest = MoveRequest(Coord(4,1), Coord(3,2))
         gameManager.simulateCheckRelief(moveRequest)
         val posSimBoard = gameManager.board.toString()
         assertThat(posSimBoard, `is`(preSimBoard) )
@@ -186,7 +195,7 @@ class GameManagerCheckTest {
         board.addPiece(Pawn(Color.WHITE), reliefPawn)
         board.addPiece(King(Color.BLACK), Coord(4, 7))
 
-        val moveRequest = MoveRequest(Coord(4,1),Coord(3,2))
+        val moveRequest = MoveRequest(Coord(4,1), Coord(3,2))
         assertThat(gameManager.simulateCheckRelief(moveRequest), `is`(true) )
     }
 
@@ -214,7 +223,8 @@ class GameManagerCheckTest {
         board.addPiece(King(Color.BLACK), Coord(7,7))
         val safeSquares= arrayOf(
                 Coord(2,0), Coord(2,1),
-                Coord(3,1), Coord(4,0))
+                Coord(3,1), Coord(4,0)
+        )
 
 
         val generatedSafeSquares = gameManager.canMoveOutofCheck()
@@ -231,7 +241,8 @@ class GameManagerCheckTest {
         board.addPiece(Pawn(Color.WHITE), Coord(2,0))
         val safeSquares= arrayOf(
                 Coord(2,1),
-                Coord(3,1), Coord(4,0))
+                Coord(3,1), Coord(4,0)
+        )
 
 
         val generatedSafeSquares = gameManager.canMoveOutofCheck()
@@ -247,7 +258,7 @@ class GameManagerCheckTest {
         board.addPiece(King(Color.BLACK), Coord(7,7))
         board.addPiece(Knight(Color.WHITE), Coord(6,0))
 
-        val moveMap= MultiMap<Coord,Coord>()
+        val moveMap= MultiMap<Coord, Coord>()
                 moveMap.put(Coord(6,0), Coord(4,1))
                 moveMap.put(Coord(6,0), Coord(5,2))
 

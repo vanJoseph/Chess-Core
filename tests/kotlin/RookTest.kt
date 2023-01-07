@@ -1,11 +1,13 @@
 import com.wildercoding.chess.pieces.Pawn
 import com.wildercoding.chess.pieces.Piece
 import com.wildercoding.chess.pieces.Rook
+import com.wildercoding.chess.units.Board
+import com.wildercoding.chess.units.Color
+import com.wildercoding.chess.units.Coord
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import wildercoding.chess.*
 
 
 class RookTest {
@@ -141,7 +143,8 @@ class RookTest {
                 Coord(3, 4),
                 Coord(3, 5),
                 Coord(3, 6),
-                Coord(3, 7))
+                Coord(3, 7)
+        )
         for (move in legalMoves) {
             assertTrue(verifiedMoves.contains(move))
         }
@@ -156,7 +159,8 @@ class RookTest {
                 Coord(3, 4),
                 Coord(3, 5),
                 Coord(3, 6),
-                Coord(3, 7))
+                Coord(3, 7)
+        )
         val nonMoves = allCoordList.subtract(legalMoves.toList())
         for (move in nonMoves) {
             assertFalse(verifiedMoves.contains(move))
@@ -171,7 +175,8 @@ class RookTest {
         val legalMoves = arrayOf(
                 Coord(3, 0),
                 Coord(3, 1),
-                Coord(3, 2))
+                Coord(3, 2)
+        )
         for (move in legalMoves) {
             assertTrue(verifiedMoves.contains(move))
         }
@@ -185,7 +190,8 @@ class RookTest {
         val legalMoves = arrayOf(
                 Coord(3, 0),
                 Coord(3, 1),
-                Coord(3, 2))
+                Coord(3, 2)
+        )
         val nonMoves = allCoordList.subtract(legalMoves.toList())
         for (move in nonMoves) {
             assertFalse(verifiedMoves.contains(move))
@@ -200,7 +206,8 @@ class RookTest {
         val legalMoves = arrayOf(
                 Coord(2, 3),
                 Coord(1, 3),
-                Coord(0, 3))
+                Coord(0, 3)
+        )
         for (move in legalMoves) {
             assertTrue(verifiedMoves.contains(move))
         }
@@ -214,7 +221,8 @@ class RookTest {
         val legalMoves = arrayOf(
                 Coord(2, 3),
                 Coord(1, 3),
-                Coord(0, 3))
+                Coord(0, 3)
+        )
         val nonMoves = allCoordList.subtract(legalMoves.toList())
         for (move in nonMoves) {
             assertFalse(verifiedMoves.contains(move))
@@ -230,7 +238,8 @@ class RookTest {
                 Coord(4, 3),
                 Coord(5, 3),
                 Coord(6, 3),
-                Coord(7, 3))
+                Coord(7, 3)
+        )
         for (move in legalMoves) {
             assertTrue(verifiedMoves.contains(move))
         }
@@ -245,7 +254,8 @@ class RookTest {
                 Coord(4, 3),
                 Coord(5, 3),
                 Coord(6, 3),
-                Coord(7, 3))
+                Coord(7, 3)
+        )
         val nonMoves = allCoordList.subtract(legalMoves.toList())
         for (move in nonMoves) {
             assertFalse(verifiedMoves.contains(move))
@@ -258,18 +268,20 @@ class RookTest {
                 Coord(2, 3),
                 Coord(3, 4),
                 Coord(6, 3),
-                Coord(3, 1))
+                Coord(3, 1)
+        )
         val moveToLocations = arrayOf<Coord>(
                 Coord(0, 1),
                 Coord(3, 7),
                 Coord(7, 3),
-                Coord(3, 0))
+                Coord(3, 0)
+        )
         val startLocation = Coord(3, 3)
-        val board=Board()
+        val board= Board()
         board.addPiece(piece, startLocation)
 
         // Add Pawns
-        pawnLocations.forEach { coord: Coord-> board.addPiece(Pawn(Color.WHITE),coord)}
+        pawnLocations.forEach { coord: Coord -> board.addPiece(Pawn(Color.WHITE),coord)}
 
         // Try to move to the passing location
         moveToLocations.forEach { coord: Coord ->
@@ -282,18 +294,20 @@ class RookTest {
                 Coord(0, 1),
                 Coord(3, 7),
                 Coord(7, 3),
-                Coord(3, 0))
+                Coord(3, 0)
+        )
         val moveToLocations = arrayOf<Coord>(
                 Coord(2, 3),
                 Coord(3, 4),
                 Coord(6, 3),
-                Coord(3, 1))
+                Coord(3, 1)
+        )
         val startLocation = Coord(3, 3)
-        val board=Board()
+        val board= Board()
         board.addPiece(piece, startLocation)
 
         // Add Pawns
-        pawnLocations.forEach { coord: Coord-> board.addPiece(Pawn(Color.WHITE),coord)}
+        pawnLocations.forEach { coord: Coord -> board.addPiece(Pawn(Color.WHITE),coord)}
 
         // Try to move to the passing location
         moveToLocations.forEach { coord: Coord ->

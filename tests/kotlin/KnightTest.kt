@@ -1,10 +1,11 @@
 import com.wildercoding.chess.pieces.Knight
 import com.wildercoding.chess.pieces.Piece
+import com.wildercoding.chess.units.Color
+import com.wildercoding.chess.units.Coord
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import wildercoding.chess.*
 
 class KnightTest {
     lateinit var piece: Piece
@@ -31,7 +32,8 @@ class KnightTest {
                 Coord(2, 5), Coord(1, 2),
                 Coord(4, 5), Coord(5, 2),
                 Coord(1, 4), Coord(2, 1),
-                Coord(5, 4), Coord(4, 1))
+                Coord(5, 4), Coord(4, 1)
+        )
         for (move in legalMoves) {
             assertTrue(verifiedMoves.contains(move))
         }
@@ -45,7 +47,8 @@ class KnightTest {
                 Coord(2, 5), Coord(1, 2),
                 Coord(4, 5), Coord(5, 2),
                 Coord(1, 4), Coord(2, 1),
-                Coord(5, 4), Coord(4, 1))
+                Coord(5, 4), Coord(4, 1)
+        )
 
         val illegalMoves = allCoordList.subtract(legalMoves.toList())
 
@@ -60,7 +63,8 @@ class KnightTest {
         val verifiedMoves = piece.generateMovesList(startPos)
         val legalMoves = arrayOf(
                 Coord(2, 1),
-                Coord(1, 2))
+                Coord(1, 2)
+        )
         for (move in legalMoves) {
             assertTrue(verifiedMoves.contains(move))
         }
@@ -72,7 +76,8 @@ class KnightTest {
         val verifiedMoves = piece.generateMovesList(startPos)
         val legalMoves = arrayOf(
                 Coord(2, 1),
-                Coord(1, 2))
+                Coord(1, 2)
+        )
         val illegalMoves = allCoordList.subtract(legalMoves.toList())
         for (move in illegalMoves) {
             assertFalse(verifiedMoves.contains(move))
@@ -85,7 +90,8 @@ class KnightTest {
         val verifiedMoves = piece.generateMovesList(startPos)
         val legalMoves = arrayOf(
                 Coord(6, 5), Coord(5, 2),
-                Coord(5, 4), Coord(6, 1))
+                Coord(5, 4), Coord(6, 1)
+        )
         for (move in legalMoves) {
             assertTrue(verifiedMoves.contains(move))
         }
@@ -97,7 +103,8 @@ class KnightTest {
         val verifiedMoves = piece.generateMovesList(startPos)
         val legalMoves = arrayOf(
                 Coord(6, 5), Coord(5, 2),
-                Coord(5, 4), Coord(6, 1))
+                Coord(5, 4), Coord(6, 1)
+        )
         val illegalMoves = allCoordList.subtract(legalMoves.toList())
         for (move in illegalMoves) {
             assertFalse(verifiedMoves.contains(move))

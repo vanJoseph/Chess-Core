@@ -1,6 +1,9 @@
 package wildercoding.chess
 
-import com.wildercoding.chess.MultiMap
+import com.wildercoding.chess.data.MoveInfo
+import com.wildercoding.chess.data.MoveRequest
+import com.wildercoding.chess.data.MoveType
+import com.wildercoding.chess.data.MultiMap
 import com.wildercoding.chess.exceptions.NoKingFoundException
 import com.wildercoding.chess.iomethods.InputMethod
 import com.wildercoding.chess.iomethods.OutputMethod
@@ -8,6 +11,9 @@ import com.wildercoding.chess.pieces.King
 import com.wildercoding.chess.pieces.Knight
 import com.wildercoding.chess.pieces.None
 import com.wildercoding.chess.pieces.Pawn
+import com.wildercoding.chess.units.Board
+import com.wildercoding.chess.units.Color
+import com.wildercoding.chess.units.Coord
 
 class GameManager(val board: Board) {
     var playerTurn = Color.WHITE
@@ -40,7 +46,7 @@ class GameManager(val board: Board) {
                 moveLog.add(moveRequest)// update the piece that moved first move
                 changeTurns()
             }
-            MoveType.CASTLE_KINGSIDE,MoveType.CASTLE_QUEENSIDE ->{ //Castling
+            MoveType.CASTLE_KINGSIDE, MoveType.CASTLE_QUEENSIDE ->{ //Castling
                 val moveInfo = verifyCastling(moveRequest)
                 if(moveInfo.success) {
                     castlePieces(moveInfo)
@@ -604,7 +610,7 @@ class GameManager(val board: Board) {
             return MoveInfo(false, "the King has move already")
         }
         // Check to see that the Rook hasn't moved
-        val rookPos =Coord(7,moveRequest.fromPos.rank)
+        val rookPos = Coord(7,moveRequest.fromPos.rank)
         if (!board.getPiece(rookPos).firstMove) {
             return MoveInfo(false, "the Rook has move already")
         }
@@ -621,7 +627,7 @@ class GameManager(val board: Board) {
                 return MoveInfo(false, "Can not move thru check")
             }
         }
-        return MoveInfo(true,MoveType.CASTLE_KINGSIDE)
+        return MoveInfo(true, MoveType.CASTLE_KINGSIDE)
     }
 
     fun verifyCastleQueenside(moveRequest: MoveRequest): MoveInfo {
@@ -635,7 +641,7 @@ class GameManager(val board: Board) {
 
 
         // Check to see that the Rook hasn't moved
-        val rookPos =Coord(0,moveRequest.fromPos.rank)
+        val rookPos = Coord(0,moveRequest.fromPos.rank)
         if (!board.getPiece(rookPos).firstMove) {
             return MoveInfo(false, "the Rook has move already")
         }

@@ -1,4 +1,4 @@
-package wildercoding.chess
+package com.wildercoding.chess.units
 
 import com.wildercoding.chess.pieces.None
 import com.wildercoding.chess.pieces.Piece
@@ -29,7 +29,7 @@ open class Board {
      *
      * @param target the board position
      */
-    fun getPiece(target:Coord): Piece {
+    fun getPiece(target: Coord): Piece {
         return squares[target.rank][target.file].piece
     }
 

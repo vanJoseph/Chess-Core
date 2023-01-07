@@ -1,7 +1,7 @@
 package com.wildercoding.chess.iomethods
 
-import wildercoding.chess.Coord
-import wildercoding.chess.MoveRequest
+import com.wildercoding.chess.units.Coord
+import com.wildercoding.chess.data.MoveRequest
 
 class ConsoleInputMethod: InputMethod {
     override fun getMove(): MoveRequest {

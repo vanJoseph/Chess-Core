@@ -2,7 +2,7 @@
 
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import wildercoding.chess.Coord
+import com.wildercoding.chess.units.Coord
 import com.wildercoding.chess.exceptions.InvalidCoordException
 import java.lang.RuntimeException
 
@@ -25,13 +25,13 @@ class CoordTest {
 
             var rankTest: Coord? = null
             try {
-                rankTest=Coord(0,value)
+                rankTest= Coord(0,value)
             } catch (ex: InvalidCoordException) {
                 exception = ex
             }
             assertTrue(exception is InvalidCoordException,"Coord$rankTest should throw a exception.")
 
-            var fullCoordTest:Coord? = null
+            var fullCoordTest: Coord? = null
             try {
                 fullCoordTest = Coord(value,value)
             } catch (ex: InvalidCoordException) {
@@ -44,11 +44,11 @@ class CoordTest {
     @Test
     fun Should_NotThrowException_When_ParamsAreInRange() {
         var exception: RuntimeException? = null
-        var coord:Coord?=null
+        var coord: Coord?=null
         for (rank in 0..7) {
             for (file in 0..7) {
                 try {
-                    coord=Coord(file, rank)
+                    coord= Coord(file, rank)
                 } catch (ex: InvalidCoordException) {
                     exception = ex
                 }

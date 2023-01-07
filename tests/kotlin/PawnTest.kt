@@ -1,11 +1,13 @@
 
 import com.wildercoding.chess.pieces.Pawn
 import com.wildercoding.chess.pieces.Rook
+import com.wildercoding.chess.units.Board
+import com.wildercoding.chess.units.Color
+import com.wildercoding.chess.units.Coord
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import wildercoding.chess.*
 
 class PawnTest  {
     lateinit var allCoordList: List<Coord>
@@ -27,7 +29,7 @@ class PawnTest  {
         val startPos = Coord(1, 1)
         val verifiedMoves = piece.generateMovesList(startPos)
         val legalMoves = arrayOf(Coord(1,2), Coord(1,3))
-        legalMoves.forEach { coord:Coord -> assertTrue(verifiedMoves.contains(coord)) }
+        legalMoves.forEach { coord: Coord -> assertTrue(verifiedMoves.contains(coord)) }
     }
 
     @Test
@@ -36,7 +38,7 @@ class PawnTest  {
         val startPos = Coord(1, 6)
         val verifiedMoves = piece.generateMovesList(startPos)
         val legalMoves = arrayOf(Coord(1,5), Coord(1,4))
-        legalMoves.forEach { coord:Coord -> assertTrue(verifiedMoves.contains(coord)) }
+        legalMoves.forEach { coord: Coord -> assertTrue(verifiedMoves.contains(coord)) }
     }
 
     @Test
@@ -46,7 +48,7 @@ class PawnTest  {
         val startPos = Coord(1, 1)
         val verifiedMoves = piece.generateMovesList(startPos)
         val legalMoves = arrayOf(Coord(1,2))
-        legalMoves.forEach { coord:Coord -> assertTrue(verifiedMoves.contains(coord)) }
+        legalMoves.forEach { coord: Coord -> assertTrue(verifiedMoves.contains(coord)) }
     }
 
     @Test
@@ -56,7 +58,7 @@ class PawnTest  {
         val startPos = Coord(1, 6)
         val verifiedMoves = piece.generateMovesList(startPos)
         val legalMoves = arrayOf(Coord(1,5))
-        legalMoves.forEach { coord:Coord -> assertTrue(verifiedMoves.contains(coord)) }
+        legalMoves.forEach { coord: Coord -> assertTrue(verifiedMoves.contains(coord)) }
     }
 
     @Test
@@ -65,7 +67,7 @@ class PawnTest  {
         piece.firstMove =  true
         val startPos = Coord(1, 1)
         val verifiedMoves = piece.generateMovesList(startPos)
-        val legalMoves = arrayOf(Coord(1,2),Coord(1,3))
+        val legalMoves = arrayOf(Coord(1,2), Coord(1,3))
         val illegalMoves = allCoordList.subtract(legalMoves.toList())
 
         for (move in illegalMoves) {

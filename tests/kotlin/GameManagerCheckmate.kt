@@ -2,6 +2,9 @@
 import com.wildercoding.chess.pieces.King
 import com.wildercoding.chess.pieces.Pawn
 import com.wildercoding.chess.pieces.Rook
+import com.wildercoding.chess.units.Board
+import com.wildercoding.chess.units.Color
+import com.wildercoding.chess.units.Coord
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
 import org.junit.jupiter.api.BeforeEach

@@ -1,5 +1,8 @@
 package com.wildercoding.chess.pieces
 
+import com.wildercoding.chess.units.Board
+import com.wildercoding.chess.units.Color
+import com.wildercoding.chess.units.Coord
 import wildercoding.chess.*
 
 class Rook(color: Color) : Piece(PieceType.ROOK, color) {

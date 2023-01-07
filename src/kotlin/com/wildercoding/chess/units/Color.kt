@@ -1,6 +1,8 @@
-package wildercoding.chess
+package com.wildercoding.chess.units
 
-enum class Color:Nameable {
+import com.wildercoding.chess.data.Nameable
+
+enum class Color: Nameable {
     WHITE {
         override fun getTypeName(): String {
             return "White"

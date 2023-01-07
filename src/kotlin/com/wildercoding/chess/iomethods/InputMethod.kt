@@ -1,6 +1,6 @@
 package com.wildercoding.chess.iomethods
 
-import wildercoding.chess.MoveRequest
+import com.wildercoding.chess.data.MoveRequest
 
 interface InputMethod {
     fun getMove(): MoveRequest

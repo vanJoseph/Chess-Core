@@ -1,5 +1,9 @@
 package com.wildercoding.chess.pieces
 
+import com.wildercoding.chess.data.MoveRequest
+import com.wildercoding.chess.units.Board
+import com.wildercoding.chess.units.Color
+import com.wildercoding.chess.units.Coord
 import wildercoding.chess.*
 
 class King(color: Color): Piece(PieceType.KING,color) {
