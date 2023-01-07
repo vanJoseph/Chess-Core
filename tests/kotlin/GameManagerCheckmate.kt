@@ -1,4 +1,6 @@
 
+import org.hamcrest.MatcherAssert.assertThat
+import org.hamcrest.core.Is.`is`
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import wildercoding.chess.*

@@ -1,14 +1,14 @@
-
-import org.junit.Assert
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import wildercoding.chess.*
 
 class QueenTest  {
     lateinit var piece: Piece
     lateinit var allCoordList: List<Coord>
 
-    @Before
+    @BeforeEach
     fun setup() {
         piece = Queen(Color.WHITE)
 
@@ -41,7 +41,7 @@ class QueenTest  {
                 Coord(1, 5), Coord(0, 0),
                 Coord(0, 6))
         for (move in legalMoves) {
-            Assert.assertTrue(verifiedMoves.contains(move))
+            assertTrue(verifiedMoves.contains(move))
         }
     }
 
@@ -68,7 +68,7 @@ class QueenTest  {
         val illegalMoves = allCoordList.subtract(legalMoves.toList())
 
         for (move in illegalMoves) {
-            Assert.assertFalse(verifiedMoves.contains(move))
+            assertFalse(verifiedMoves.contains(move))
         }
     }
     @Test
@@ -88,7 +88,7 @@ class QueenTest  {
                 Coord(3, 3), Coord(7, 7),
                 Coord(4, 4))
         for (move in legalMoves) {
-            Assert.assertTrue(verifiedMoves.contains(move))
+            assertTrue(verifiedMoves.contains(move))
         }
     }
 
@@ -110,7 +110,7 @@ class QueenTest  {
                 Coord(4, 4))
         val illegalMoves = allCoordList.subtract(legalMoves.toList())
         for (move in illegalMoves) {
-            Assert.assertFalse(verifiedMoves.contains(move))
+            assertFalse(verifiedMoves.contains(move))
         }
     }
 
@@ -131,7 +131,7 @@ class QueenTest  {
                 Coord(4, 6), Coord(4, 0),
                 Coord(3, 7))
         for (move in legalMoves) {
-            Assert.assertTrue(verifiedMoves.contains(move))
+            assertTrue(verifiedMoves.contains(move))
         }
     }
 
@@ -153,7 +153,7 @@ class QueenTest  {
                 Coord(3, 7))
         val illegalMoves = allCoordList.subtract(legalMoves.toList())
         for (move in illegalMoves) {
-            Assert.assertFalse(verifiedMoves.contains(move))
+            assertFalse(verifiedMoves.contains(move))
         }
     }
     @Test
@@ -167,7 +167,7 @@ class QueenTest  {
                 Coord(3, 6),
                 Coord(3, 7))
         for (move in legalMoves) {
-            Assert.assertTrue(verifiedMoves.contains(move))
+            assertTrue(verifiedMoves.contains(move))
         }
     }
 
@@ -183,7 +183,7 @@ class QueenTest  {
                 Coord(3, 7))
         val nonMoves = allCoordList.subtract(legalMoves.toList())
         for (move in nonMoves) {
-            Assert.assertFalse(verifiedMoves.contains(move))
+            assertFalse(verifiedMoves.contains(move))
         }
     }
 
@@ -197,7 +197,7 @@ class QueenTest  {
                 Coord(3, 1),
                 Coord(3, 2))
         for (move in legalMoves) {
-            Assert.assertTrue(verifiedMoves.contains(move))
+            assertTrue(verifiedMoves.contains(move))
         }
     }
 
@@ -212,7 +212,7 @@ class QueenTest  {
                 Coord(3, 2))
         val nonMoves = allCoordList.subtract(legalMoves.toList())
         for (move in nonMoves) {
-            Assert.assertFalse(verifiedMoves.contains(move))
+            assertFalse(verifiedMoves.contains(move))
         }
     }
 
@@ -226,7 +226,7 @@ class QueenTest  {
                 Coord(1, 3),
                 Coord(0, 3))
         for (move in legalMoves) {
-            Assert.assertTrue(verifiedMoves.contains(move))
+            assertTrue(verifiedMoves.contains(move))
         }
     }
 
@@ -241,7 +241,7 @@ class QueenTest  {
                 Coord(0, 3))
         val nonMoves = allCoordList.subtract(legalMoves.toList())
         for (move in nonMoves) {
-            Assert.assertFalse(verifiedMoves.contains(move))
+            assertFalse(verifiedMoves.contains(move))
         }
     }
 
@@ -256,7 +256,7 @@ class QueenTest  {
                 Coord(6, 3),
                 Coord(7, 3))
         for (move in legalMoves) {
-            Assert.assertTrue(verifiedMoves.contains(move))
+            assertTrue(verifiedMoves.contains(move))
         }
     }
 
@@ -272,7 +272,7 @@ class QueenTest  {
                 Coord(7, 3))
         val nonMoves = allCoordList.subtract(legalMoves.toList())
         for (move in nonMoves) {
-            Assert.assertFalse(verifiedMoves.contains(move))
+            assertFalse(verifiedMoves.contains(move))
         }
     }
 
@@ -287,7 +287,7 @@ class QueenTest  {
                 Coord(6, 6),
                 Coord(7, 7))
         for (move in legalMoves) {
-            Assert.assertTrue(verifiedMoves.contains(move))
+            assertTrue(verifiedMoves.contains(move))
         }
     }
 
@@ -303,7 +303,7 @@ class QueenTest  {
                 Coord(7, 7))
         val nonMoves = allCoordList.subtract(legalMoves.toList())
         for (move in nonMoves) {
-            Assert.assertFalse(verifiedMoves.contains(move))
+            assertFalse(verifiedMoves.contains(move))
         }
     }
 
@@ -317,7 +317,7 @@ class QueenTest  {
                 Coord(5, 1),
                 Coord(6, 0))
         for (move in legalMoves) {
-            Assert.assertTrue(verifiedMoves.contains(move))
+            assertTrue(verifiedMoves.contains(move))
         }
     }
 
@@ -332,7 +332,7 @@ class QueenTest  {
                 Coord(6, 0))
         val nonMoves = allCoordList.subtract(legalMoves.toList())
         for (move in nonMoves) {
-            Assert.assertFalse(verifiedMoves.contains(move))
+            assertFalse(verifiedMoves.contains(move))
         }
     }
 
@@ -346,7 +346,7 @@ class QueenTest  {
                 Coord(1, 5),
                 Coord(2, 4))
         for (move in legalMoves) {
-            Assert.assertTrue(verifiedMoves.contains(move))
+            assertTrue(verifiedMoves.contains(move))
         }
     }
 
@@ -361,7 +361,7 @@ class QueenTest  {
                 Coord(2, 4))
         val nonMoves = allCoordList.subtract(legalMoves.toList())
         for (move in nonMoves) {
-            Assert.assertFalse(verifiedMoves.contains(move))
+            assertFalse(verifiedMoves.contains(move))
         }
     }
 
@@ -375,7 +375,7 @@ class QueenTest  {
                 Coord(1, 1),
                 Coord(0, 0))
         for (move in legalMoves) {
-            Assert.assertTrue(verifiedMoves.contains(move))
+            assertTrue(verifiedMoves.contains(move))
         }
     }
 
@@ -390,7 +390,7 @@ class QueenTest  {
                 Coord(0, 0))
         val nonMoves = allCoordList.subtract(legalMoves.toList())
         for (move in nonMoves) {
-            Assert.assertFalse(verifiedMoves.contains(move))
+            assertFalse(verifiedMoves.contains(move))
         }
     }
     @Test
@@ -422,7 +422,7 @@ class QueenTest  {
 
         // Try to move to the passing location
         moveToLocations.forEach { coord: Coord ->
-            Assert.assertFalse(piece.verifyMove(board, startLocation, coord))
+            assertFalse(piece.verifyMove(board, startLocation, coord))
         }
     }
     @Test
@@ -454,7 +454,7 @@ class QueenTest  {
 
         // Try to move to the passing location
         moveToLocations.forEach { coord: Coord ->
-            Assert.assertTrue(piece.verifyMove(board, startLocation, coord))
+            assertTrue(piece.verifyMove(board, startLocation, coord))
         }
     }
 }

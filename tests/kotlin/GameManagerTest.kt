@@ -1,18 +1,16 @@
-import com.sun.source.tree.WhileLoopTree
 import com.wildercoding.chess.StandardChessBoard
-import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.MatcherAssert.assertThat
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
-import org.junit.Before
-import org.junit.Ignore
-import org.junit.Test
+import org.hamcrest.core.Is.`is`
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import wildercoding.chess.*
 import java.lang.RuntimeException
 
 class GameManagerTest {
     lateinit var gameManager: GameManager
-    @Before
+    @BeforeEach
     fun setup() {
         gameManager= GameManager(StandardChessBoard())
     }

@@ -1,7 +1,7 @@
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import wildercoding.chess.*
 
 
@@ -9,7 +9,7 @@ class SquareTest {
     lateinit var piece: Piece
     lateinit var square: Square
 
-    @Before
+    @BeforeEach
     fun setup() {
         piece = None()
         square = Square(Coord(0,0))

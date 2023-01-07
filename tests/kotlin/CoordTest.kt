@@ -21,7 +21,7 @@ class CoordTest {
             } catch (ex: InvalidCoordException) {
                 exception = ex
             }
-            assertTrue("Coord$fileTest should throw a exception.",exception is InvalidCoordException )
+            assertTrue(exception is InvalidCoordException ,"Coord$fileTest should throw a exception.")
 
             var rankTest: Coord? = null
             try {
@@ -29,7 +29,7 @@ class CoordTest {
             } catch (ex: InvalidCoordException) {
                 exception = ex
             }
-            assertTrue("Coord$rankTest should throw a exception.", exception is InvalidCoordException)
+            assertTrue(exception is InvalidCoordException,"Coord$rankTest should throw a exception.")
 
             var fullCoordTest:Coord? = null
             try {
@@ -37,7 +37,7 @@ class CoordTest {
             } catch (ex: InvalidCoordException) {
                 exception = ex
             }
-            assertTrue("Coord$fullCoordTest should throw a exception.",exception is InvalidCoordException)
+            assertTrue(exception is InvalidCoordException,"Coord$fullCoordTest should throw a exception.")
         }
     }
 
@@ -55,7 +55,7 @@ class CoordTest {
             }
         }
 
-        assertTrue("Coord$coord is valid",exception == null)
+        assertTrue(exception == null,"Coord$coord is valid")
     }
 
     @Test

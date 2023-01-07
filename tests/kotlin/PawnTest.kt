@@ -1,16 +1,14 @@
 
-import org.hamcrest.MatcherAssert
-import org.hamcrest.core.Is
-import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
-import org.junit.Before
-import org.junit.Test
+import org.junit.jupiter.api.Assertions.assertFalse
+import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.BeforeEach
+import org.junit.jupiter.api.Test
 import wildercoding.chess.*
 
 class PawnTest  {
     lateinit var allCoordList: List<Coord>
 
-    @Before
+    @BeforeEach
     fun setup() {
         val allCoordsArrayList = arrayListOf<Coord>()
         for (y in 0..7) {
