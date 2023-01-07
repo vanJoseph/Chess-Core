@@ -1,5 +1,7 @@
 package wildercoding.chess
 
+import com.wildercoding.chess.pieces.Piece
+
 
 /**
  * The Representation of Chess board

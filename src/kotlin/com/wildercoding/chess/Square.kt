@@ -1,5 +1,7 @@
 package wildercoding.chess
 
+import com.wildercoding.chess.pieces.Piece
+
 class Square(val boardPostion: Coord) {
     var piece: Piece = None()
     private set

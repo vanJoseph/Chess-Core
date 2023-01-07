@@ -1,5 +1,6 @@
 package com.wildercoding.chess
 
+import com.wildercoding.chess.pieces.*
 import wildercoding.chess.*
 
 class StandardChessBoard: Board() {

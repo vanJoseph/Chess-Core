@@ -1,9 +1,6 @@
 
-import com.sun.source.tree.BlockTree
-import com.sun.source.tree.WhileLoopTree
 import com.wildercoding.chess.MultiMap
-import com.wildercoding.chess.NoKingFoundException
-import org.hamcrest.CoreMatchers.hasItems
+import com.wildercoding.chess.pieces.*
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
 import org.hamcrest.core.IsCollectionContaining.hasItem

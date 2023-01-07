@@ -2,6 +2,9 @@ package wildercoding.chess
 
 import com.wildercoding.chess.MultiMap
 import com.wildercoding.chess.NoKingFoundException
+import com.wildercoding.chess.pieces.King
+import com.wildercoding.chess.pieces.Knight
+import com.wildercoding.chess.pieces.Pawn
 
 class GameManager(val board: Board) {
     var playerTurn = Color.WHITE

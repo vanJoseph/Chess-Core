@@ -1,4 +1,6 @@
-package wildercoding.chess
+package com.wildercoding.chess.pieces
+
+import wildercoding.chess.*
 
 class Pawn(color: Color) : Piece(PieceType.PAWN, color) {
 
@@ -35,8 +37,9 @@ class Pawn(color: Color) : Piece(PieceType.PAWN, color) {
     override fun verifyTake(board: Board, fromPos: Coord, toPos: Coord): Boolean {
         val colorMod = if (color == Color.BLACK) -1 else 1
         val takeSquare = arrayOf(
-                Coord.getValidatedCoord(fromPos.file + 1, fromPos.rank + colorMod),
-                Coord.getValidatedCoord(fromPos.file - 1, fromPos.rank + colorMod))
+            Coord.getValidatedCoord(fromPos.file + 1, fromPos.rank + colorMod),
+            Coord.getValidatedCoord(fromPos.file - 1, fromPos.rank + colorMod)
+        )
         for (square in takeSquare.filterNotNull()) {
             if (board.getPiece(square).color == Color.NONE) {
                 continue

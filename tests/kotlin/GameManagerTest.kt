@@ -1,4 +1,8 @@
 import com.wildercoding.chess.StandardChessBoard
+import com.wildercoding.chess.pieces.Bishop
+import com.wildercoding.chess.pieces.King
+import com.wildercoding.chess.pieces.Pawn
+import com.wildercoding.chess.pieces.Rook
 import org.hamcrest.MatcherAssert.assertThat
 import org.hamcrest.core.Is.`is`
 import org.junit.jupiter.api.Assertions.assertFalse

@@ -1,4 +1,6 @@
-package wildercoding.chess
+package com.wildercoding.chess.pieces
+
+import wildercoding.chess.*
 
 class Queen(color: Color) : Piece(PieceType.QUEEN, color) {
 
@@ -104,7 +106,7 @@ class Queen(color: Color) : Piece(PieceType.QUEEN, color) {
     fun generateSeMoveList(coord: Coord): List<Coord> {
         val possibleLocations = arrayListOf<Coord>()
         for (i in 1..7) {
-            val nextCoord = Coord.getValidatedCoord(coord.file + i, coord.rank- i)
+            val nextCoord = Coord.getValidatedCoord(coord.file + i, coord.rank - i)
             possibleLocations.add(nextCoord ?:break)
         }
         return possibleLocations
@@ -113,7 +115,7 @@ class Queen(color: Color) : Piece(PieceType.QUEEN, color) {
     fun generateNwMoveList(coord: Coord): List<Coord> {
         val possibleLocations = arrayListOf<Coord>()
         for (i in 1..7) {
-            val nextCoord = Coord.getValidatedCoord(coord.file -i, coord.rank+i)
+            val nextCoord = Coord.getValidatedCoord(coord.file - i, coord.rank + i)
             possibleLocations.add(nextCoord ?:break)
         }
         return possibleLocations
@@ -122,7 +124,7 @@ class Queen(color: Color) : Piece(PieceType.QUEEN, color) {
     fun generateSwMoveList(coord: Coord): List<Coord> {
         val possibleLocations = arrayListOf<Coord>()
         for (i in 1..7) {
-            val nextCoord = Coord.getValidatedCoord(coord.file -i, coord.rank-i)
+            val nextCoord = Coord.getValidatedCoord(coord.file - i, coord.rank - i)
             possibleLocations.add(nextCoord ?:break)
         }
         return possibleLocations

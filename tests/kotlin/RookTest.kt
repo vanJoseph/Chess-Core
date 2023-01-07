@@ -1,3 +1,6 @@
+import com.wildercoding.chess.pieces.Pawn
+import com.wildercoding.chess.pieces.Piece
+import com.wildercoding.chess.pieces.Rook
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach

@@ -1,4 +1,5 @@
 
+import com.wildercoding.chess.pieces.King
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
@@ -48,7 +49,7 @@ class BoardTest {
 
     @Test
     fun Should_HavePiece_When_PieceIsAdded(){
-        val piece=King(Color.WHITE)
+        val piece= King(Color.WHITE)
         val addPieceToSquare ={coord: Coord -> board.addPiece(piece,coord); Unit }
         cycleThruBoardCoords(addPieceToSquare)
 
@@ -64,7 +65,7 @@ class BoardTest {
 
     @Test
     fun Should_ReturnTrue_When_NonNonePieceIsRemoved() {
-        val piece=King(Color.WHITE)
+        val piece= King(Color.WHITE)
 
         // Add piece to all of the squares
         val addPieceToSquare ={coord: Coord -> board.addPiece(piece,coord); Unit }
@@ -78,7 +79,7 @@ class BoardTest {
 
     @Test
     fun Should_HaveNone_When_PieceIsRemoved() {
-        val piece=King(Color.WHITE)
+        val piece= King(Color.WHITE)
 
         // Add piece to all of the squares
         val addPieceToSquare ={coord: Coord -> board.addPiece(piece,coord); Unit }
@@ -95,7 +96,7 @@ class BoardTest {
 
     @Test
     fun Should_AllSquareAreNone_When_BoardIsCleared() {
-        val piece=King(Color.WHITE)
+        val piece= King(Color.WHITE)
 
         // Add piece to all of the squares
         val addPieceToSquare ={coord: Coord -> board.addPiece(piece,coord); Unit }
