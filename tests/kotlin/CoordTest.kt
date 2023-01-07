@@ -3,7 +3,7 @@
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import wildercoding.chess.Coord
-import wildercoding.chess.InvalidCoordException
+import com.wildercoding.chess.exceptions.InvalidCoordException
 import java.lang.RuntimeException
 
 
@@ -21,7 +21,7 @@ class CoordTest {
             } catch (ex: InvalidCoordException) {
                 exception = ex
             }
-            assertTrue(exception is InvalidCoordException ,"Coord$fileTest should throw a exception.")
+            assertTrue(exception is InvalidCoordException,"Coord$fileTest should throw a exception.")
 
             var rankTest: Coord? = null
             try {

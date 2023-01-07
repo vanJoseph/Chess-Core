@@ -1,7 +1,7 @@
 package wildercoding.chess
 
 import com.wildercoding.chess.MultiMap
-import com.wildercoding.chess.NoKingFoundException
+import com.wildercoding.chess.exceptions.NoKingFoundException
 import com.wildercoding.chess.iomethods.InputMethod
 import com.wildercoding.chess.iomethods.OutputMethod
 import com.wildercoding.chess.pieces.King

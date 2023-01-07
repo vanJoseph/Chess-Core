@@ -1,5 +1,7 @@
 package wildercoding.chess
 
+import com.wildercoding.chess.exceptions.InvalidCoordException
+
 data class Coord(var file: Int, var rank: Int) {
     init {
         if (!validateCoord(file, rank))
