@@ -1,10 +1,5 @@
 
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import wildercoding.chess.ConsoleInputMethod
-import wildercoding.chess.Coord
-import wildercoding.chess.MoveRequest
-import wildercoding.chess.MoveType
 
 class ConsoleInputMethodTest {
     @Test

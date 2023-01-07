@@ -1,4 +1,4 @@
-package wildercoding.chess
+package com.wildercoding.chess.iomethods
 
 //class DirectInputMethod(val fromPos:Coord, val toPos: Coord): InputMethod {
 //    constructor(fromFile:Int, fromRank:Int, toFile:Int, toRank:Int): this(Coord(fromFile,fromRank),Coord(toFile,toRank))
